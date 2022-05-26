@@ -2,6 +2,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -52,7 +53,7 @@ typedef struct CLI_ARGS {
   bool verbose;
   int  count;
   bool pretty;
-  bool color;
+  int color;
 } args_t;
 
 static struct cag_option options[] = {
@@ -81,16 +82,16 @@ static struct cag_option options[] = {
     .access_name    = "count",
     .value_name     = "COUNT",
     .description    = "Item Count" },
-  { .identifier     = 'C',
-    .access_letters = "C",
-    .access_name    = "color",
-    .value_name     = "COLOR",
-    .description    = "Color Mode" },
   { .identifier     = 'p',
     .access_letters = "p",
     .access_name    = "pretty",
     .value_name     = "PRETTY",
     .description    = "JSON Pretty Mode" },
+  { .identifier     = 'x',
+    .access_letters = "x",
+    .access_name    = "color",
+    .value_name     = "COLOR",
+    .description    = "Color Mode" },
   { .identifier     = 'h',
     .access_letters = "h",
     .access_name    = "help",

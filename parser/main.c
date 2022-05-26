@@ -26,6 +26,7 @@ args_t args = {
     DEFAULT_MODE,
     DEFAULT_VERBOSE,
     DEFAULT_COUNT,
+    DEFAULT_COLOR,
 };
 
 
@@ -43,7 +44,9 @@ int debug_args(){
     "\n"
     ansistr(AC_RESETALL AC_UNDERLINE "Pretty Mode: %d")
     "\n"
-    , args.verbose, args.input, args.output, args.mode, args.count, args.pretty
+    ansistr(AC_RESETALL AC_UNDERLINE "Color Mode: %d")
+    "\n"
+    , args.verbose, args.input, args.output, args.mode, args.count, args.pretty, args.color
     );
 
   return(EXIT_SUCCESS);
@@ -59,7 +62,7 @@ int main(int argc, char **argv) {
   
   if ((strcmp(args.mode, "csv") == 0)) return(parse_csv());
 
-  printf(AC_RESETALL AC_RED "No mode selected: %s\n" AC_RESETALL, args.mode); return(0);
+  printf(AC_RESETALL AC_RED "No mode selected: %s\n" AC_RESETALL, args.mode); return(1);
 
   return(EXIT_SUCCESS);
 }
@@ -74,6 +77,8 @@ int parse_args(int argc, char *argv[]){
   cag_option_prepare(&context, options, CAG_ARRAY_SIZE(options), argc, argv);
   while (cag_option_fetch(&context)) {
     identifier = cag_option_get(&context);
+    printf("id>%c\n", identifier);
+
     switch (identifier) {
     case 'i':
       value    = cag_option_get_value(&context);
@@ -90,7 +95,7 @@ int parse_args(int argc, char *argv[]){
     case 'p':
       args.pretty = true;
       break;
-    case 'C':
+    case 'x':
       args.color = true;
       break;
     case 'v':
@@ -126,7 +131,7 @@ int parse_csv(){
   JSON_Value  *o;
   JSON_Object *O;
 
-  for (int i = 0; i < Lines.count && ((i+1) < args.count); i++) {
+  for (int i = 0; i < Lines.count && (qty < args.count-1); i++) {
     LINE = stringfn_trim(Lines.strings[i]);
     struct StringFNStrings SPLIT = stringfn_split(LINE, ',');
     free(LINE);
