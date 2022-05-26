@@ -69,7 +69,7 @@ uncrustify:
 	@shfmt -w scripts/*.sh
 
 uncrustify-clean:
-	@find $(TIDIED_FILES) vendor -type f -name "*unc-back*"|xargs -I % unlink %
+	@find  . -type f -name "*unc-back*"|xargs -I % unlink %
 
 fix-dbg:
 	@$(SED) 's|, % s);|, %s);|g' -i $(TIDIED_FILES)
