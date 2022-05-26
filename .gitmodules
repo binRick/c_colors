@@ -1,0 +1,27 @@
+[submodule "submodules/c_stringfn"]
+	path = submodules/c_stringfn
+	url = https://github.com/sagiegurari/c_stringfn
+[submodule "submodules/fs.c"]
+	path = submodules/fs.c
+	url = https://github.com/jwerle/fs.c
+[submodule "submodules/rgba"]
+	path = submodules/rgba
+	url = https://github.com/clibs/rgba
+[submodule "submodules/slug.c"]
+	path = submodules/slug.c
+	url = https://github.com/hkjels/slug.c
+[submodule "submodules/djbhash"]
+	path = submodules/djbhash
+	url = https://github.com/gdi/djbhash
+[submodule "submodules/uuid4"]
+	path = submodules/uuid4
+	url = https://github.com/rxi/uuid4
+[submodule "submodules/timestamp"]
+	path = submodules/timestamp
+	url = https://github.com/clibs/timestamp
+[submodule "submodules/svpng"]
+	path = submodules/svpng
+	url = https://github.com/miloyip/svpng
+[submodule "submodules/b64.c"]
+	path = submodules/b64.c
+	url = https://github.com/littlstar/b64.c
