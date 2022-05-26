@@ -24,8 +24,8 @@ deps = []
 bin_srcs = []
 submodule_srcs = []
 bin_srcs = [
-  'submodules/timestamp/timestamp.c',
-  'submodules/uuid4/src/uuid4.c',
+  #  'submodules/timestamp/timestamp.c',
+  #a'submodules/uuid4/src/uuid4.c',
 ]
 cc = meson.get_compiler('c')
 #//***********************************************************/
@@ -35,27 +35,37 @@ pwd_bin = find_program('pwd', required : true)
 pwd = run_command(pwd_bin, check: true).stdout().strip()
 #//***********************************************************/
 inc = include_directories(
-  '.',
-  './include', 
-  './src', 
-  './submodules/timestamp', 
-  './submodules/djbhash/src',
-  './submodules',
+  #'.',
+  #'./include', 
+  #'./src', 
+  #//  './submodules/timestamp', 
+  #'./submodules/djbhash/src',
+  #  './submodules',
 )
 #//***********************************************************/
+#subdir('meson/deps/cstringfn')
+#subdir('meson/deps/fs')
+#subdir('meson/deps/rgba')
+#subdir('meson/deps/svpng')
+#subdir('meson/deps/b64')
+#subdir('meson/deps/ansicodes')
 subdir('meson/deps')
 dep_cargs = dependency('cargs',fallback:['cargs', 'dep_cargs'])
 spng_dep = dependency('libspng',fallback:['libspng', 'spng_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
+subdir('parser')
 enabled_bins = [
     { 'bin': 'colors',            'tests': [], 'deps': [
                                                           svpng_dep, spng_dep,
                                                           rgba_dep,    dep_cargs,
                                                           parson_shared_dep,
                                                           cstringfn_dep,
+                                                          ansicodes_dep,
                                                           fs_dep,
                                                      ], },
 ]
+enabled_bins = []
+
 if get_option('enable-binaries')
   foreach b : enabled_bins
    bin_src = [
