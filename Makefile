@@ -32,7 +32,6 @@ CD_M1 = cd $(M1_DIR)
 
 all: ensure dirs do-hex-png-pixel-test
 
-
 clean: 
 	@rm -rf $(EMBEDS_DIR) build
 
