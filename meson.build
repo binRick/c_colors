@@ -55,7 +55,7 @@ spng_dep = dependency('libspng',fallback:['libspng', 'spng_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
 subdir('parser')
 enabled_bins = [
-    { 'bin': 'colors',            'tests': [], 'deps': [
+  { 'bin': 'colors',            'tests': [], 'deps': [
                                                           svpng_dep, spng_dep,
                                                           rgba_dep,    dep_cargs,
                                                           parson_shared_dep,
@@ -64,12 +64,33 @@ enabled_bins = [
                                                           fs_dep,
                                                      ], },
 ]
-enabled_bins = []
+enabled_bins = [
+  {
+    'bin':'hex-png-pixel',
+    'srcs': [
+              'src/hex-png-pixel.c',
+              'src/hex-png-pixel-utils.c',
+              'vendor/stb_image_write.h',
+              'include/hex-png-pixel.h',
+              ],
+    'tests': [
+        { 
+          'args': [
+                    ['--test'],
+                    ['pngs'],
+                  ],
+        },
+      ],
+    'deps':  [],
+  },  
+
+]
 
 if get_option('enable-binaries')
   foreach b : enabled_bins
    bin_src = [
       'src/' + b['bin'] + '.c',
+      b['srcs'],
    ]
    e = {
     'name': b['bin'],
@@ -88,7 +109,7 @@ if get_option('enable-binaries')
    if get_option('enable-binary-tests')
     foreach t: b['tests']
      foreach a: t['args']
-      test(b['bin'], e['exec'], args: a, env: test_env)
+      test(b['bin'], e['exec'], args: a)
      endforeach
     endforeach
    endif

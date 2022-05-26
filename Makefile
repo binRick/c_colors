@@ -29,14 +29,9 @@ CD_LOADER = cd $(LOADER_DIR)
 CD_PROJECT = cd $(PROJECT_DIR)
 CD_M1 = cd $(M1_DIR)
 ##############################################################
-##############################################################
 
-all: ensure dirs 
-	@make do-m1
+all: ensure dirs do-hex-png-pixel-test
 
-do-build: do-m1-test
-
-MESON_DIRS = m1
 
 clean: 
 	@rm -rf $(EMBEDS_DIR) build
@@ -51,7 +46,14 @@ dirs: ensure dirs-embeds
 dirs-embeds:
 	@mkdir -p $(EMBEDS_DIR)
 
-do-m1: ensure do-m1-test
+do-hex-png-pixel-meson: 
+	@meson build || { meson build --reconfigure || { meson build --wipe; } && meson build; }
+
+do-hex-png-pixel-build: do-hex-png-pixel-meson
+	@eval $(CD_M1) && { ninja -C build; }
+
+do-hex-png-pixel-test: do-hex-png-pixel-build
+	@ninja test -C build -v
 
 do-m1-meson: 
 	@eval $(CD_M1) && { meson build || { meson build --reconfigure || { meson build --wipe; } && meson build; }; }
@@ -62,7 +64,7 @@ do-m1-build: do-m1-meson
 do-m1-test: do-m1-build
 	@eval $(CD_M1) && { ninja test -C build -v; }
 
-test: do-m1-test
+test: do-hex-png-pixel-test
 
 uncrustify:
 	@$(UNCRUSTIFY) -c etc/uncrustify.cfg --replace $(TIDIED_FILES) 
