@@ -20,13 +20,15 @@
 #define RENDER_PRETTY_JSON      alse
 #define COLORNAMES_CSV_FILE     "vendor/colornames/colornames.csv"
 #define COLORNAMES_JSON_FILE    "vendor/colornames/colornames.json"
+////////////////////////////////////////////////////////////////////
 #define DEFAULT_INPUT           COLORNAMES_CSV_FILE
-#define DEFAULT_OUTPUT          NULL
+#define DEFAULT_OUTPUT          ""
 #define DEFAULT_COUNT           10
 #define DEFAULT_VERBOSE         false
 #define DEFAULT_PRETTY          false
 #define DEFAULT_COLOR           false
 #define DEFAULT_MODE            "csv"
+////////////////////////////////////////////////////////////////////
 
 int parse_args(int argc, char *argv[]);
 int debug_args();

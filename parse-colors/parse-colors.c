@@ -1,7 +1,5 @@
 #include "../colors-csv-parser/colors-csv-parser.h"
 #include "parse-colors.h"
-
-
 args_t args = {
   DEFAULT_INPUT,
   DEFAULT_OUTPUT,
@@ -10,7 +8,6 @@ args_t args = {
   DEFAULT_COUNT,
   DEFAULT_COLOR,
 };
-
 
 int debug_args(){
   fprintf(stderr,
@@ -71,9 +68,9 @@ int parse_args(int argc, char *argv[]){
       args.count = atoi(value);
       break;
     case 'h':
-      fprintf(stderr, AC_RESETALL AC_YELLOW AC_BOLD "Usage: parser [OPTION]...\n" AC_RESETALL);
+      fprintf(stderr, AC_RESETALL AC_YELLOW AC_BOLD "Usage: parse-colors [OPTION]\n" AC_RESETALL);
       cag_option_print(options, CAG_ARRAY_SIZE(options), stdout);
-      return(EXIT_SUCCESS);
+      exit(EXIT_SUCCESS);
     }
   }
   return(EXIT_SUCCESS);
@@ -81,10 +78,10 @@ int parse_args(int argc, char *argv[]){
 
 
 int main(int argc, char **argv) {
+  parse_args(argc, argv);
   if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
     printf("Test OK\n"); return(0);
   }
-  parse_args(argc, argv);
   parse_csv_options *options = malloc(sizeof(parse_csv_options));
 
   options->input_file       = args.input;

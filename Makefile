@@ -35,6 +35,9 @@ CD_M1 = cd $(M1_DIR)
 
 all: ensure dirs do-hex-png-pixel-test
 
+do-write-etc-color-names:
+	@./build/parse-colors/parse-colors -c 50000 -o ./etc/parsed-colors.json
+
 clean: 
 	@rm -rf $(EMBEDS_DIR) build
 	@rm -rf *.png

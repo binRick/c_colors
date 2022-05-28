@@ -10,7 +10,9 @@ parse_colors_deps = [
      #     ansicodes_dep,
      rgba_dep, 
      ansi_codes_dep, 
-     ansi_rgb_utils_dep, 
+     ansi_rgb_utils_dep,
+     bytes_dep,
+     c_string_buffer_dep,
      #c_ansi_dep, 
 ]
 if get_option('enable-binaries')

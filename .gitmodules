@@ -31,3 +31,9 @@
 [submodule "submodules/c_ansi"]
 	path = submodules/c_ansi
 	url = https://github.com/binRick/c_ansi
+[submodule "submodules/c_string_buffer"]
+	path = submodules/c_string_buffer
+	url = https://github.com/sagiegurari/c_string_buffer
+[submodule "submodules/bytes"]
+	path = submodules/bytes
+	url = https://github.com/clibs/bytes
