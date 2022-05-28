@@ -5,7 +5,7 @@ project('c_colors', ['c'],
   ]
 )
 bins = [
-  'm1',
+  #  'm1',
 ]
 config = configuration_data()
 version = run_command('git', 'describe', '--tags')
@@ -43,27 +43,12 @@ inc = include_directories(
   #  './submodules',
 )
 #//***********************************************************/
-#subdir('meson/deps/cstringfn')
-#subdir('meson/deps/fs')
-#subdir('meson/deps/rgba')
-#subdir('meson/deps/svpng')
-#subdir('meson/deps/b64')
-#subdir('meson/deps/ansicodes')
 subdir('meson/deps')
-dep_cargs = dependency('cargs',fallback:['cargs', 'dep_cargs'])
+cargs_dep = dependency('cargs',fallback:['cargs', 'cargs_dep'])
 spng_dep = dependency('libspng',fallback:['libspng', 'spng_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
+subdir('colors_csv_parser')
 subdir('parser')
-enabled_bins = [
-  { 'bin': 'colors',            'tests': [], 'deps': [
-                                                          svpng_dep, spng_dep,
-                                                          rgba_dep,    dep_cargs,
-                                                          parson_shared_dep,
-                                                          cstringfn_dep,
-                                                          ansicodes_dep,
-                                                          fs_dep,
-                                                     ], },
-]
 enabled_bins = [
   {
     'bin':'hex-png-pixel',
