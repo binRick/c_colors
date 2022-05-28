@@ -2,6 +2,7 @@ rgb_ansi_utils_srcs = [
   'rgb-ansi-utils.c',
 ]
 rgb_ansi_utils_deps = [
+  m_dep,
 ]
 rgb_ansi_utils_lib = static_library('rgb-ansi-utils',
   rgb_ansi_utils_srcs,

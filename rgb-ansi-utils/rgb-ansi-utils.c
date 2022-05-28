@@ -1,9 +1,4 @@
 #include "rgb-ansi-utils.h"
-#include <math.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #define DELTA_E_K_L    2
 #define DELTA_E_K_1    0.048

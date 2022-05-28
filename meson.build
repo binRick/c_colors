@@ -17,11 +17,13 @@ add_project_arguments('-Wno-pragma-once-outside-header', language : 'c')
 add_project_arguments('-Wno-incompatible-pointer-types', language : 'c')
 add_project_arguments('-Wno-pointer-sign', language : 'c')
 cc = meson.get_compiler('c')
+add_global_arguments('-lm',language : 'c')
 #//////////////////////////////////////////////////////////////////////
 subdir('meson/deps/rgba')
 subdir('meson/deps/cstringfn')
 subdir('meson/deps/fs')
 subdir('meson/deps/ansicodes')
+m_dep = cc.find_library('m', required : true)
 cargs_dep = dependency('cargs',fallback:['cargs', 'cargs_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
 #//////////////////////////////////////////////////////////////////////

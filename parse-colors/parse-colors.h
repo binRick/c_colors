@@ -2,6 +2,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include <ctype.h>
+#include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
