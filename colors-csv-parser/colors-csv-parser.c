@@ -1,5 +1,5 @@
-#include "colors-csv-parser.h"
 #include "../rgb-ansi-utils/rgb-ansi-utils.h"
+#include "colors-csv-parser.h"
 
 
 int parse_colors_csv(parse_csv_options *OPTIONS){

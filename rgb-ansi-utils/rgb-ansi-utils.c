@@ -256,7 +256,8 @@ uint32_t set[] = {
   0xeeeeee,
 };
 
-void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2)     {
+
+void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2) {
   float x, y, z;
 
   r1 /= 255.0;
@@ -320,7 +321,7 @@ void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2)     
 /*
  * calc delta E
  */
-float delta_e(float l1, float a1, float b1, float l2, float a2, float b2)      {
+float delta_e(float l1, float a1, float b1, float l2, float a2, float b2) {
   float deltaL, c1, c2, deltaC, deltaA, deltaB, deltaHSquared, deltaH;
   float q1, q2, q3, deltaE;
 
