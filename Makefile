@@ -37,6 +37,7 @@ all: ensure dirs do-hex-png-pixel-test
 
 clean: 
 	@rm -rf $(EMBEDS_DIR) build
+	@rm -rf *.png
 
 ensure: dirs-embeds
 
@@ -70,7 +71,6 @@ test: do-hex-png-pixel-test
 
 uncrustify:
 	@$(UNCRUSTIFY) -c etc/uncrustify.cfg --replace $(TIDIED_FILES) 
-	@shfmt -w scripts/*.sh
 
 uncrustify-clean:
 	@find  . -type f -name "*unc-back*"|xargs -I % unlink %
