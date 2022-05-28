@@ -2,6 +2,21 @@
 #include "colors-csv-parser.h"
 
 
+void ansi_truecolor_fg(FILE *file, int r, int g, int b) {
+  fprintf(file, TRUECOLOR_FG_CODE, r, g, b);
+}
+
+
+void ansi_truecolor_bg(FILE *file, int r, int g, int b) {
+  fprintf(file, TRUECOLOR_BG_CODE, r, g, b);
+}
+
+
+void ansi_reset(FILE *file) {
+  fputs(RESET_CODE, file);
+}
+
+
 int parse_colors_csv(parse_csv_options *OPTIONS){
   char                   *content = fs_read(OPTIONS->input_file);
   struct StringFNStrings Lines    = stringfn_split_lines_and_trim(content);

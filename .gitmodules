@@ -25,3 +25,6 @@
 [submodule "submodules/b64.c"]
 	path = submodules/b64.c
 	url = https://github.com/littlstar/b64.c
+[submodule "submodules/parson"]
+	path = submodules/parson
+	url = https://github.com/kgabis/parson

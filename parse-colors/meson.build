@@ -12,9 +12,7 @@ parse_colors_deps = [
 ]
 if get_option('enable-binaries')
   parse_colors_exec = executable('parse-colors',
-     [
-      parse_colors_srcs,
-     ],
+     parse_colors_srcs,
      dependencies: parse_colors_deps,
      include_directories: [],
   )

@@ -2,19 +2,6 @@
 #include "parse-colors.h"
 
 
-void ansi_truecolor_fg(FILE *file, int r, int g, int b) {
-  fprintf(file, TRUECOLOR_FG_CODE, r, g, b);
-}
-
-
-void ansi_truecolor_bg(FILE *file, int r, int g, int b) {
-  fprintf(file, TRUECOLOR_BG_CODE, r, g, b);
-}
-
-
-void ansi_reset(FILE *file) {
-  fputs(RESET_CODE, file);
-}
 args_t args = {
   DEFAULT_INPUT,
   DEFAULT_OUTPUT,

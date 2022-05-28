@@ -1,7 +1,6 @@
 #pragma once
 #ifndef PARSER_H
 #define PARSER_H
-#include <assert.h>
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -14,7 +13,7 @@
 #include "../subprojects/cargs/include/cargs.h"
 
 #define RENDER_COLOR_OUTPUT     false
-#define RENDER_PRETTY_JSON      true
+#define RENDER_PRETTY_JSON      alse
 #define COLORNAMES_CSV_FILE     "vendor/colornames/colornames.csv"
 #define COLORNAMES_JSON_FILE    "vendor/colornames/colornames.json"
 #define DEFAULT_INPUT           COLORNAMES_CSV_FILE
