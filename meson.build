@@ -17,7 +17,6 @@ add_project_arguments('-Wno-pragma-once-outside-header', language : 'c')
 add_project_arguments('-Wno-incompatible-pointer-types', language : 'c')
 add_project_arguments('-Wno-pointer-sign', language : 'c')
 cc = meson.get_compiler('c')
-add_global_arguments('-lm',language : 'c')
 #//////////////////////////////////////////////////////////////////////
 subdir('meson/deps/rgba')
 subdir('meson/deps/cstringfn')
