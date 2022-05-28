@@ -9,12 +9,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
+#include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
+
+
 #include "../submodules/c_stringfn/include/stringfn.h"
 #include "../submodules/fs.c/fs.h"
 #include "../submodules/parson/parson.h"
 #include "../submodules/rgba/src/rgba.h"
-#include "../vendor/ansicodes/ansicodes.h"
-#include "../vendor/ansicodes/rgbansi.h"
+//#include "../vendor/ansicodes/ansicodes.h"
+//#include "../vendor/ansicodes/rgbansi.h"
 
 typedef struct parse_csv_options parse_csv_options;
 struct parse_csv_options {

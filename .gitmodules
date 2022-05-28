@@ -28,3 +28,6 @@
 [submodule "submodules/parson"]
 	path = submodules/parson
 	url = https://github.com/kgabis/parson
+[submodule "submodules/c_ansi"]
+	path = submodules/c_ansi
+	url = https://github.com/binRick/c_ansi

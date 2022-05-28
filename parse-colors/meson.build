@@ -7,8 +7,11 @@ parse_colors_deps = [
      cstringfn_dep,
      parson_shared_dep,
      fs_dep,
-     ansicodes_dep,
+     #     ansicodes_dep,
      rgba_dep, 
+     ansi_codes_dep, 
+     ansi_rgb_utils_dep, 
+     #c_ansi_dep, 
 ]
 if get_option('enable-binaries')
   parse_colors_exec = executable('parse-colors',

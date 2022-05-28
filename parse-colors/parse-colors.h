@@ -11,6 +11,9 @@
 #include <string.h>
 #include <sys/time.h>
 
+
+#include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
+#include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
 
 #define RENDER_COLOR_OUTPUT     false
