@@ -9,6 +9,7 @@ args_t args = {
   DEFAULT_COLOR,
 };
 
+
 int debug_args(){
   fprintf(stderr,
           acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d")

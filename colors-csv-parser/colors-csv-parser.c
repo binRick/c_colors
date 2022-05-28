@@ -18,10 +18,12 @@ void ansi_reset(FILE *file) {
 
 
 int parse_colors_csv(parse_csv_options *OPTIONS){
-  bool WRITE_TO_FILE = false;
-  struct StringBuffer *sb = stringbuffer_new_with_options(1024,true);
-  if(OPTIONS->output_file != NULL && strlen(OPTIONS->output_file)>1){
-     WRITE_TO_FILE = true;
+  bool                WRITE_TO_FILE = false;
+  struct StringBuffer *sb           = stringbuffer_new_with_options(1024, true);
+
+  stringbuffer_append_string(sb, "");
+  if (OPTIONS->output_file != NULL && strlen(OPTIONS->output_file) > 1) {
+    WRITE_TO_FILE = true;
   }
   char                   *content = fs_read(OPTIONS->input_file);
   struct StringFNStrings Lines    = stringfn_split_lines_and_trim(content);
@@ -105,29 +107,31 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     }else{
       js = json_serialize_to_string(o);
     }
-    if(WRITE_TO_FILE){
-        stringbuffer_append_string(sb,js);
-    }else{
-        if (OPTIONS->output_color_mode) {
-          ansi_truecolor_bg(stdout, C->rgb->red, C->rgb->green, C->rgb->blue);
-        }
-        fprintf(stdout, "%s\n", js);
-        if (OPTIONS->output_color_mode) {
-          printf(AC_RESETALL);
-        }
-    }
     qty++;
-  }
-    if(WRITE_TO_FILE){
-        int wrote_bytes = fs_write(OPTIONS->output_file, stringbuffer_to_string(sb));
-        fprintf(stderr,
-                "wrote %s bytes to file %s\n"
-                , bytes_to_string(wrote_bytes)
-                , OPTIONS->output_file
-                );
 
+    if (!WRITE_TO_FILE) {
+      if (OPTIONS->output_color_mode) {
+        ansi_truecolor_bg(stdout, C->rgb->red, C->rgb->green, C->rgb->blue);
+      }
+      fprintf(stdout, "%s\n", js);
+      if (OPTIONS->output_color_mode) {
+        printf(AC_RESETALL);
+      }
+    }else{
+        stringbuffer_append_string(sb, js);
+        stringbuffer_append_string(sb, "\n");
     }
-    stringbuffer_release(sb);
+  }
+  stringbuffer_append_string(sb, "\n");
+  if (WRITE_TO_FILE) {
+    int wrote_bytes = fs_write(OPTIONS->output_file, stringbuffer_to_string(sb));
+    fprintf(stderr,
+            "wrote %s bytes to file %s\n",
+            bytes_to_string(wrote_bytes),
+            OPTIONS->output_file
+            );
+  }
+  stringbuffer_release(sb);
   return(EXIT_SUCCESS);
 } /* parse_colors_csv */
 
