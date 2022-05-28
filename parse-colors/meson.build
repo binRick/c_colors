@@ -1,0 +1,24 @@
+parse_colors_srcs = [
+  'parse-colors.c',
+]
+parse_colors_deps = [
+     cargs_dep,
+     colors_csv_parser_dep,
+     cstringfn_dep,
+     parson_shared_dep,
+     fs_dep,
+     ansicodes_dep,
+     rgba_dep, 
+]
+if get_option('enable-binaries')
+  parse_colors_exec = executable('parser',
+     [
+      parse_colors_srcs,
+     ],
+     dependencies: parse_colors_deps,
+     include_directories: [],
+  )
+  if get_option('enable-binary-tests')
+    test('parse-colors Test', parse_colors_exec, args: ['--test'])
+  endif
+endif

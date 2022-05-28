@@ -1,15 +1,5 @@
+#include "parse-colors.h"
 #include "../colors_csv_parser/colors_csv_parser.h"
-#include "parser.h"
-
-
-void ansi_256_fg(FILE *file, int color) {
-  fprintf(file, C256_FG_CODE, color);
-}
-
-
-void ansi_256_bg(FILE *file, int color) {
-  fprintf(file, C256_BG_CODE, color);
-}
 
 
 void ansi_truecolor_fg(FILE *file, int r, int g, int b) {

@@ -48,7 +48,7 @@ cargs_dep = dependency('cargs',fallback:['cargs', 'cargs_dep'])
 spng_dep = dependency('libspng',fallback:['libspng', 'spng_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
 subdir('colors_csv_parser')
-subdir('parser')
+subdir('parse-colors')
 enabled_bins = [
   {
     'bin':'hex-png-pixel',
