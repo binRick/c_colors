@@ -1,10 +1,10 @@
 colors_csv_srcs = [
-  'colors_csv_parser.c',
-  'rgb2ansi.c',
+  'colors-csv-parser.c',
 ]
 colors_csv_parser_deps = [
+  rgb_ansi_utils_dep,
 ]
-colors_csv_parser_lib = static_library('colors_csv_parser',
+colors_csv_parser_lib = static_library('colors-csv-parser',
   colors_csv_srcs,
   install: false, 
   dependencies: colors_csv_parser_deps,

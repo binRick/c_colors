@@ -24,10 +24,9 @@ ETC_DIR=$(DIR)/etc
 DOCKER_DIR=$(DIR)/docker
 ##############################################################
 TIDIED_FILES = \
-			   $(M1_DIR)/src/*.c \
-			   $(M1_DIR)/include/*.h \
-			   colors_csv_parser/*.c colors_csv_parser/*.h \
-			   parser/*.c parser/*.h
+			   colors-csv-parser/*.c colors-csv-parser/*.h \
+			   rgb-ansi-utils/*.c rgb-ansi-utils/*.h \
+			   parse-colors/*.c parse-colors/*.h
 ##############################################################
 CD_LOADER = cd $(LOADER_DIR)
 CD_PROJECT = cd $(PROJECT_DIR)

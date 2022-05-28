@@ -11,7 +11,7 @@ parse_colors_deps = [
      rgba_dep, 
 ]
 if get_option('enable-binaries')
-  parse_colors_exec = executable('parser',
+  parse_colors_exec = executable('parse-colors',
      [
       parse_colors_srcs,
      ],

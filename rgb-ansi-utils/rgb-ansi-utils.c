@@ -1,3 +1,4 @@
+#include "rgb-ansi-utils.h"
 #include <math.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -255,16 +256,6 @@ uint32_t set[] = {
   0xeeeeee,
 };
 
-
-void usage(char *name)      {
-  fprintf(stderr, "usage: %s -<n|f|b> <#rrggbb>\n", name);
-  exit(0);
-}
-
-
-/*
- * convert color from RGB to LAB
- */
 void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2)     {
   float x, y, z;
 

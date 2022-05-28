@@ -1,5 +1,5 @@
 #include "parse-colors.h"
-#include "../colors_csv_parser/colors_csv_parser.h"
+#include "../colors-csv-parser/colors-csv-parser.h"
 
 
 void ansi_truecolor_fg(FILE *file, int r, int g, int b) {
