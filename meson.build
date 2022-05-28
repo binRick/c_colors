@@ -48,6 +48,8 @@ cargs_dep = dependency('cargs',fallback:['cargs', 'cargs_dep'])
 #spng_dep = dependency('libspng',fallback:['libspng', 'spng_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
 subdir('rgb-ansi-utils')
+subdir('hex-png-pixel-utils')
+subdir('hex-png-pixel-creator')
 subdir('colors-csv-parser')
 subdir('parse-colors')
 enabled_bins = [
@@ -71,6 +73,7 @@ enabled_bins = [
   },  
 
 ]
+enabled_bins = []
 
 if get_option('enable-binaries')
   foreach b : enabled_bins

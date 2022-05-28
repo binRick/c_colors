@@ -1,0 +1,19 @@
+hex_png_pixel_utils_srcs = [
+  'hex-png-pixel-utils.c',
+  'stb_image_write.h',
+]
+hex_png_pixel_utils_deps = [
+     cargs_dep,
+]
+
+hex_png_pixel_utils_lib = static_library('hex-png-pixel-utils',
+  hex_png_pixel_utils_srcs,
+  install: false,
+  dependencies: hex_png_pixel_utils_deps,
+  include_directories: [],
+)
+
+hex_png_pixel_utils_dep = declare_dependency(
+  include_directories: [],
+  link_with: hex_png_pixel_utils_lib,
+)

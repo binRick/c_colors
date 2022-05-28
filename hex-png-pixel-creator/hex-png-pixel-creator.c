@@ -1,6 +1,7 @@
-#include "include/hex-png-pixel.h"
 #include <stdio.h>
 #include <string.h>
+#include "hex-png-pixel-creator.h"
+#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
 
 
 int main(int argc, char **argv) {
