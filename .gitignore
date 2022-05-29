@@ -19,3 +19,5 @@ tmp/
 subprojects/*/
 *unc-backup*
 *.png
+etc/*.json
+etc/*.sqlite

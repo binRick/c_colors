@@ -8,6 +8,7 @@
 typedef struct parse_json_options   parse_json_options;
 typedef struct ParsedColor          ParsedColor;
 
+#include "../db/db.h"
 #include "../submodules/djbhash/src/djbhash.h"
 struct parse_json_options {
   char           *input_file, *duration;
@@ -16,13 +17,18 @@ struct parse_json_options {
   ParsedColor    **ParsedColors;
   size_t         ParsedColorsQty;
   struct djbhash ResultsHash;
+  ColorsDB       *DB;
 };
 
+#include "../submodules/boydemdb/boydemdb.h"
 #include "../submodules/bytes/bytes.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
 #include "../submodules/c_timer/include/c_timer.h"
+#include "../vendor/sqlite3.h"
+#ifdef DEBUG_MEMORY
 #include "../submodules/debug-memory/debug_memory.h"
+#endif
 #include "../submodules/fs.c/fs.h"
 #include "../submodules/parson/parson.h"
 
@@ -41,6 +47,7 @@ struct ParsedColor {
   int       Ansicode;
   ParsedRGB *RGB;
   ParsedSeq *Seq;
+  char      *JSON;
 };
 
 

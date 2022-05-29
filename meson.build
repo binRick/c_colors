@@ -29,10 +29,12 @@ subdir('submodules/c_ansi/ansi-rgb-utils')
 subdir('submodules/c_ansi/ansi-utils')
 subdir('meson/deps/debug-memory')
 subdir('meson/deps/c_timer')
+subdir('meson/deps/boydemdb')
 m_dep = cc.find_library('m', required : true)
 cargs_dep = dependency('cargs',fallback:['cargs', 'cargs_dep'])
 parson_shared_dep = dependency('parson',fallback:['parson', 'parson_shared_dep'])
 #//////////////////////////////////////////////////////////////////////
+subdir('db')
 subdir('rgb-ansi-utils')
 subdir('hex-png-pixel-utils')
 #//////////////////////////////////////////////////////////////////////
@@ -41,4 +43,6 @@ subdir('colors-json-parser')
 #//////////////////////////////////////////////////////////////////////
 subdir('hex-png-pixel-creator')
 subdir('parse-colors')
+#//////////////////////////////////////////////////////////////////////
+subdir('color-db')
 #//////////////////////////////////////////////////////////////////////

@@ -9,6 +9,59 @@ args_t args = {
   DEFAULT_COLOR,
 };
 
+void cleanup();
+
+
+int main(int argc, char **argv) {
+  parse_args(argc, argv);
+  if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
+    printf("Test OK\n"); return(0);
+  }
+
+
+  if ((strcmp(args.mode, "debug_args") == 0)) {
+    return(debug_args());
+  }
+
+  if ((strcmp(args.mode, "csv") == 0)) {
+    parse_csv_options *options = malloc(sizeof(parse_csv_options));
+    options->input_file       = args.input;
+    options->verbose_mode     = args.verbose;
+    options->pretty_json_mode = args.pretty;
+    options->output_file      = args.output;
+    options->parse_qty        = args.count;
+    return(parse_colors_csv(options));
+  }
+  if ((strcmp(args.mode, "json") == 0)) {
+    args.input = DEFAULT_JSON_INPUT;
+    parse_json_options *options = malloc(sizeof(parse_json_options));
+    options->DB           = malloc(sizeof(ColorsDB));
+    options->DB->Path     = COLOR_NAMES_DB_PATH;
+    options->input_file   = args.input;
+    options->verbose_mode = args.verbose;
+    options->parse_qty    = args.count;
+    if (init_colors_db(options->DB) != 0) {
+      printf("failed to initialize DB!\n");
+      exit(1);
+    }
+    int r = parse_colors_json(options);
+    /*
+     * iterate_parsed_results(options);
+     * iterate_parsed_results(options);
+     * iterate_parsed_results(options);
+     * free_parsed_results(options);
+     */
+    if (options) {
+      free(options);
+    }
+    cleanup();
+    return(r);
+  }
+
+  printf(AC_RESETALL AC_RED "No mode selected: %s\n" AC_RESETALL, args.mode);
+  return(1);
+} /* main */
+
 
 int debug_args(){
   fprintf(stderr,
@@ -80,50 +133,9 @@ int parse_args(int argc, char *argv[]){
 
 void cleanup(){
   if (args.verbose) {
+#ifdef DEBUG_MEMORY
     print_allocated_memory();
+#endif
   }
-}
-
-
-int main(int argc, char **argv) {
-  parse_args(argc, argv);
-  if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
-    printf("Test OK\n"); return(0);
-  }
-
-
-  if ((strcmp(args.mode, "debug_args") == 0)) {
-    return(debug_args());
-  }
-
-  if ((strcmp(args.mode, "csv") == 0)) {
-    parse_csv_options *options = malloc(sizeof(parse_csv_options));
-    options->input_file       = args.input;
-    options->verbose_mode     = args.verbose;
-    options->pretty_json_mode = args.pretty;
-    options->output_file      = args.output;
-    options->parse_qty        = args.count;
-    return(parse_colors_csv(options));
-  }
-  if ((strcmp(args.mode, "json") == 0)) {
-    args.input = DEFAULT_JSON_INPUT;
-    parse_json_options *options = malloc(sizeof(parse_json_options));
-    options->input_file   = args.input;
-    options->verbose_mode = args.verbose;
-    options->parse_qty    = args.count;
-    int r = parse_colors_json(options);
-    iterate_parsed_results(options);
-    iterate_parsed_results(options);
-    iterate_parsed_results(options);
-    free_parsed_results(options);
-    if (options) {
-      free(options);
-    }
-    cleanup();
-    return(r);
-  }
-
-  printf(AC_RESETALL AC_RED "No mode selected: %s\n" AC_RESETALL, args.mode);
-  return(1);
 }
 
