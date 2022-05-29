@@ -1,4 +1,5 @@
-#include "../colors-csv-parser/colors-csv-parser.h"
+#define VERBOSE_DEBUG_HANDLER false
+#include "../db/db.h"
 #include "parse-colors.h"
 args_t args = {
   DEFAULT_CSV_INPUT,
@@ -10,6 +11,13 @@ args_t args = {
 };
 
 void cleanup();
+
+
+void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
+  if (VERBOSE_DEBUG_HANDLER) {
+    fprintf(stderr, "\nhandler, name: %s!\n", PARSED_COLOR_ITEM->Name);
+  }
+}
 
 
 int main(int argc, char **argv) {
@@ -32,25 +40,27 @@ int main(int argc, char **argv) {
     options->parse_qty        = args.count;
     return(parse_colors_csv(options));
   }
+  if ((strcmp(args.mode, "db") == 0)) {
+    ColorsDB *DB = malloc(sizeof(ColorsDB));
+    DB->Path = COLOR_NAMES_DB_PATH;
+    //int r = db_(options);
+    return(db_list_ids(DB));
+  }
+
   if ((strcmp(args.mode, "json") == 0)) {
     args.input = DEFAULT_JSON_INPUT;
     parse_json_options *options = malloc(sizeof(parse_json_options));
-    options->DB           = malloc(sizeof(ColorsDB));
-    options->DB->Path     = COLOR_NAMES_DB_PATH;
-    options->input_file   = args.input;
-    options->verbose_mode = args.verbose;
-    options->parse_qty    = args.count;
+    options->DB                 = malloc(sizeof(ColorsDB));
+    options->DB->Path           = COLOR_NAMES_DB_PATH;
+    options->input_file         = args.input;
+    options->verbose_mode       = args.verbose;
+    options->parse_qty          = args.count;
+    options->ParsedColorHandler = print_color_name_handler;
     if (init_colors_db(options->DB) != 0) {
       printf("failed to initialize DB!\n");
       exit(1);
     }
     int r = parse_colors_json(options);
-    /*
-     * iterate_parsed_results(options);
-     * iterate_parsed_results(options);
-     * iterate_parsed_results(options);
-     * free_parsed_results(options);
-     */
     if (options) {
       free(options);
     }

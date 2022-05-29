@@ -1,6 +1,6 @@
 #include "color-db.h"
-#define TYPE1    1
-#define TYPE2    2
+#define TYPE1 1
+#define TYPE2 2
 
 args_t  args = {
   DEFAULT_DB_FILE,

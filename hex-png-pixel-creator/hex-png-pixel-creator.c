@@ -1,4 +1,5 @@
 #include "hex-png-pixel-creator.h"
+HexPngWriterConfig gen_hex_write_config();
 
 args_t args = {
   DEFAULT_INPUT,

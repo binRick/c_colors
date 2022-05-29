@@ -20,6 +20,12 @@ struct ColorsDB {
     colordb db;
 };
 
+int db_list_ids(ColorsDB *DB);
+
+int db_list_type_ids(ColorsDB *DB, colordb_type TYPEID);
+int db_count_ids(ColorsDB *DB);
+int db_count_type_ids(ColorsDB *DB, colordb_type TYPEID);
+
 colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD);
 colordb_id add_colors_db(ColorsDB *DB, colordb_type TYPEID, char *RECORD);
 int init_colors_db(ColorsDB*);

@@ -4,12 +4,20 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#ifndef AC_HIDE_CURSOR
+#define AC_HIDE_CURSOR                 "\x1b[?25l"
+#endif
+#ifndef AC_SHOW_CURSOR
+#define AC_SHOW_CURSOR                 "\x1b[?25h"
+#endif
 
 typedef struct parse_json_options   parse_json_options;
 typedef struct ParsedColor          ParsedColor;
 
 #include "../db/db.h"
 #include "../submodules/djbhash/src/djbhash.h"
+
+typedef void (*json_item_cb_t)(ParsedColor *PARSED_COLOR_ITEM);
 struct parse_json_options {
   char           *input_file, *duration;
   bool           verbose_mode;
@@ -18,6 +26,7 @@ struct parse_json_options {
   size_t         ParsedColorsQty;
   struct djbhash ResultsHash;
   ColorsDB       *DB;
+  json_item_cb_t ParsedColorHandler;
 };
 
 #include "../db/db.h"
@@ -25,6 +34,7 @@ struct parse_json_options {
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
 #include "../submodules/c_timer/include/c_timer.h"
+#include "../submodules/progress.c/progress.h"
 #include "../vendor/sqlite3.h"
 #ifdef DEBUG_MEMORY
 #include "../submodules/debug-memory/debug_memory.h"

@@ -1,5 +1,4 @@
 dbg_lib = library('dbg', 
-'../../../submodules/dbg.h/dbg.h',
 install: false, dependencies: [
   asprintf_dep,
   ], 

@@ -19,13 +19,13 @@
 #include "../subprojects/cargs/include/cargs.h"
 
 ////////////////////////////////////////////////////////////////////
-#define DEFAULT_DB_FILE    "etc/db1.sqlite"
-#define DEFAULT_OUTPUT     ""
-#define DEFAULT_COUNT      10
-#define DEFAULT_VERBOSE    false
-#define DEFAULT_PRETTY     false
-#define DEFAULT_COLOR      false
-#define DEFAULT_MODE       "list"
+#define DEFAULT_DB_FILE "etc/db1.sqlite"
+#define DEFAULT_OUTPUT  ""
+#define DEFAULT_COUNT   10
+#define DEFAULT_VERBOSE false
+#define DEFAULT_PRETTY  false
+#define DEFAULT_COLOR   false
+#define DEFAULT_MODE    "list"
 ////////////////////////////////////////////////////////////////////
 
 int init_db();

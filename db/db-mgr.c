@@ -1,4 +1,13 @@
 #include "db-mgr.h"
+#include <stdio.h>
+
+#define SELECT_IDS_QUERY      "SELECT id FROM blobs"
+#define SELECT_TYPEIDS_QUERY  "SELECT type FROM blobs"
+#define SELECT_TYPEID_IDS_QUERY "SELECT id from blobs where type = ?"
+
+#define SELECT_COUNT_TYPEIDS_QUERY    "SELECT COUNT(DISTINCT type) from blobs"
+#define SELECT_COUNT_IDS_QUERY    "SELECT COUNT(id) FROM blobs"
+#define SELECT_COUNT_TYPEID_QUERY "SELECT COUNT(id) from blobs where type = ?"
 
 #define SELECT_QUERY          "SELECT data FROM blobs WHERE id = ?"
 #define ONE_QUERY             "SELECT id, data FROM blobs WHERE type = ? LIMIT 1"
@@ -6,6 +15,103 @@
 #define DELETE_QUERY          "DELETE FROM blobs WHERE id = ?"
 #define CREATE_TABLE_QUERY    "CREATE TABLE IF NOT EXISTS blobs (id INTEGER PRIMARY KEY, type INTEGER, data BLOB)"
 
+void *colordb_get_typeid_ids(colordb db, const colordb_type type, size_t *size, size_t *rows_qty){
+  const void    *p;
+  unsigned char *copy = NULL;
+  unsigned char *row_copy = NULL;
+  *size = 0;
+  *rows_qty = 0;
+
+  if (sqlite3_bind_int(db->typeid_ids, 1, type) != SQLITE_OK) return(copy);
+  *rows_qty = 0;
+  size_t added_bytes = 0;
+
+
+  while (sqlite3_step(db->typeid_ids) == SQLITE_ROW) {
+    p     = sqlite3_column_blob(db->typeid_ids, 0);
+    size_t row_size = (size_t)sqlite3_column_bytes(db->typeid_ids, 0);
+    unsigned char *row_data = malloc(row_size + 1);
+    memcpy(row_data, p, row_size);
+    row_data[row_size] = '\0';
+
+    if(copy == NULL)
+        copy = malloc(row_size + 1);
+    else
+        copy = realloc(copy, (*size) + row_size + 1 + (*rows_qty));
+
+    if (!copy) goto reset;
+
+    memcpy(copy + *size + (*rows_qty), p, row_size);
+    copy[*size+(*rows_qty)+row_size] = '\0';
+
+    *size += row_size;
+    (*rows_qty)++;
+  }
+
+reset:
+  sqlite3_clear_bindings(db->typeid_ids);
+  sqlite3_reset(db->typeid_ids);
+
+  return(copy);
+
+
+}
+
+void *colordb_count_ids(colordb db, size_t *size){
+  const void    *p;
+  unsigned char *copy = NULL;
+
+  if (sqlite3_step(db->count_ids) != SQLITE_ROW) {
+    goto reset;
+  }
+
+  *size = sqlite3_column_int64(db->count_ids, 0);
+
+reset:
+  sqlite3_clear_bindings(db->count_ids);
+  sqlite3_reset(db->count_ids);
+
+  return(copy);
+}
+void *colordb_count_typeids(colordb db, size_t *size){
+  const void    *p;
+  unsigned char *copy = NULL;
+
+  printf("querying unique typeids...........\n");
+  if (sqlite3_step(db->count_typeids) != SQLITE_ROW) {
+    goto reset;
+  }
+
+  *size = sqlite3_column_int64(db->count_typeids, 0);
+
+reset:
+  sqlite3_clear_bindings(db->count_typeids);
+  sqlite3_reset(db->count_typeids);
+
+  return(copy);
+}
+
+
+void *colordb_count_typeid(colordb db, const colordb_type type, size_t *size){
+  const void    *p;
+  unsigned char *copy = NULL;
+
+  if (sqlite3_bind_int(db->count_typeid, 1, type) != SQLITE_OK) {
+    return(copy);
+  }
+
+  if (sqlite3_step(db->count_typeid) != SQLITE_ROW) {
+    goto reset;
+  }
+
+  *size = sqlite3_column_int64(db->count_typeid, 0);
+
+reset:
+  sqlite3_clear_bindings(db->count_typeid);
+  sqlite3_reset(db->count_typeid);
+
+  return(copy);
+}
 
 colordb_id colordb_add(colordb            db,
                        const colordb_type type,
@@ -196,6 +302,66 @@ colordb colordb_open(const char *path){
                       -1,
                       &db->delete,
                       NULL) != SQLITE_OK) {
+    sqlite3_finalize(db->one);
+    sqlite3_finalize(db->select);
+    sqlite3_finalize(db->insert);
+    sqlite3_close(db->db);
+    free(db);
+    return(NULL);
+  }
+
+  if (sqlite3_prepare(db->db,
+                      SELECT_COUNT_TYPEID_QUERY,
+                      -1,
+                      &db->count_typeid,
+                      NULL) != SQLITE_OK) {
+    sqlite3_finalize(db->delete);
+    sqlite3_finalize(db->one);
+    sqlite3_finalize(db->select);
+    sqlite3_finalize(db->insert);
+    sqlite3_close(db->db);
+    free(db);
+    return(NULL);
+  }
+
+  if (sqlite3_prepare(db->db,
+                      SELECT_COUNT_TYPEIDS_QUERY,
+                      -1,
+                      &db->count_typeids,
+                      NULL) != SQLITE_OK) {
+    sqlite3_finalize(db->count_typeid);
+    sqlite3_finalize(db->delete);
+    sqlite3_finalize(db->one);
+    sqlite3_finalize(db->select);
+    sqlite3_finalize(db->insert);
+    sqlite3_close(db->db);
+    free(db);
+    return(NULL);
+  }
+  if (sqlite3_prepare(db->db,
+                      SELECT_COUNT_IDS_QUERY,
+                      -1,
+                      &db->count_ids,
+                      NULL) != SQLITE_OK) {
+    sqlite3_finalize(db->count_typeids);
+    sqlite3_finalize(db->count_typeid);
+    sqlite3_finalize(db->delete);
+    sqlite3_finalize(db->one);
+    sqlite3_finalize(db->select);
+    sqlite3_finalize(db->insert);
+    sqlite3_close(db->db);
+    free(db);
+    return(NULL);
+  }
+  if (sqlite3_prepare(db->db,
+                      SELECT_TYPEID_IDS_QUERY,
+                      -1,
+                      &db->typeid_ids,
+                      NULL) != SQLITE_OK) {
+    sqlite3_finalize(db->count_ids);
+    sqlite3_finalize(db->count_typeids);
+    sqlite3_finalize(db->count_typeid);
+    sqlite3_finalize(db->delete);
     sqlite3_finalize(db->one);
     sqlite3_finalize(db->select);
     sqlite3_finalize(db->insert);

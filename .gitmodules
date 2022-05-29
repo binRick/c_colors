@@ -58,3 +58,6 @@
 [submodule "submodules/c_fsio"]
 	path = submodules/c_fsio
 	url = https://github.com/sagiegurari/c_fsio
+[submodule "submodules/progress.c"]
+	path = submodules/progress.c
+	url = https://github.com/jwerle/progress.c

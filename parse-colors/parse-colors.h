@@ -12,27 +12,31 @@
 #include <sys/time.h>
 
 
+#include "../colors-csv-parser/colors-csv-parser.h"
 #include "../colors-json-parser/colors-json-parser.h"
 #include "../db/db.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
 //#include "../submodules/c_timer/include/c_timer.h"
+//#ifndef DBG_H_c49aa87c_54eb_46d2_8d72_a51f5efce1ac
+//#include "../submodules/dbg.h/dbg.h"
+//#endif
 
-#define RENDER_COLOR_OUTPUT     false
-#define RENDER_PRETTY_JSON      alse
-#define COLORNAMES_CSV_FILE     "vendor/colornames/colornames.csv"
-#define COLORNAMES_JSON_FILE    "etc/parsed-colors.json"
-#define COLOR_NAMES_DB_PATH     "etc/colornames.sqlite"
+#define RENDER_COLOR_OUTPUT  false
+#define RENDER_PRETTY_JSON   alse
+#define COLORNAMES_CSV_FILE  "vendor/colornames/colornames.csv"
+#define COLORNAMES_JSON_FILE "etc/parsed-colors.json"
+#define COLOR_NAMES_DB_PATH  "etc/colornames.sqlite"
 ////////////////////////////////////////////////////////////////////
-#define DEFAULT_CSV_INPUT       COLORNAMES_CSV_FILE
-#define DEFAULT_JSON_INPUT      COLORNAMES_JSON_FILE
-#define DEFAULT_OUTPUT          ""
-#define DEFAULT_COUNT           10
-#define DEFAULT_VERBOSE         false
-#define DEFAULT_PRETTY          false
-#define DEFAULT_COLOR           false
-#define DEFAULT_MODE            "csv"
+#define DEFAULT_CSV_INPUT    COLORNAMES_CSV_FILE
+#define DEFAULT_JSON_INPUT   COLORNAMES_JSON_FILE
+#define DEFAULT_OUTPUT       ""
+#define DEFAULT_COUNT        10
+#define DEFAULT_VERBOSE      false
+#define DEFAULT_PRETTY       false
+#define DEFAULT_COLOR        false
+#define DEFAULT_MODE         "csv"
 ////////////////////////////////////////////////////////////////////
 
 int parse_args(int argc, char *argv[]);
