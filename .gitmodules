@@ -49,3 +49,12 @@
 [submodule "submodules/smaz"]
 	path = submodules/smaz
 	url = https://github.com/antirez/smaz
+[submodule "submodules/asprintf.c"]
+	path = submodules/asprintf.c
+	url = https://github.com/jwerle/asprintf.c
+[submodule "submodules/dbg.h"]
+	path = submodules/dbg.h
+	url = https://github.com/leiless/dbg.h
+[submodule "submodules/c_fsio"]
+	path = submodules/c_fsio
+	url = https://github.com/sagiegurari/c_fsio

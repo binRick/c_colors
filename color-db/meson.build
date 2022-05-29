@@ -11,6 +11,7 @@ parse_colors_deps = [
      c_string_buffer_dep,
      c_timer_dep,
      db_dep,
+     asprintf_dep,
 ]
 if get_option('enable-binaries')
   parse_colors_exec = executable('color-db',

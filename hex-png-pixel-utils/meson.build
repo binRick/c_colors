@@ -4,6 +4,11 @@ hex_png_pixel_utils_srcs = [
 ]
 hex_png_pixel_utils_deps = [
      cargs_dep,
+     dbg_dep,
+     asprintf_dep,
+     bytes_dep,
+     c_fsio_dep,
+     cstringfn_dep,
 ]
 
 hex_png_pixel_utils_lib = static_library('hex-png-pixel-utils',

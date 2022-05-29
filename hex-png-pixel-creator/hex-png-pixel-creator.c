@@ -1,32 +1,36 @@
 #include "hex-png-pixel-creator.h"
 
-int parse_args(int, char **);
-int debug_args();
-int write_png_images();
-
 args_t args = {
   DEFAULT_INPUT,
   DEFAULT_OUTPUT_DIR,
   DEFAULT_MODE,
   DEFAULT_VERBOSE,
   DEFAULT_COUNT,
+  DEFAULT_HEX,
 };
 
+HexPngWriterConfig gen_hex_write_config(){
+    HexPngWriterConfig CONFIG = {
+        .COLOR = args.hex,
+        .PATH = args.output_dir,
+        .DEBUG = args.verbose,
+    };
+    return(CONFIG);
+}
 
 int main(int argc, char **argv) {
   parse_args(argc, argv);
+  HexPngWriterConfig config = gen_hex_write_config();
+  if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
+    int r = write_hex_png_to_path(&config);
+    return(r);
+  }
   if ((strcmp(args.mode, "write") == 0)) {
-    printf("writing images\n");
-    return(0);
+    int r = write_hex_png_to_path(&config);
+    return(r);
   }
   if ((strcmp(args.mode, "debug_args") == 0)) {
     return(debug_args());
-  }
-  if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
-    hex_png_pixel("#ABFF55");
-    hex_png_pixel("#5C22F5");
-    hex_png_pixel("#AB8855");
-    return(hex_png_pixel("#77FF55"));
   }
 
   printf(AC_RESETALL AC_RED "No mode selected: %s\n" AC_RESETALL, args.mode);
@@ -63,6 +67,9 @@ int parse_args(int argc, char **argv){
     identifier = cag_option_get(&context);
 
     switch (identifier) {
+    case 'H':
+      args.hex = cag_option_get_value(&context);
+      break;
     case 'm':
       value      = cag_option_get_value(&context);
       args.mode = value;

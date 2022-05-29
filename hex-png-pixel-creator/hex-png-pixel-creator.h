@@ -12,10 +12,14 @@
 #include <string.h>
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../subprojects/cargs/include/cargs.h"
+#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
+#include "../submodules/c_fsio/include/fsio.h"
 
+int parse_args(int, char **);
+int debug_args();
+int write_png_images();
 int hex_png_pixel(char *COLOR);
 char *str_substring(char *str, int start, int size);
-
 
 #define PARSED_COLORS_JSON_FILE    "etc/parsed-colors.json"
 ////////////////////////////////////////////////////////////////////
@@ -24,6 +28,7 @@ char *str_substring(char *str, int start, int size);
 #define DEFAULT_COUNT           10
 #define DEFAULT_VERBOSE         false
 #define DEFAULT_MODE            "write"
+#define DEFAULT_HEX             "FFFFFF"
 ////////////////////////////////////////////////////////////////////
 
 typedef struct CLI_ARGS {
@@ -32,6 +37,7 @@ typedef struct CLI_ARGS {
   char *mode;
   bool verbose;
   int  count;
+  char *hex;
 } args_t;
 
 static struct cag_option options[] = {
@@ -60,6 +66,11 @@ static struct cag_option options[] = {
     .access_name    = "count",
     .value_name     = "COUNT",
     .description    = "Item Count" },
+  { .identifier     = 'H',
+    .access_letters = "H",
+    .access_name    = "hex",
+    .value_name     = "HEX",
+    .description    = "Color Hex Value" },
   { .identifier     = 'h',
     .access_letters = "h",
     .access_name    = "help",

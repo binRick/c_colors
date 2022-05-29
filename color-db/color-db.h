@@ -13,19 +13,19 @@
 
 
 #include "../colors-json-parser/colors-json-parser.h"
+#include "../db/db.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
-#include "../db/db.h"
 
 ////////////////////////////////////////////////////////////////////
-#define DEFAULT_DB_FILE         "etc/db1.sqlite"
-#define DEFAULT_OUTPUT          ""
-#define DEFAULT_COUNT           10
-#define DEFAULT_VERBOSE         false
-#define DEFAULT_PRETTY          false
-#define DEFAULT_COLOR           false
-#define DEFAULT_MODE            "list"
+#define DEFAULT_DB_FILE    "etc/db1.sqlite"
+#define DEFAULT_OUTPUT     ""
+#define DEFAULT_COUNT      10
+#define DEFAULT_VERBOSE    false
+#define DEFAULT_PRETTY     false
+#define DEFAULT_COLOR      false
+#define DEFAULT_MODE       "list"
 ////////////////////////////////////////////////////////////////////
 
 int init_db();

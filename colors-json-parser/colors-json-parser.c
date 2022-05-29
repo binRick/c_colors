@@ -2,6 +2,7 @@
 
 #define COLORDB_MAX_HASH_BUCKETS    65536 * 128
 
+
 unsigned long colordb_hash(char *key, int length){
   unsigned long i;
   unsigned long hash;
@@ -13,28 +14,28 @@ unsigned long colordb_hash(char *key, int length){
   return(hash % COLORDB_MAX_HASH_BUCKETS);
 }
 
-#define ADD_ITEM_TO_HEX_DB()     { do { \
-    unsigned long key = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex));                       \
-    if (OPTIONS->verbose_mode)                                                                     \
-    printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu' \n", c->Hex, strlen(c->JSON), key); \
-    unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON); \
-    if (OPTIONS->verbose_mode)                                                                     \
-    printf("Hex>  added ID #%lu\n", inserted_id);                                                  \
-} while (0); }
+#define ADD_ITEM_TO_HEX_DB()     { do {                                                                                             \
+                                     unsigned long key = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex));                       \
+                                     if (OPTIONS->verbose_mode)                                                                     \
+                                     printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu' \n", c->Hex, strlen(c->JSON), key); \
+                                     unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON); \
+                                     if (OPTIONS->verbose_mode)                                                                     \
+                                     printf("Hex>  added ID #%lu\n", inserted_id);                                                  \
+                                   } while (0); }
 
-#define ADD_ITEM_TO_NAME_DB()    { do {   \
-    unsigned long key = (unsigned long)colordb_hash(c->Name, strlen(c->Name));                      \
-    if (OPTIONS->verbose_mode)                                                                      \
-    printf("Name> adding '%s' (%lu bytes) to db with key '%lu' \n", c->Name, strlen(c->JSON), key); \
-    unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON);  \
-    if (OPTIONS->verbose_mode)                                                                      \
-    printf("Name> added ID #%lu\n", inserted_id);                                                   \
-} while (0); }
+#define ADD_ITEM_TO_NAME_DB()    { do {                                                                                              \
+                                     unsigned long key = (unsigned long)colordb_hash(c->Name, strlen(c->Name));                      \
+                                     if (OPTIONS->verbose_mode)                                                                      \
+                                     printf("Name> adding '%s' (%lu bytes) to db with key '%lu' \n", c->Name, strlen(c->JSON), key); \
+                                     unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON);  \
+                                     if (OPTIONS->verbose_mode)                                                                      \
+                                     printf("Name> added ID #%lu\n", inserted_id);                                                   \
+                                   } while (0); }
 
 #define ADD_ITEM_TO_DBS()        { do {                     \
-    ADD_ITEM_TO_NAME_DB(); \
-    ADD_ITEM_TO_HEX_DB();  \
-} while (0); }
+                                     ADD_ITEM_TO_NAME_DB(); \
+                                     ADD_ITEM_TO_HEX_DB();  \
+                                   } while (0); }
 
 
 #define ALLOC_ITEM()             { do {                                                      \

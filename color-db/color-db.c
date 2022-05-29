@@ -1,8 +1,8 @@
 #include "color-db.h"
-#define TYPE1 1
-#define TYPE2 2
+#define TYPE1    1
+#define TYPE2    2
 
-args_t args = {
+args_t  args = {
   DEFAULT_DB_FILE,
   DEFAULT_MODE,
   DEFAULT_VERBOSE,
@@ -11,54 +11,66 @@ args_t args = {
 
 colordb db;
 
+
 int init_db(char *DB){
   db = colordb_open(DB);
-  if(!db){
-		return(EXIT_FAILURE);
+  if (!db) {
+    return(EXIT_FAILURE);
   }
-
   return(EXIT_SUCCESS);
 }
 
 
 int read_db(){
   return(EXIT_SUCCESS);
-
 }
 
+
 int list_db(char *DB){
+  char *str = NULL;
+  char *fmt = "this is a %s";
+  int  size = asprintf(&str, fmt, "string");
+
+  printf("%s\n", str);
+  printf("%d\n", size);
+
+
   printf("listing db.........\n");
   init_db(DB);
-  char *msg = "mydat123xxxxxxxx";
-  colordb_id id = colordb_add(db, TYPE1, (void*)msg, strlen(msg));
+  char       *msg = "mydat123xxxxxxxx";
+  colordb_id id   = colordb_add(db, TYPE1, (void *)msg, strlen(msg));
+
   printf("added %llu\n", id);
 
-  size_t len0;
+  size_t     len0;
   colordb_id found_id0;
-  void *item0 = colordb_get(db, id, &len0);
+  void       *item0 = colordb_get(db, id, &len0);
+
   printf("got>  size:%lu\n", len0);
-  printf("got>  '%s'\n", (char*)item0);
+  printf("got>  '%s'\n", (char *)item0);
 
-  size_t len;
+  size_t     len;
   colordb_id found_id;
-  void *item = colordb_one(db, TYPE1, &found_id, &len);
-  printf("got>  size:%lu\n", len);
-  printf("got>  '%s'\n", (char*)item);
+  void       *item = colordb_one(db, TYPE1, &found_id, &len);
 
-  size_t len1;
+  printf("got>  size:%lu\n", len);
+  printf("got>  '%s'\n", (char *)item);
+
+  size_t     len1;
   colordb_id found_id1;
-  void *item1;
+  void       *item1;
 
   colordb_delete(db, found_id1);
 
   item1 = colordb_one(db, TYPE2, &found_id1, &len1);
   printf("(after del) 2: got>  size:%lu\n", len1);
-  printf("(after del) 2: got>  #%llu> '%s'\n", found_id1, (char*)item1);
+  printf("(after del) 2: got>  #%llu> '%s'\n", found_id1, (char *)item1);
 
   colordb_close(db);
 
   return(EXIT_SUCCESS);
-}
+} /* list_db */
+
 
 int debug_args(){
   fprintf(stderr,
@@ -88,7 +100,7 @@ int parse_args(int argc, char *argv[]){
 
     switch (identifier) {
     case 'd':
-      value      = cag_option_get_value(&context);
+      value        = cag_option_get_value(&context);
       args.db_file = value;
       break;
     case 'm':
@@ -110,7 +122,6 @@ int parse_args(int argc, char *argv[]){
   }
   return(EXIT_SUCCESS);
 }
-
 
 
 int main(int argc, char **argv) {
