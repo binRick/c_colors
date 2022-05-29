@@ -27,7 +27,7 @@ TIDIED_FILES = \
 			   colors-csv-parser/*.c colors-csv-parser/*.h \
 			   rgb-ansi-utils/*.c rgb-ansi-utils/*.h \
 			   colors-json-parser/*.c colors-json-parser/*.h \
-			   color-db/*.h color-db/*.c \
+			   db/*.h db/*.c \
 			   parse-colors/*.c parse-colors/*.h
 ##############################################################
 CD_LOADER = cd $(LOADER_DIR)

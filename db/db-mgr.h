@@ -16,6 +16,7 @@ typedef struct {
   sqlite3      *db;
   sqlite3_stmt *select, *insert, *delete, *one;
   sqlite3_stmt *ids, *typeids, *typeid_ids, *count_typeids, *count_ids, *count_typeid;
+  sqlite3_stmt *distinct_typeids;
 } *colordb;
 
 typedef colordb_id colordb_type;
@@ -31,5 +32,6 @@ void *colordb_count_typeid(colordb db, const colordb_type type, size_t *size);
 void *colordb_count_typeids(colordb db, size_t *size);
 void *colordb_count_ids(colordb db, size_t *size);
 void *colordb_get_typeid_ids(colordb db, const colordb_type type, size_t *size, size_t *rows_qty);
+void *colordb_get_distinct_typeids(colordb db, size_t *size, size_t *rows_qty);
 
 #endif

@@ -15,7 +15,7 @@ unsigned long colordb_hash(char *key, int length);
 #define VERBOSE_DEBUG_PROGRESS false
 
 #define DB_HEX_MODE_ENABLED  false
-#define DB_NAME_MODE_ENABLED false
+#define DB_NAME_MODE_ENABLED true
 
 
 void db_progress_start(progress_data_t *data) {

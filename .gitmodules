@@ -61,3 +61,9 @@
 [submodule "submodules/progress.c"]
 	path = submodules/progress.c
 	url = https://github.com/jwerle/progress.c
+[submodule "submodules/tempdir.c"]
+	path = submodules/tempdir.c
+	url = https://github.com/stephenmathieson/tempdir.c
+[submodule "submodules/strdup"]
+	path = submodules/strdup
+	url = https://github.com/clibs/strdup
