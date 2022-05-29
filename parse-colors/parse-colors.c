@@ -112,6 +112,10 @@ int main(int argc, char **argv) {
     options->verbose_mode = args.verbose;
     options->parse_qty    = args.count;
     int r = parse_colors_json(options);
+    iterate_parsed_results(options);
+    iterate_parsed_results(options);
+    iterate_parsed_results(options);
+    free_parsed_results(options);
     if (options) {
       free(options);
     }
