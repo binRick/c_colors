@@ -43,7 +43,6 @@ int main(int argc, char **argv) {
   if ((strcmp(args.mode, "db") == 0)) {
     ColorsDB *DB = malloc(sizeof(ColorsDB));
     DB->Path = COLOR_NAMES_DB_PATH;
-    //int r = db_(options);
     return(db_list_ids(DB));
   }
 

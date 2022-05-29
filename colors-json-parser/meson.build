@@ -8,6 +8,7 @@ colors_json_parser_deps = [
   debug_memory_dep,
   c_timer_dep,
   djbhash_dep,
+  hex_png_pixel_utils_dep,
   db_dep,
   progress_dep,
 ]

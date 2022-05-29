@@ -30,6 +30,7 @@ struct parse_json_options {
 };
 
 #include "../db/db.h"
+#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
 #include "../submodules/bytes/bytes.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
@@ -58,6 +59,8 @@ struct ParsedColor {
   ParsedRGB *RGB;
   ParsedSeq *Seq;
   char      *JSON;
+  char      *PngEncodedContent;
+  size_t    PngDecodedLength;
 };
 
 

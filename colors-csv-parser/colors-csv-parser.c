@@ -1,3 +1,4 @@
+#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
 #include "../rgb-ansi-utils/rgb-ansi-utils.h"
 #include "colors-csv-parser.h"
 
@@ -91,8 +92,11 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     /////////////////////////////////////////////////////////////////////////
     o = json_value_init_object();
     O = json_value_get_object(o);
+    EncodedPngResult PNG_RESULT = hex_to_png_encoded_bytes(C->hex);
     json_object_set_string(O, "name", C->name);
     json_object_set_string(O, "hex", C->hex);
+    json_object_set_string(O, "encoded_png_content", PNG_RESULT.EncodedContent);
+    json_object_set_number(O, "decoded_png_length", PNG_RESULT.DecodedLength);
     json_object_dotset_number(O, "ansicode", C->ansicode);
     json_object_dotset_number(O, "rgb.red", C->rgb->red);
     json_object_dotset_number(O, "rgb.green", C->rgb->green);

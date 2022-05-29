@@ -1,23 +1,27 @@
 //#define DEBUG_MEMORY_ENABLED
-#include "hex-png-pixel-utils.h"
-#include "stb_image_write.h"
-#include "../submodules/dbg.h/dbg.h"
 #ifdef DEBUG_MEMORY_ENABLED
 #include "../submodules/debug-memory/debug_memory.h"
 #endif
+#include "hex-png-pixel-utils.h"
+#include "stb_image_write.h"
+#include "../submodules/dbg.h/dbg.h"
 //////////////////////////////////////////////////////////
 static const char *str_substring(char *str, int start, int size);
 //////////////////////////////////////////////////////////
 EncodedPngResult hex_to_png_encoded_bytes(char *COLOR){
   EncodedPngResult _ENC_RES = { .EncodedLength = 0, .DecodedLength = 0, .EncodedContent = NULL, .DecodedContent = NULL };
-  if(!COLOR || strlen(COLOR) != HEX_LEN) 
-      return(_ENC_RES);
+  if(COLOR[0] == '#'){
+      char *NC = malloc(HEX_LEN+1);
+      NC = str_substring(COLOR,1,HEX_LEN);
+      NC[HEX_LEN] = '\0';
+      COLOR = NC;
+  }
+  if(!COLOR || strlen(COLOR) != HEX_LEN) return(_ENC_RES);
   char *td = gettempdir();
   size_t wrote_bytes; 
   assert(td);
   char *write_file = malloc(MAX_PATH_LEN);
   sprintf(write_file, "%s/.tmp.png", td);
-
   char *upper_color = malloc(HEX_LEN); 
   unsigned char *data = malloc(3); 
   upper_color = stringfn_to_uppercase(COLOR); 
@@ -30,6 +34,7 @@ EncodedPngResult hex_to_png_encoded_bytes(char *COLOR){
   free(data); 
   free(upper_color); 
   free(td);
+  unlink(write_file);
   free(write_file);
   if(strlen(PNG_DATA) < 1) return(_ENC_RES);
   if(wrote_bytes < 1) return(_ENC_RES);
@@ -40,6 +45,7 @@ EncodedPngResult hex_to_png_encoded_bytes(char *COLOR){
     .EncodedLength = strlen(ENCODED_PNG_DATA),
     .EncodedContent = ENCODED_PNG_DATA,
   };
+
 #ifdef DEBUG_MEMORY_ENABLED
     print_allocated_memory();
 #endif    

@@ -1,17 +1,14 @@
 #include "colors-json-parser.h"
 unsigned long colordb_hash(char *key, int length);
 
-
 #include "../submodules/progress.c/progress.h"
-#ifndef DBG_H_c49aa87c_54eb_46d2_8d72_a51f5efce1ac
-#include "../submodules/dbg.h/dbg.h"
-#endif
+//#include "../submodules/dbg.h/dbg.h"
 
 #define COLORDB_MAX_HASH_BUCKETS 65536 * 128
 #define PROGRESS_BAR_WIDTH 40
 #define BG_PROGRESS_BAR_CHAR "."
 #define PROGRESS_BAR_CHAR "="
-#define VERBOSE_DEBUG_ITEMS false
+#define VERBOSE_DEBUG_ITEMS true
 #define VERBOSE_DEBUG_PROGRESS false
 
 #define DB_HEX_MODE_ENABLED  false
@@ -100,6 +97,8 @@ void db_progress_end(progress_data_t *data) {
                           c->Name               = json_object_get_string(ColorObject, "name");                \
                           c->Ansicode           = json_object_get_number(ColorObject, "ansicode");            \
                           c->Hex                = json_object_get_string(ColorObject, "hex");                 \
+                          c->PngEncodedContent  = json_object_get_string(ColorObject, "encoded_png_content"); \
+                          c->PngDecodedLength   = json_object_get_number(ColorObject, "decoded_png_length");  \
                           c->RGB->red           = json_object_dotget_number(ColorObject, "rgb.red");          \
                           c->RGB->green         = json_object_dotget_number(ColorObject, "rgb.green");        \
                           c->RGB->blue          = json_object_dotget_number(ColorObject, "rgb.blue");         \
@@ -131,6 +130,9 @@ void db_progress_end(progress_data_t *data) {
                                    );                                                                \
                             printf("\tansi seq fg: %lu bytes\n",                                     \
                                    strlen(c->Seq->Ansi->fg)                                          \
+                                   );                                                                \
+                            printf("\tencoded png (%lu bytes decoded): %s\n",                        \
+                                   c->PngDecodedLength, c->PngEncodedContent                         \
                                    );                                                                \
                           }                                                                          \
                         } while (0); }
