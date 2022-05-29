@@ -4,16 +4,16 @@ parse_colors_srcs = [
 parse_colors_deps = [
      cargs_dep,
      colors_csv_parser_dep,
+     colors_json_parser_dep,
      cstringfn_dep,
      parson_shared_dep,
      fs_dep,
-     #     ansicodes_dep,
      rgba_dep, 
      ansi_codes_dep, 
      ansi_rgb_utils_dep,
      bytes_dep,
      c_string_buffer_dep,
-     #c_ansi_dep, 
+     #//     c_timer_dep,
 ]
 if get_option('enable-binaries')
   parse_colors_exec = executable('parse-colors',

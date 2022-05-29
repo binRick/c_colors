@@ -6,7 +6,6 @@
 .nodemon.log
 embeds
 .n
-*/deps/*
 **/vendor/*
 **/submodules/*
 */build
@@ -19,5 +18,4 @@ tmp/
 */subprojects/*
 subprojects/*/
 *unc-backup*
-*/meson/*
 *.png

@@ -12,16 +12,19 @@
 #include <sys/time.h>
 
 
+#include "../colors-json-parser/colors-json-parser.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
+//#include "../submodules/c_timer/include/c_timer.h"
 
 #define RENDER_COLOR_OUTPUT     false
 #define RENDER_PRETTY_JSON      alse
 #define COLORNAMES_CSV_FILE     "vendor/colornames/colornames.csv"
-#define COLORNAMES_JSON_FILE    "vendor/colornames/colornames.json"
+#define COLORNAMES_JSON_FILE    "etc/parsed-colors.json"
 ////////////////////////////////////////////////////////////////////
-#define DEFAULT_INPUT           COLORNAMES_CSV_FILE
+#define DEFAULT_CSV_INPUT       COLORNAMES_CSV_FILE
+#define DEFAULT_JSON_INPUT      COLORNAMES_JSON_FILE
 #define DEFAULT_OUTPUT          ""
 #define DEFAULT_COUNT           10
 #define DEFAULT_VERBOSE         false

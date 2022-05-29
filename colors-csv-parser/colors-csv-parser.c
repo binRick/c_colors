@@ -118,8 +118,8 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
         printf(AC_RESETALL);
       }
     }else{
-        stringbuffer_append_string(sb, js);
-        stringbuffer_append_string(sb, "\n");
+      stringbuffer_append_string(sb, js);
+      stringbuffer_append_string(sb, "\n");
     }
   }
   stringbuffer_append_string(sb, "\n");

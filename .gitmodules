@@ -37,3 +37,9 @@
 [submodule "submodules/bytes"]
 	path = submodules/bytes
 	url = https://github.com/clibs/bytes
+[submodule "submodules/debug-memory"]
+	path = submodules/debug-memory
+	url = https://github.com/funasoul/debug-memory
+[submodule "submodules/c_timer"]
+	path = submodules/c_timer
+	url = https://github.com/binRick/c_timer
