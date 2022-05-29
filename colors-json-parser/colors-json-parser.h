@@ -20,7 +20,7 @@ struct parse_json_options {
   ColorsDB       *DB;
 };
 
-#include "../submodules/boydemdb/boydemdb.h"
+#include "../db/db.h"
 #include "../submodules/bytes/bytes.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_stringfn/include/stringfn.h"

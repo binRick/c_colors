@@ -9,10 +9,10 @@ args_t args = {
   DEFAULT_COUNT,
 };
 
-boydemdb db;
+colordb db;
 
 int init_db(char *DB){
-  db = boydemdb_open(DB);
+  db = colordb_open(DB);
   if(!db){
 		return(EXIT_FAILURE);
   }
@@ -30,32 +30,32 @@ int list_db(char *DB){
   printf("listing db.........\n");
   init_db(DB);
   char *msg = "mydat123xxxxxxxx";
-  boydemdb_id id = boydemdb_add(db, TYPE1, (void*)msg, strlen(msg));
+  colordb_id id = colordb_add(db, TYPE1, (void*)msg, strlen(msg));
   printf("added %llu\n", id);
 
   size_t len0;
-  boydemdb_id found_id0;
-  void *item0 = boydemdb_get(db, id, &len0);
+  colordb_id found_id0;
+  void *item0 = colordb_get(db, id, &len0);
   printf("got>  size:%lu\n", len0);
   printf("got>  '%s'\n", (char*)item0);
 
   size_t len;
-  boydemdb_id found_id;
-  void *item = boydemdb_one(db, TYPE1, &found_id, &len);
+  colordb_id found_id;
+  void *item = colordb_one(db, TYPE1, &found_id, &len);
   printf("got>  size:%lu\n", len);
   printf("got>  '%s'\n", (char*)item);
 
   size_t len1;
-  boydemdb_id found_id1;
+  colordb_id found_id1;
   void *item1;
 
-  boydemdb_delete(db, found_id1);
+  colordb_delete(db, found_id1);
 
-  item1 = boydemdb_one(db, TYPE2, &found_id1, &len1);
+  item1 = colordb_one(db, TYPE2, &found_id1, &len1);
   printf("(after del) 2: got>  size:%lu\n", len1);
   printf("(after del) 2: got>  #%llu> '%s'\n", found_id1, (char*)item1);
 
-  boydemdb_close(db);
+  colordb_close(db);
 
   return(EXIT_SUCCESS);
 }

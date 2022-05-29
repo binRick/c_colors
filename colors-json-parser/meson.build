@@ -8,7 +8,6 @@ colors_json_parser_deps = [
   debug_memory_dep,
   c_timer_dep,
   djbhash_dep,
-  boydemdb_dep,
   db_dep,
 ]
 colors_json_parser_lib = static_library('colors-json-parser',

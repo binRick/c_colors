@@ -46,3 +46,6 @@
 [submodule "submodules/boydemdb"]
 	path = submodules/boydemdb
 	url = https://github.com/dimkr/boydemdb
+[submodule "submodules/smaz"]
+	path = submodules/smaz
+	url = https://github.com/antirez/smaz

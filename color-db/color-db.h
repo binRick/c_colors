@@ -16,8 +16,7 @@
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
-#include "../submodules/boydemdb/boydemdb.h"
-#include "../vendor/sqlite3.h"
+#include "../db/db.h"
 
 ////////////////////////////////////////////////////////////////////
 #define DEFAULT_DB_FILE         "etc/db1.sqlite"
