@@ -67,3 +67,6 @@
 [submodule "submodules/strdup"]
 	path = submodules/strdup
 	url = https://github.com/clibs/strdup
+[submodule "submodules/spmemvfs"]
+	path = submodules/spmemvfs
+	url = https://github.com/spsoft/spmemvfs.git

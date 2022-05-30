@@ -21,3 +21,6 @@ subprojects/*/
 *.png
 etc/*.json
 etc/*.sqlite
+abc.db
+etc/dbmem0.dat
+etc/dbmem0.sqlite

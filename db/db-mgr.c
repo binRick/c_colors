@@ -1,5 +1,4 @@
 #include "db-mgr.h"
-#include <stdio.h>
 
 #define SELECT_IDS_QUERY      "SELECT id FROM blobs"
 #define SELECT_TYPEIDS_QUERY  "SELECT type FROM blobs"

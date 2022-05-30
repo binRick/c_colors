@@ -1,13 +1,20 @@
 #include "parse-colors.h"
+#include "termpaint.h"
+#include "termpaintx.h"
+#include "termpaintx_ttyrescue.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <termios.h>
-#include "termpaint.h"
-#include "termpaintx.h"
-#include "termpaintx_ttyrescue.h"
-#define streq(a,b) (strcmp(a,b)==0)
+#include <unistd.h>
+#define streq(a, b) (strcmp(a, b) == 0)
 #define DEBUG_TERMINAL_CAPABILITIES false
+#define ALT_SCREEN_MODE_ENABLED false
+void cleanup();
+void restore_screen();
+void setup_screen();
+void load_new_palette_type_id();
+
 args_t args = {
   DEFAULT_CSV_INPUT,
   DEFAULT_OUTPUT,
@@ -16,122 +23,152 @@ args_t args = {
   DEFAULT_COUNT,
   DEFAULT_COLOR,
 };
-
 typedef struct {
-    bool RestorePalette;
+  bool RestorePalette, IsTTY, AltScreenInitiallyEnabled;
 } TerminalCapabilities_t;
-
-TerminalCapabilities_t TerminalCapabilities = {
-    RestorePalette: false,
-};
-
-
-
-void cleanup();
-void restore_screen();
-void setup_screen();
-void load_new_palette_type_id();
-
-
-
-
 typedef enum {
   OFF,
   ON,
   QUERY,
 } BoolQuery;
 
-static void await_c1(unsigned char c1)
-{
+bool                   wasicanon;
+TerminalCapabilities_t TerminalCapabilities = {
+  .RestorePalette            = false,
+  .AltScreenInitiallyEnabled = false,
+  .IsTTY                     = false,
+};
+
+
+static bool seticanon(bool icanon, bool echo){
+  struct termios termios;
+
+  tcgetattr(0, &termios);
+
+  bool ret = (termios.c_lflag & ICANON);
+
+  if (icanon) {
+    termios.c_lflag |= ICANON;
+  }else{
+    termios.c_lflag &= ~ICANON;
+  }
+
+  if (echo) {
+    termios.c_lflag |= ECHO;
+  }else{
+    termios.c_lflag &= ~ECHO;
+  }
+
+  tcsetattr(0, TCSANOW, &termios);
+
+  return(ret);
+}
+
+
+void restoreicanon(void){
+  seticanon(wasicanon, true);
+}
+
+
+static void await_c1(unsigned char c1){
   unsigned char c;
 
   /* await CSI - 8bit or 2byte 7bit form */
   bool in_esc = false;
-  while((c = getchar())) {
-    if(c == c1)
+
+  while ((c = getchar())) {
+    if (c == c1) {
       break;
-    if(in_esc && c == (char)(c1 - 0x40))
+    }
+    if (in_esc && c == (char)(c1 - 0x40)) {
       break;
-    if(!in_esc && c == 0x1b)
+    }
+    if (!in_esc && c == 0x1b) {
       in_esc = true;
-    else
+    }else{
       in_esc = false;
+    }
   }
 }
-static char *read_csi()
-{
+
+
+static char *read_csi(){
   await_c1(0x9B); // CSI
 
   /* TODO: This really should be a more robust CSI parser
    */
   char csi[32];
-  int i = 0;
-  for(; i < sizeof(csi)-1; i++) {
+  int  i = 0;
+
+  for ( ; i < sizeof(csi) - 1; i++) {
     char c = csi[i] = getchar();
-    if(c >= 0x40 && c <= 0x7e)
+    if (c >= 0x40 && c <= 0x7e) {
       break;
+    }
   }
   csi[++i] = 0;
 
   // TODO: returns longer than 32?
 
-  return strdup(csi);
+  return(strdup(csi));
 }
-static bool query_dec_mode(int mode)
-{
+
+
+static bool query_dec_mode(int mode){
   printf("\x1b[?%d$p", mode);
 
   char *s = NULL;
+
   do {
-    if(s)
+    if (s) {
       free(s);
+    }
     s = read_csi();
 
     /* expect "?" mode ";" value "$y" */
 
-    int reply_mode, reply_value;
+    int  reply_mode, reply_value;
     char reply_cmd;
     /* If the sscanf format string ends in a literal, we can't tell from
      * its return value if it matches. Hence we'll %c the cmd and check it
      * explicitly
      */
-    if(sscanf(s, "?%d;%d$%c", &reply_mode, &reply_value, &reply_cmd) < 3)
+    if (sscanf(s, "?%d;%d$%c", &reply_mode, &reply_value, &reply_cmd) < 3) {
       continue;
-    if(reply_cmd != 'y')
+    }
+    if (reply_cmd != 'y') {
       continue;
+    }
 
-    if(reply_mode != mode)
+    if (reply_mode != mode) {
       continue;
+    }
 
     free(s);
 
-    if(reply_value == 1 || reply_value == 3)
-      return true;
-    if(reply_value == 2 || reply_value == 4)
-      return false;
+    if (reply_value == 1 || reply_value == 3) {
+      return(true);
+    }
+    if (reply_value == 2 || reply_value == 4) {
+      return(false);
+    }
 
     printf("Unrecognised reply to DECRQM: %d\n", reply_value);
-    return false;
-  } while(1);
+    return(false);
+  } while (1);
 }
-static void do_dec_mode(int mode, BoolQuery val, const char *name){
-  switch(val) {
-    case OFF:
-    case ON:
-      printf("\x1b[?%d%c", mode, val == ON ? 'h' : 'l');
-      break;
 
-    case QUERY:
-      if(query_dec_mode(mode))
-        printf("%s on\n", name);
-      else
-        printf("%s off\n", name);
-      break;
+
+static void do_dec_mode(int mode, BoolQuery val, const char *name){
+  if (query_dec_mode(mode)) {
+    printf("%s on\n", name);
+  }else{
+    printf("%s off\n", name);
   }
 }
 
+
 char *strdup_escaped(const char *tmp) {
-  // escaping could quadruple size
   char *ret = malloc(strlen(tmp) * 4 + 1);
   char *dst = ret;
 
@@ -204,31 +241,6 @@ void debug_log(termpaint_integration *integration, const char *data, int length)
 }
 
 
-void setup_screen(){
-  do_dec_mode(1049, 2, "altscreen");
-
-  sleep(5);
-
-  printf(AC_ALT_SCREEN_ON);
-  if(TerminalCapabilities.RestorePalette)
-    printf(AC_SAVE_PALETTE);
-  printf(AC_HIDE_CURSOR);
-  signal(SIGTERM, restore_screen);
-  signal(SIGQUIT, restore_screen);
-  signal(SIGINT, restore_screen);
-  atexit(restore_screen);
-}
-
-
-void restore_screen(){
-  printf(AC_SHOW_CURSOR);
-  printf(AC_ALT_SCREEN_OFF);
-  if(TerminalCapabilities.RestorePalette)
-      printf(AC_RESTORE_PALETTE);
-  cleanup();
-}
-
-
 void cleanup(){
   if (args.verbose) {
 #ifdef DEBUG_MEMORY
@@ -239,11 +251,11 @@ void cleanup(){
 }
 
 
-int QUERY_TERMINAL(){
+int TermpaintQuery(){
   termpaint_integration *integration = termpaintx_full_integration("+kbdsigint +kbdsigtstp");
 
   if (!integration) {
-    puts("Could not init!");
+    puts("Could not init termpaint!");
     return(1);
   }
   termpaint_integration_set_logging_func(integration, debug_log);
@@ -265,51 +277,66 @@ int QUERY_TERMINAL(){
   termpaint_terminal_free_with_restore(terminal);
   for (Cap *c = caps; c->name; c++) {
     c->state = termpaint_terminal_capable(terminal, c->id);
-    if(strcmp(c->name,"TITLE_RESTORE")==0)
-        TerminalCapabilities.RestorePalette = c->state;
-    if(DEBUG_TERMINAL_CAPABILITIES)
-        printf(AC_RESETALL AC_YELLOW AC_ITALIC "%30s" AC_RESETALL 
-            " => " 
-            "[" AC_REVERSED AC_BOLD "%3s" AC_RESETALL "]"
-            "\n"
-            , c->name
-            , c->state ? AC_GREEN "Yes" : AC_RED "No"
-            );
+    if (strcmp(c->name, "TITLE_RESTORE") == 0) {
+      TerminalCapabilities.RestorePalette = c->state;
+    }
+    if (DEBUG_TERMINAL_CAPABILITIES || args.verbose) {
+      printf(AC_RESETALL AC_YELLOW AC_ITALIC "%30s" AC_RESETALL
+             " => "
+             "[" AC_REVERSED AC_BOLD "%3s" AC_RESETALL "]"
+             "\n",
+             c->name,
+             c->state ? AC_GREEN "Yes" : AC_RED "No"
+             );
+    }
   }
-  if(DEBUG_TERMINAL_CAPABILITIES || args.verbose){
-      printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", self_reported_name_and_version);
-      printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", buff);
-      printf(AC_BLUE AC_BOLD "Restore Palette?" AC_RESETALL " " "%s" AC_RESETALL "\n", TerminalCapabilities.RestorePalette ? AC_GREEN "Yes" : AC_RED "No");
-//      printf("\e[?1049%c", "
-      sleep(5);
+  if (DEBUG_TERMINAL_CAPABILITIES || args.verbose) {
+    printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", self_reported_name_and_version);
+    printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", buff);
+    printf(AC_BLUE AC_BOLD "Restore Palette?" AC_RESETALL " " "%s" AC_RESETALL "\n", TerminalCapabilities.RestorePalette ? AC_GREEN "Yes" : AC_RED "No");
+    sleep(2);
   }
   return(EXIT_SUCCESS);
+} /* QUERY_TERMINAL */
+
+
+void setup_screen(){
+  if (ALT_SCREEN_MODE_ENABLED) {
+    printf(AC_ALT_SCREEN_ON);
+  }
+  TermpaintQuery();
+  if (TerminalCapabilities.RestorePalette) {
+    printf(AC_SAVE_PALETTE);
+  }
+  printf(AC_HIDE_CURSOR);
+  signal(SIGTERM, restore_screen);
+  signal(SIGQUIT, restore_screen);
+  signal(SIGINT, restore_screen);
+  atexit(restore_screen);
 }
 
 
-char *draw_box(int BOX_SIZE){
-  int  W = BOX_SIZE * 2, H = BOX_SIZE;
-  char *out = malloc(1024);
-  char *BG  = AC_RESETALL AC_BLACK "" AC_BG24(255, 255, 255);
-
-  sprintf(out, "%s", BG);
-  for (int y = 0; y < H; y++) {
-    for (int x = 0; x < W; x++) {
-      strcat(out, " ");
-    }
-    strcat(out, "\n");
+void restore_screen(){
+  printf(AC_SHOW_CURSOR);
+  if (ALT_SCREEN_MODE_ENABLED) {
+    printf(AC_ALT_SCREEN_OFF);
   }
-  return(out);
+  if (TerminalCapabilities.RestorePalette) {
+    printf(AC_RESTORE_PALETTE);
+  }
+  cleanup();
 }
 
 
 void load_new_palette_type_id(int PALETTE_TYPE_ID){
-  if(!TerminalCapabilities.RestorePalette)
-        return;
-
+  if (!TerminalCapabilities.RestorePalette || !TerminalCapabilities.IsTTY) {
+    return;
+  }
   struct StringFNStrings p = stringfn_split(WorkerPaletteTypes[PALETTE_TYPE_ID].Colors, ' ');
 
-  fprintf(stdout, "Loading %s Colors\n", WorkerPaletteTypes[PALETTE_TYPE_ID].Name);
+  if (args.verbose) {
+    fprintf(stdout, "Loading %s Colors\n", WorkerPaletteTypes[PALETTE_TYPE_ID].Name);
+  }
   char *new_palette_codes = malloc(1024);
 
   sprintf(new_palette_codes, NEWPALETTE,
@@ -334,17 +361,14 @@ void load_new_palette_type_id(int PALETTE_TYPE_ID){
           p.strings[0]
           );
 
-  printf("%s\n", new_palette_codes);
-  char *box = draw_box(5);
-
-  printf(AC_RESETALL "%s" AC_RESETALL "\n", box);
-  free(box);
+  printf("%s", new_palette_codes);
   free(new_palette_codes);
+  stringfn_release_strings_struct(p);
 }
 
 
 void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
-  if (VERBOSE_DEBUG_HANDLER) {
+  if (VERBOSE_DEBUG_HANDLER || args.verbose) {
     fprintf(stderr, "\nhandler, name: %s!\n", PARSED_COLOR_ITEM->Name);
   }
 }
@@ -355,10 +379,13 @@ int main(int argc, char **argv) {
   if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
     printf("Test OK\n"); return(0);
   }
-  QUERY_TERMINAL();
-  setup_screen();
-  load_new_palette_type_id(DEFAULT_PALETTE);
+  TerminalCapabilities.IsTTY = isatty(STDIN_FILENO);
 
+  if (TerminalCapabilities.IsTTY) {
+    setup_screen();
+  }
+
+  load_new_palette_type_id(DEFAULT_PALETTE);
   if ((strcmp(args.mode, "debug_args") == 0)) {
     load_new_palette_type_id(ARGS_PALETTE);
     return(debug_args());
@@ -374,6 +401,28 @@ int main(int argc, char **argv) {
     options->parse_qty        = args.count;
     return(parse_colors_csv(options));
   }
+  if ((strcmp(args.mode, "typeids_hash") == 0)) {
+    load_new_palette_type_id(TYPEIDS_PALETTE);
+    ColorsDB       *DB = malloc(sizeof(ColorsDB));
+    DB->Path = COLOR_NAMES_DB_PATH;
+    struct djbhash TYPEIDS_HASH = db_get_typeids_hash(DB);
+    djbhash_reset_iterator(&TYPEIDS_HASH);
+    fprintf(stdout,
+            AC_BRIGHT_BLUE_BLACK AC_ITALIC  "TypeIDs Hash qty:"
+            AC_RESETALL " "
+            AC_RESETALL AC_GREEN AC_BOLD AC_REVERSED "%d" AC_RESETALL
+            "\n",
+            TYPEIDS_HASH.active_count
+            );
+
+    return(TYPEIDS_HASH.active_count > 0);
+  }
+  if ((strcmp(args.mode, "typeids") == 0)) {
+    load_new_palette_type_id(TYPEIDS_PALETTE);
+    ColorsDB *DB = malloc(sizeof(ColorsDB));
+    DB->Path = COLOR_NAMES_DB_PATH;
+    return(db_list_typeids(DB));
+  }
   if ((strcmp(args.mode, "db") == 0)) {
     load_new_palette_type_id(DB_PALETTE);
     ColorsDB *DB = malloc(sizeof(ColorsDB));
@@ -382,7 +431,7 @@ int main(int argc, char **argv) {
   }
 
   if ((strcmp(args.mode, "json") == 0)) {
-    load_new_palette_type_id(2);
+    load_new_palette_type_id(JSON_PALETTE);
     args.input = DEFAULT_JSON_INPUT;
     parse_json_options *options = malloc(sizeof(parse_json_options));
     options->DB                 = malloc(sizeof(ColorsDB));

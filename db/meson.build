@@ -10,6 +10,7 @@ db_deps = [
      fs_dep,
      ansi_codes_dep, 
      bytes_dep,
+     djbhash_dep,
      c_string_buffer_dep,
      smaz_dep,
      c_timer_dep,

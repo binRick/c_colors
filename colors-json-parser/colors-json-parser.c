@@ -3,16 +3,15 @@ unsigned long colordb_hash(char *key, int length);
 
 #include "../submodules/progress.c/progress.h"
 //#include "../submodules/dbg.h/dbg.h"
-
-#define COLORDB_MAX_HASH_BUCKETS 65536 * 128
-#define PROGRESS_BAR_WIDTH 40
-#define BG_PROGRESS_BAR_CHAR "."
-#define PROGRESS_BAR_CHAR "="
+////////////////////////////////////////////////////////////////////
+#define OPTIMIZE_SQL_SYNC_USING_HASH_TABLE true
+////////////////////////////////////////////////////////////////////
 #define VERBOSE_DEBUG_ITEMS true
 #define VERBOSE_DEBUG_PROGRESS false
-
-#define DB_HEX_MODE_ENABLED  false
+////////////////////////////////////////////////////////////////////
+#define DB_HEX_MODE_ENABLED  true
 #define DB_NAME_MODE_ENABLED true
+////////////////////////////////////////////////////////////////////
 
 
 void db_progress_start(progress_data_t *data) {
@@ -60,17 +59,23 @@ void db_progress_end(progress_data_t *data) {
                                   ADD_ITEM_TO_HEX_DB();     \
                                 } while (0); }
 
-#define ADD_ITEM_TO_HEX_DB()  { do {                                                                       \
-                                  unsigned long key = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex)); \
-                                  if (OPTIONS->verbose_mode)                                               \
-                                  printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu' \n"           \
-                                         , c->Hex, strlen(c->JSON), key                                    \
-                                         );                                                                \
-                                  unsigned long inserted_id = add_colors_db_if_not_exist(                  \
-                                    OPTIONS->DB->db, key, (void *)c->JSON                                  \
-                                    );                                                                     \
-                                  if (OPTIONS->verbose_mode)                                               \
-                                  printf("Hex>  added ID #%lu\n", inserted_id);                            \
+#define ADD_ITEM_TO_HEX_DB()  { do {                                                                                                           \
+                                  unsigned long key      = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex));                                \
+                                  char          *key_str = malloc(1024);                                                                       \
+                                  sprintf(key_str, "%lu", key);                                                                                \
+                                  bool          exists_in_typeids_hash = ((TYPEIDS_HASH_ITEM = djbhash_find(&TYPEIDS_HASH, key_str)) != NULL); \
+                                  if (OPTIONS->verbose_mode)                                                                                   \
+                                  printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu' | exists_in_typeids_hash: %s |\n"                 \
+                                         , c->Hex, strlen(c->JSON), key                                                                        \
+                                         , exists_in_typeids_hash ?"Yes":"No"                                                                  \
+                                         );                                                                                                    \
+                                  if (!OPTIMIZE_SQL_SYNC_USING_HASH_TABLE || !exists_in_typeids_hash) {                                        \
+                                    unsigned long inserted_id = add_colors_db_if_not_exist(                                                    \
+                                      OPTIONS->DB->db, key, (void *)c->JSON                                                                    \
+                                      );                                                                                                       \
+                                    if (OPTIONS->verbose_mode)                                                                                 \
+                                    printf("Hex>  added ID #%lu\n", inserted_id);                                                              \
+                                  }                                                                                                            \
                                 } while (0); }
 
 #define ADD_ITEM_TO_NAME_DB() { do {                                                                                              \
@@ -155,6 +160,19 @@ void db_progress_end(progress_data_t *data) {
 
 int parse_colors_json(parse_json_options *OPTIONS){
   ct_start(NULL);
+  struct djbhash      TYPEIDS_HASH = db_get_typeids_hash(OPTIONS->DB);
+  struct djbhash_node *TYPEIDS_HASH_ITEM;
+
+  djbhash_reset_iterator(&TYPEIDS_HASH);
+  fprintf(stdout,
+          AC_BRIGHT_BLUE_BLACK AC_ITALIC  "TypeIDs Hash qty:"
+          AC_RESETALL " "
+          AC_RESETALL AC_GREEN AC_BOLD AC_REVERSED "%d" AC_RESETALL
+          "\n",
+          TYPEIDS_HASH.active_count
+          );
+
+
   djbhash_init(&(OPTIONS->ResultsHash));
   char                   *json_data = fs_read(OPTIONS->input_file);
   struct StringFNStrings Lines      = stringfn_split_lines_and_trim(json_data);
@@ -195,9 +213,7 @@ int parse_colors_json(parse_json_options *OPTIONS){
   }
   END_PROGRESS();
   if (OPTIONS->verbose_mode) {
-    fprintf(stderr, "Parsed %d items in %s\n",
-            OPTIONS->ResultsHash.active_count, OPTIONS->duration
-            );
+    fprintf(stderr, "Parsed %d items in %s\n", OPTIONS->ResultsHash.active_count, OPTIONS->duration);
   }
   return(EXIT_SUCCESS);
 } /* parse_colors_json */
@@ -233,17 +249,5 @@ int iterate_parsed_results(parse_json_options *OPTIONS){
     item = djbhash_iterate(&OPTIONS->ResultsHash);
   }
   return(0);
-}
-
-
-unsigned long colordb_hash(char *key, int length){
-  unsigned long i;
-  unsigned long hash;
-
-  hash = 5381;
-  for ( i = 0; i < length; key++, i++ ) {
-    hash = ((hash << 5) + hash) + (*key);
-  }
-  return(hash % COLORDB_MAX_HASH_BUCKETS);
 }
 
