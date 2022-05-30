@@ -9,7 +9,7 @@
 #include <unistd.h>
 #define streq(a, b) (strcmp(a, b) == 0)
 #define DEBUG_TERMINAL_CAPABILITIES false
-#define ALT_SCREEN_MODE_ENABLED false
+#define ALT_SCREEN_MODE_ENABLED true
 void cleanup();
 void restore_screen();
 void setup_screen();
@@ -294,7 +294,7 @@ int TermpaintQuery(){
     printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", self_reported_name_and_version);
     printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", buff);
     printf(AC_BLUE AC_BOLD "Restore Palette?" AC_RESETALL " " "%s" AC_RESETALL "\n", TerminalCapabilities.RestorePalette ? AC_GREEN "Yes" : AC_RED "No");
-    sleep(2);
+    sleep(0);
   }
   return(EXIT_SUCCESS);
 } /* QUERY_TERMINAL */

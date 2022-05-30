@@ -24,3 +24,4 @@ etc/*.sqlite
 abc.db
 etc/dbmem0.dat
 etc/dbmem0.sqlite
+./etc/parsed-colors.json

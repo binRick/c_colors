@@ -188,6 +188,20 @@ bool db_typeid_exists(ColorsDB *DB, colordb_type TYPEID){
 }
 
 
+colordb_id add_colors_db_typeid_name(ColorsDB *DB, colordb_type TYPEID, char *NAME){
+  colordb_id id = colordb_add_typeid_name(DB, TYPEID, (char *)NAME, strlen(NAME));
+
+  return(id);
+}
+
+
+colordb_id add_colors_db_typeid_hex(ColorsDB *DB, colordb_type TYPEID, char *HEX){
+  colordb_id id = colordb_add_typeid_hex(DB, TYPEID, (char *)HEX, strlen(HEX));
+
+  return(id);
+}
+
+
 colordb_id add_colors_db(ColorsDB *DB, colordb_type TYPEID, char *RECORD){
   colordb_id id = colordb_add(DB, TYPEID, (void *)RECORD, strlen(RECORD));
 
@@ -195,13 +209,22 @@ colordb_id add_colors_db(ColorsDB *DB, colordb_type TYPEID, char *RECORD){
 }
 
 
-colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD){
+colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD, char *HEX, char *NAME){
   colordb_id id = db_get_typeid_id(DB, TYPEID);
 
   if (id > 0) {
     return(id);
   }
-  return(add_colors_db(DB, TYPEID, RECORD));
+  colordb_id new_id = add_colors_db(DB, TYPEID, RECORD);
+
+  if (new_id < 1) {
+    return(new_id);
+  }
+
+  colordb_id hex_id  = add_colors_db_typeid_hex(DB, new_id, HEX);
+  colordb_id name_id = add_colors_db_typeid_name(DB, new_id, NAME);
+
+  return(new_id);
 }
 
 

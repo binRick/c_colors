@@ -5,3 +5,4 @@
 #include <stdlib.h>
 #include <string.h>
 int hex_to_closest_ansi_code(const uint32_t trp);
+int hex_to_256_color_ansicode(char *HEX);

@@ -67,9 +67,8 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     r = rgba_from_string(C->hex, &ok);
     rgba_t rgba = rgba_new(r);
     ////////////////////
-    ui = strtoul(C->hex, &ptr, 16);
     ////////////////////
-    C->ansicode      = hex_to_closest_ansi_code(ui);
+    C->ansicode      = hex_to_256_color_ansicode(C->hex);
     C->rgb           = malloc(sizeof(RGB_t));
     C->ansi          = malloc(sizeof(Ansi_t));
     C->truecolor     = malloc(sizeof(Ansi_t));
@@ -130,7 +129,8 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   if (WRITE_TO_FILE) {
     int wrote_bytes = fs_write(OPTIONS->output_file, stringbuffer_to_string(sb));
     fprintf(stderr,
-            "wrote %s bytes to file %s\n",
+            "Wrote %s to file %s."
+            "\n",
             bytes_to_string(wrote_bytes),
             OPTIONS->output_file
             );

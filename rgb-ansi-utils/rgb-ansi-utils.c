@@ -1,5 +1,6 @@
 #include "rgb-ansi-utils.h"
-
+#include <stdbool.h>
+#define RGB_UTILS_DEBUG_MODE false
 #define DELTA_E_K_L 2
 #define DELTA_E_K_1 0.048
 #define DELTA_E_K_2 0.014
@@ -366,3 +367,25 @@ int hex_to_closest_ansi_code(const uint32_t trp) {
   return(t + 16);
 }
 
+
+int hex_to_256_color_ansicode(char *HEX){
+  char gnd = '3';
+  char *colp, *ptr;
+  int  color;
+
+  colp = HEX;
+
+  if (*colp == '#') {
+    *colp++;
+  }
+  int closest = hex_to_closest_ansi_code(colp);
+
+  if (RGB_UTILS_DEBUG_MODE) {
+    printf("hex:       %s\n", HEX);
+    printf("colp:      %s\n", colp);
+    printf("closest:   %d\n", closest);
+  }
+  return(closest);
+}
+
+#undef RGB_UTILS_DEBUG_MODE

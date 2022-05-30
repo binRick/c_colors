@@ -9,7 +9,7 @@ unsigned long colordb_hash(char *key, int length);
 #define VERBOSE_DEBUG_ITEMS true
 #define VERBOSE_DEBUG_PROGRESS false
 ////////////////////////////////////////////////////////////////////
-#define DB_HEX_MODE_ENABLED  true
+#define DB_HEX_MODE_ENABLED  false
 #define DB_NAME_MODE_ENABLED true
 ////////////////////////////////////////////////////////////////////
 
@@ -64,27 +64,35 @@ void db_progress_end(progress_data_t *data) {
                                   char          *key_str = malloc(1024);                                                                       \
                                   sprintf(key_str, "%lu", key);                                                                                \
                                   bool          exists_in_typeids_hash = ((TYPEIDS_HASH_ITEM = djbhash_find(&TYPEIDS_HASH, key_str)) != NULL); \
-                                  if (OPTIONS->verbose_mode)                                                                                   \
-                                  printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu' | exists_in_typeids_hash: %s |\n"                 \
-                                         , c->Hex, strlen(c->JSON), key                                                                        \
-                                         , exists_in_typeids_hash ?"Yes":"No"                                                                  \
-                                         );                                                                                                    \
+                                  if (OPTIONS->verbose_mode) {                                                                                 \
+                                    printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu'"                                                \
+                                           "\n"                                                                                                \
+                                           "\t| exists_in_typeids_hash: %s |"                                                                  \
+                                           "\n"                                                                                                \
+                                           , c->Hex, strlen(c->JSON), key                                                                      \
+                                           , exists_in_typeids_hash ?"Yes":"No"                                                                \
+                                           );                                                                                                  \
+                                  }                                                                                                            \
                                   if (!OPTIMIZE_SQL_SYNC_USING_HASH_TABLE || !exists_in_typeids_hash) {                                        \
-                                    unsigned long inserted_id = add_colors_db_if_not_exist(                                                    \
-                                      OPTIONS->DB->db, key, (void *)c->JSON                                                                    \
-                                      );                                                                                                       \
-                                    if (OPTIONS->verbose_mode)                                                                                 \
-                                    printf("Hex>  added ID #%lu\n", inserted_id);                                                              \
+                                    unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db                                     \
+                                                                                           , key                                               \
+                                                                                           , (void *)c->JSON                                   \
+                                                                                           , (char *)c->Hex                                    \
+                                                                                           , (char *)c->Name                                   \
+                                                                                           );                                                  \
+                                    if (OPTIONS->verbose_mode) {                                                                               \
+                                      printf("Hex>  added ID #%lu\n", inserted_id);                                                            \
+                                    }                                                                                                          \
                                   }                                                                                                            \
                                 } while (0); }
 
-#define ADD_ITEM_TO_NAME_DB() { do {                                                                                              \
-                                  unsigned long key = (unsigned long)colordb_hash(c->Name, strlen(c->Name));                      \
-                                  if (OPTIONS->verbose_mode)                                                                      \
-                                  printf("Name> adding '%s' (%lu bytes) to db with key '%lu' \n", c->Name, strlen(c->JSON), key); \
-                                  unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON);  \
-                                  if (OPTIONS->verbose_mode)                                                                      \
-                                  printf("Name> added ID #%lu\n", inserted_id);                                                   \
+#define ADD_ITEM_TO_NAME_DB() { do {                                                                                                                              \
+                                  unsigned long key = (unsigned long)colordb_hash(c->Name, strlen(c->Name));                                                      \
+                                  if (OPTIONS->verbose_mode)                                                                                                      \
+                                  printf("Name> adding '%s' (%lu bytes) to db with key '%lu' \n", c->Name, strlen(c->JSON), key);                                 \
+                                  unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON, (char *)c->Hex, (char *)c->Name); \
+                                  if (OPTIONS->verbose_mode)                                                                                                      \
+                                  printf("Name> added ID #%lu\n", inserted_id);                                                                                   \
                                 } while (0); }
 
 

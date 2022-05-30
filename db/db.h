@@ -1,7 +1,7 @@
 #pragma once
 #ifndef DB_H
 #define DB_H
-#define COLORDB_MAX_HASH_BUCKETS 65536 * 128
+#define COLORDB_MAX_HASH_BUCKETS 65536 * 1024
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -29,7 +29,9 @@ int db_list_typeids(ColorsDB *DB);
 int db_list_type_ids(ColorsDB *DB, colordb_type TYPEID);
 int db_count_ids(ColorsDB *DB);
 int db_count_type_ids(ColorsDB *DB, colordb_type TYPEID);
-colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD);
+colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD, char *HEX, char *NAME);
+colordb_id add_colors_db_typeid_hex(ColorsDB *DB, colordb_type TYPEID, char *HEX);
+colordb_id add_colors_db_typeid_name(ColorsDB *DB, colordb_type TYPEID, char *NAME);
 colordb_id add_colors_db(ColorsDB *DB, colordb_type TYPEID, char *RECORD);
 
 /////////////////////////////////////////////////////////

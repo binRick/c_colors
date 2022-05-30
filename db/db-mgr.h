@@ -17,6 +17,8 @@ typedef colordb_id   colordb_type;
 typedef struct {
   sqlite3      *db;
   sqlite3_stmt *select, *insert, *delete, *one;
+  sqlite3_stmt *insert_typeid_hex;
+  sqlite3_stmt *insert_typeid_name;
   sqlite3_stmt *ids, *typeids;
   sqlite3_stmt *typeid_ids;
   sqlite3_stmt *count_typeid;
@@ -27,6 +29,8 @@ typedef struct {
 colordb colordb_open(const char *path);
 void colordb_close(colordb db);
 colordb_id colordb_add(colordb db, const colordb_type type, void *blob, size_t size);
+colordb_id colordb_add_typeid_hex(colordb db, const colordb_type type, char *hex, size_t size);
+colordb_id colordb_add_typeid_name(colordb db, const colordb_type type, char *name, size_t size);
 void *colordb_get(colordb db, colordb_id id, size_t *size);
 void *colordb_one(colordb db, const colordb_type type, colordb_id *id, size_t *size);
 void colordb_delete(colordb db, colordb_id id);
