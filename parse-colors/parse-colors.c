@@ -1,5 +1,3 @@
-#define VERBOSE_DEBUG_HANDLER false
-#include "../db/db.h"
 #include "parse-colors.h"
 args_t args = {
   DEFAULT_CSV_INPUT,
@@ -9,8 +7,72 @@ args_t args = {
   DEFAULT_COUNT,
   DEFAULT_COLOR,
 };
-
 void cleanup();
+void restore_screen();
+void setup_screen();
+void load_new_palette_type_id();
+
+
+void setup_screen(){
+  printf(AC_ALT_SCREEN_ON);
+  printf(AC_SAVE_PALETTE);
+  printf(AC_HIDE_CURSOR);
+  signal(SIGTERM, restore_screen);
+  signal(SIGQUIT, restore_screen);
+  signal(SIGINT, restore_screen);
+  atexit(restore_screen);
+}
+
+
+void restore_screen(){
+  printf(AC_SHOW_CURSOR);
+  printf(AC_ALT_SCREEN_OFF);
+  printf(AC_RESTORE_PALETTE);
+  cleanup();
+}
+
+
+void cleanup(){
+  if (args.verbose) {
+#ifdef DEBUG_MEMORY
+    print_allocated_memory();
+#endif
+  }
+  exit(0);
+}
+
+
+void load_new_palette_type_id(int PALETTE_TYPE_ID){
+  struct StringFNStrings p = stringfn_split(WorkerPaletteTypes[PALETTE_TYPE_ID].Colors, ' ');
+
+  fprintf(stdout, "Loading %s Colors\n", WorkerPaletteTypes[PALETTE_TYPE_ID].Name);
+  char *new_palette_codes = malloc(1024);
+
+  sprintf(new_palette_codes, NEWPALETTE,
+          p.strings[18],
+          p.strings[17],
+          p.strings[16],
+          p.strings[15],
+          p.strings[14],
+          p.strings[13],
+          p.strings[12],
+          p.strings[11],
+          p.strings[10],
+          p.strings[9],
+          p.strings[8],
+          p.strings[7],
+          p.strings[6],
+          p.strings[5],
+          p.strings[4],
+          p.strings[3],
+          p.strings[2],
+          p.strings[1],
+          p.strings[0]
+          );
+
+  printf("%s\n", new_palette_codes);
+  free(new_palette_codes);
+}
 
 
 void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
@@ -21,17 +83,21 @@ void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
 
 
 int main(int argc, char **argv) {
+  setup_screen();
+  load_new_palette_type_id(0);
   parse_args(argc, argv);
   if ((argc >= 2) && (strcmp(argv[1], "--test") == 0)) {
     printf("Test OK\n"); return(0);
   }
 
-
   if ((strcmp(args.mode, "debug_args") == 0)) {
+    load_new_palette_type_id(4);
+
     return(debug_args());
   }
 
   if ((strcmp(args.mode, "csv") == 0)) {
+    load_new_palette_type_id(1);
     parse_csv_options *options = malloc(sizeof(parse_csv_options));
     options->input_file       = args.input;
     options->verbose_mode     = args.verbose;
@@ -41,12 +107,14 @@ int main(int argc, char **argv) {
     return(parse_colors_csv(options));
   }
   if ((strcmp(args.mode, "db") == 0)) {
+    load_new_palette_type_id(3);
     ColorsDB *DB = malloc(sizeof(ColorsDB));
     DB->Path = COLOR_NAMES_DB_PATH;
     return(db_list_ids(DB));
   }
 
   if ((strcmp(args.mode, "json") == 0)) {
+    load_new_palette_type_id(2);
     args.input = DEFAULT_JSON_INPUT;
     parse_json_options *options = malloc(sizeof(parse_json_options));
     options->DB                 = malloc(sizeof(ColorsDB));
@@ -138,13 +206,4 @@ int parse_args(int argc, char *argv[]){
   }
   return(EXIT_SUCCESS);
 } /* parse_args */
-
-
-void cleanup(){
-  if (args.verbose) {
-#ifdef DEBUG_MEMORY
-    print_allocated_memory();
-#endif
-  }
-}
 
