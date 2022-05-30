@@ -14,6 +14,7 @@ parse_colors_deps = [
      bytes_dep,
      c_string_buffer_dep,
      db_dep,
+     termpaint_dep,
 ]
 if get_option('enable-binaries')
   parse_colors_exec = executable('parse-colors',
