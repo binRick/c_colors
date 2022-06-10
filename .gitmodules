@@ -43,9 +43,6 @@
 [submodule "submodules/c_timer"]
 	path = submodules/c_timer
 	url = https://github.com/binRick/c_timer
-[submodule "submodules/boydemdb"]
-	path = submodules/boydemdb
-	url = https://github.com/dimkr/boydemdb
 [submodule "submodules/smaz"]
 	path = submodules/smaz
 	url = https://github.com/antirez/smaz
@@ -70,3 +67,9 @@
 [submodule "submodules/spmemvfs"]
 	path = submodules/spmemvfs
 	url = https://github.com/spsoft/spmemvfs.git
+[submodule "submodules/asprintf"]
+	path = submodules/asprintf
+	url = https://github.com/jwerle/asprintf.c
+[submodule "submodules/meson_deps"]
+	path = submodules/meson_deps
+	url = https://github.com/binRick/meson_deps

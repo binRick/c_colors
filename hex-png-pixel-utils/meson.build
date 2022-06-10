@@ -8,7 +8,7 @@ hex_png_pixel_utils_deps = [
      asprintf_dep,
      bytes_dep,
      c_fsio_dep,
-     cstringfn_dep,
+     c_stringfn_dep,
      tempdir_dep,
      b64_dep,
      debug_memory_dep,

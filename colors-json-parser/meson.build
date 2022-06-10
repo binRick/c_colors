@@ -3,7 +3,7 @@ colors_json_srcs = [
 ]
 colors_json_parser_deps = [
   rgb_ansi_utils_dep,
-  parson_shared_dep,
+  parson_dep,
   fs_dep,
   debug_memory_dep,
   c_timer_dep,

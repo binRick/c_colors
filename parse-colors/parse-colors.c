@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
-#include <termios.h>
 #include <unistd.h>
 #define streq(a, b) (strcmp(a, b) == 0)
 #define DEBUG_TERMINAL_CAPABILITIES false
@@ -15,7 +14,7 @@ void restore_screen();
 void setup_screen();
 void load_new_palette_type_id();
 
-args_t args = {
+args_t                 args = {
   DEFAULT_CSV_INPUT,
   DEFAULT_OUTPUT,
   DEFAULT_MODE,
@@ -23,149 +22,12 @@ args_t args = {
   DEFAULT_COUNT,
   DEFAULT_COLOR,
 };
-typedef struct {
-  bool RestorePalette, IsTTY, AltScreenInitiallyEnabled;
-} TerminalCapabilities_t;
-typedef enum {
-  OFF,
-  ON,
-  QUERY,
-} BoolQuery;
 
-bool                   wasicanon;
 TerminalCapabilities_t TerminalCapabilities = {
   .RestorePalette            = false,
   .AltScreenInitiallyEnabled = false,
   .IsTTY                     = false,
 };
-
-
-static bool seticanon(bool icanon, bool echo){
-  struct termios termios;
-
-  tcgetattr(0, &termios);
-
-  bool ret = (termios.c_lflag & ICANON);
-
-  if (icanon) {
-    termios.c_lflag |= ICANON;
-  }else{
-    termios.c_lflag &= ~ICANON;
-  }
-
-  if (echo) {
-    termios.c_lflag |= ECHO;
-  }else{
-    termios.c_lflag &= ~ECHO;
-  }
-
-  tcsetattr(0, TCSANOW, &termios);
-
-  return(ret);
-}
-
-
-void restoreicanon(void){
-  seticanon(wasicanon, true);
-}
-
-
-static void await_c1(unsigned char c1){
-  unsigned char c;
-
-  /* await CSI - 8bit or 2byte 7bit form */
-  bool in_esc = false;
-
-  while ((c = getchar())) {
-    if (c == c1) {
-      break;
-    }
-    if (in_esc && c == (char)(c1 - 0x40)) {
-      break;
-    }
-    if (!in_esc && c == 0x1b) {
-      in_esc = true;
-    }else{
-      in_esc = false;
-    }
-  }
-}
-
-
-static char *read_csi(){
-  await_c1(0x9B); // CSI
-
-  /* TODO: This really should be a more robust CSI parser
-   */
-  char csi[32];
-  int  i = 0;
-
-  for ( ; i < sizeof(csi) - 1; i++) {
-    char c = csi[i] = getchar();
-    if (c >= 0x40 && c <= 0x7e) {
-      break;
-    }
-  }
-  csi[++i] = 0;
-
-  // TODO: returns longer than 32?
-
-  return(strdup(csi));
-}
-
-
-static bool query_dec_mode(int mode){
-  printf("\x1b[?%d$p", mode);
-
-  char *s = NULL;
-
-  do {
-    if (s) {
-      free(s);
-    }
-    s = read_csi();
-
-    /* expect "?" mode ";" value "$y" */
-
-    int  reply_mode, reply_value;
-    char reply_cmd;
-    /* If the sscanf format string ends in a literal, we can't tell from
-     * its return value if it matches. Hence we'll %c the cmd and check it
-     * explicitly
-     */
-    if (sscanf(s, "?%d;%d$%c", &reply_mode, &reply_value, &reply_cmd) < 3) {
-      continue;
-    }
-    if (reply_cmd != 'y') {
-      continue;
-    }
-
-    if (reply_mode != mode) {
-      continue;
-    }
-
-    free(s);
-
-    if (reply_value == 1 || reply_value == 3) {
-      return(true);
-    }
-    if (reply_value == 2 || reply_value == 4) {
-      return(false);
-    }
-
-    printf("Unrecognised reply to DECRQM: %d\n", reply_value);
-    return(false);
-  } while (1);
-}
-
-
-static void do_dec_mode(int mode, BoolQuery val, const char *name){
-  if (query_dec_mode(mode)) {
-    printf("%s on\n", name);
-  }else{
-    printf("%s off\n", name);
-  }
-}
 
 
 char *strdup_escaped(const char *tmp) {

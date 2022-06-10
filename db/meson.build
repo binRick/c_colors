@@ -5,8 +5,8 @@ db_srcs = [
 ]
 db_deps = [
      cargs_dep,
-     cstringfn_dep,
-     parson_shared_dep,
+     c_stringfn_dep,
+     parson_dep,
      fs_dep,
      ansi_codes_dep, 
      bytes_dep,

@@ -4,7 +4,7 @@ hex_png_pixel_creator_srcs = [
 hex_png_pixel_creator_deps = [
      cargs_dep,
      hex_png_pixel_utils_dep,
-     parson_shared_dep,
+     parson_dep,
      c_fsio_dep,
 ]
 if get_option('enable-binaries')

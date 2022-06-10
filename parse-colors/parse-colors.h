@@ -19,9 +19,9 @@
 #include "../colors-csv-parser/colors-csv-parser.h"
 #include "../colors-json-parser/colors-json-parser.h"
 #include "../db/db.h"
-#include "../db/db.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_ansi/ansi-rgb-utils/ansi-rgb-utils.h"
+#include "../submodules/c_ansi/ansi-utils/ansi-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
 ////////////////////////////////////////////////////////////////////
 #define RENDER_COLOR_OUTPUT  false
