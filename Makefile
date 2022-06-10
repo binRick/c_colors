@@ -105,3 +105,5 @@ nodemon:
 	@$(PASSH) -L .nodemon.log $(NODEMON) -w '*/meson.build' -w "*/*.c" -w "*/*.h" --delay 1 -i '*/subprojects' -I  -w 'include/*.h' -w meson.build -w src -w Makefile -w loader/meson.build -w loader/src -w loader/include -i '*/embeds/*' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make dev-all||true'
 
 
+git-pull:
+	@git pull --recurse-submodules
