@@ -1,7 +1,7 @@
 db_srcs = [
   'db.c',
   'db-mgr.c',
-  '../vendor/sqlite3.c',
+ pwd+ '/vendor/sqlite/sqlite3.c',
 ]
 db_deps = [
      cargs_dep,
@@ -26,11 +26,11 @@ db_lib = static_library('db',
   db_srcs,
   install: false,
   dependencies: db_deps,
-  include_directories: [],
+  include_directories: [inc],
   c_args: sqlite_cflags,
 )
 
 db_dep = declare_dependency(
-  include_directories: [],
+  include_directories: [inc],
   link_with: db_lib,
 )

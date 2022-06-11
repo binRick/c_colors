@@ -23,6 +23,7 @@ pwd = run_command(pwd_bin, check: true).stdout().strip()
 #//////////////////////////////////////////////////////////////////////
 inc = include_directories(
   './',
+  './vendor',
   'db/',
   'embeds/',
   'submodules/',
