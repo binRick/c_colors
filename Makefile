@@ -107,3 +107,7 @@ nodemon:
 
 git-pull:
 	@git pull --recurse-submodules
+git-submodules-pull-master:
+	@git submodule foreach git pull origin master --jobs=10
+git-submodules-update:
+	@git submodule update --init	
