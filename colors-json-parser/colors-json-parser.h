@@ -8,15 +8,15 @@
 #include <string.h>
 ///////////////////////////////////////////////////////////////////////////
 #ifndef AC_HIDE_CURSOR
-#define AC_HIDE_CURSOR                 "\x1b[?25l"
+#define AC_HIDE_CURSOR          "\x1b[?25l"
 #endif
 #ifndef AC_SHOW_CURSOR
-#define AC_SHOW_CURSOR                 "\x1b[?25h"
+#define AC_SHOW_CURSOR          "\x1b[?25h"
 #endif
 ///////////////////////////////////////////////////////////////////////////
-#define PROGRESS_BAR_WIDTH 40
-#define BG_PROGRESS_BAR_CHAR "."
-#define PROGRESS_BAR_CHAR "="
+#define PROGRESS_BAR_WIDTH      40
+#define BG_PROGRESS_BAR_CHAR    "."
+#define PROGRESS_BAR_CHAR       "="
 ///////////////////////////////////////////////////////////////////////////
 typedef struct parse_json_options   parse_json_options;
 typedef struct ParsedColor          ParsedColor;

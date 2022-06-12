@@ -6,9 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#define streq(a, b) (strcmp(a, b) == 0)
-#define DEBUG_TERMINAL_CAPABILITIES false
-#define ALT_SCREEN_MODE_ENABLED true
+#define streq(a, b)    (strcmp(a, b) == 0)
+#define DEBUG_TERMINAL_CAPABILITIES    false
+#define ALT_SCREEN_MODE_ENABLED        true
 void cleanup();
 void restore_screen();
 void setup_screen();
@@ -58,7 +58,7 @@ typedef struct {
 } Cap;
 
 Cap  caps[] = {
-#define C(name) { TERMPAINT_CAPABILITY_ ## name, #name, 0 }
+#define C(name)    { TERMPAINT_CAPABILITY_ ## name, #name, 0 }
   C(CSI_POSTFIX_MOD),
   C(TITLE_RESTORE),
   C(MAY_TRY_CURSOR_SHAPE_BAR),

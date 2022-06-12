@@ -1,7 +1,7 @@
 #include "dbmem.h"
 //#define DBMEM_DEBUG
-#define DBMEM_MIN(x, y) ((x) < (y)?(x):(y))
-#define DBMEM_MAX(x, y) ((x) > (y)?(x):(y))
+#define DBMEM_MIN(x, y)    ((x) < (y)?(x):(y))
+#define DBMEM_MAX(x, y)    ((x) > (y)?(x):(y))
 
 
 static void dbmemDebug(const char *format, ...){

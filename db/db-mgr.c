@@ -1,18 +1,18 @@
 #include "db-mgr.h"
 
-#define SELECT_IDS_QUERY      "SELECT id FROM blobs"
-#define SELECT_TYPEIDS_QUERY  "SELECT type FROM blobs"
-#define SELECT_TYPEID_IDS_QUERY "SELECT id from blobs where type = ?"
+#define SELECT_IDS_QUERY                 "SELECT id FROM blobs"
+#define SELECT_TYPEIDS_QUERY             "SELECT type FROM blobs"
+#define SELECT_TYPEID_IDS_QUERY          "SELECT id from blobs where type = ?"
 
-#define SELECT_COUNT_TYPEIDS_QUERY    "SELECT COUNT(DISTINCT type) from blobs"
-#define SELECT_COUNT_IDS_QUERY    "SELECT COUNT(id) FROM blobs"
-#define SELECT_COUNT_TYPEID_QUERY "SELECT COUNT(id) from blobs where type = ?"
-#define SELECT_DISTINCT_TYPEIDS_QUERY "SELECT DISTINCT type from blobs"
+#define SELECT_COUNT_TYPEIDS_QUERY       "SELECT COUNT(DISTINCT type) from blobs"
+#define SELECT_COUNT_IDS_QUERY           "SELECT COUNT(id) FROM blobs"
+#define SELECT_COUNT_TYPEID_QUERY        "SELECT COUNT(id) from blobs where type = ?"
+#define SELECT_DISTINCT_TYPEIDS_QUERY    "SELECT DISTINCT type from blobs"
 
-#define SELECT_QUERY          "SELECT data FROM blobs WHERE id = ?"
-#define ONE_QUERY             "SELECT id, data FROM blobs WHERE type = ? LIMIT 1"
-#define INSERT_QUERY          "INSERT INTO blobs(type, data) VALUES (?, ?)"
-#define DELETE_QUERY          "DELETE FROM blobs WHERE id = ?"
+#define SELECT_QUERY                     "SELECT data FROM blobs WHERE id = ?"
+#define ONE_QUERY                        "SELECT id, data FROM blobs WHERE type = ? LIMIT 1"
+#define INSERT_QUERY                     "INSERT INTO blobs(type, data) VALUES (?, ?)"
+#define DELETE_QUERY                     "DELETE FROM blobs WHERE id = ?"
 #define CREATE_TABLE_QUERY            \
   "CREATE TABLE IF NOT EXISTS blobs " \
   "("                                 \
@@ -20,22 +20,22 @@
   " type INTEGER,"                    \
   " data BLOB NOT NULL"               \
   ")"
-#define INSERT_TYPEID_HEX_QUERY   "INSERT INTO hexcodes(blobid, hex) VALUES (?, ?)"
-#define INSERT_TYPEID_NAME_QUERY   "INSERT INTO colornames(blobid, colorname) VALUES (?, ?)"
-#define CREATE_NAME_TABLE_QUERY    "CREATE TABLE IF NOT EXISTS " \
-  "colornames"                                                   \
-  "("                                                            \
-  "id INTEGER PRIMARY KEY,"                                      \
-  " blobid INTEGER REFERENCES blobs,"                            \
-  " colorname VARCHAR(32) NOT NULL"                              \
+#define INSERT_TYPEID_HEX_QUERY          "INSERT INTO hexcodes(blobid, hex) VALUES (?, ?)"
+#define INSERT_TYPEID_NAME_QUERY         "INSERT INTO colornames(blobid, colorname) VALUES (?, ?)"
+#define CREATE_NAME_TABLE_QUERY          "CREATE TABLE IF NOT EXISTS " \
+  "colornames"                                                         \
+  "("                                                                  \
+  "id INTEGER PRIMARY KEY,"                                            \
+  " blobid INTEGER REFERENCES blobs,"                                  \
+  " colorname VARCHAR(32) NOT NULL"                                    \
   ")"
 
-#define CREATE_HEX_TABLE_QUERY    "CREATE TABLE IF NOT EXISTS " \
-  "hexcodes"                                                    \
-  "("                                                           \
-  "id INTEGER PRIMARY KEY,"                                     \
-  " blobid INTEGER REFERENCES blobs,"                           \
-  " hex VARCHAR(7) NOT NULL"                                    \
+#define CREATE_HEX_TABLE_QUERY           "CREATE TABLE IF NOT EXISTS " \
+  "hexcodes"                                                           \
+  "("                                                                  \
+  "id INTEGER PRIMARY KEY,"                                            \
+  " blobid INTEGER REFERENCES blobs,"                                  \
+  " hex VARCHAR(7) NOT NULL"                                           \
   ")"
 
 
@@ -372,13 +372,13 @@ colordb colordb_open(const char *path){
     free(db);
   }
 
-#define CREATE_TABLE(__SQL__){ do {                                                                  \
-                                 if (sqlite3_exec(db->db, __SQL__, NULL, NULL, NULL) != SQLITE_OK) { \
-                                   sqlite3_close(db->db);                                            \
-                                   free(db);                                                         \
-                                   return(NULL);                                                     \
-                                 }                                                                   \
-                               } while (0); }
+#define CREATE_TABLE(__SQL__)    { do {                                                                  \
+                                     if (sqlite3_exec(db->db, __SQL__, NULL, NULL, NULL) != SQLITE_OK) { \
+                                       sqlite3_close(db->db);                                            \
+                                       free(db);                                                         \
+                                       return(NULL);                                                     \
+                                     }                                                                   \
+                                   } while (0); }
 
   CREATE_TABLE(CREATE_TABLE_QUERY);
   CREATE_TABLE(CREATE_HEX_TABLE_QUERY);

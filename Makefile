@@ -76,7 +76,7 @@ do-m1-test: do-m1-build
 test: do-hex-png-pixel-test
 
 uncrustify:
-	@$(UNCRUSTIFY) -c etc/uncrustify.cfg --replace $(TIDIED_FILES) 
+	@$(UNCRUSTIFY) -c submodules/meson_deps/etc/uncrustify.cfg --replace $(TIDIED_FILES) 
 
 uncrustify-clean:
 	@find  . -type f -name "*unc-back*"|xargs -I % unlink %

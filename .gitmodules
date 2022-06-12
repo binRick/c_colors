@@ -40,9 +40,6 @@
 [submodule "submodules/debug-memory"]
 	path = submodules/debug-memory
 	url = https://github.com/funasoul/debug-memory
-[submodule "submodules/c_timer"]
-	path = submodules/c_timer
-	url = https://github.com/binRick/c_timer
 [submodule "submodules/smaz"]
 	path = submodules/smaz
 	url = https://github.com/antirez/smaz

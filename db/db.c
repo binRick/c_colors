@@ -1,5 +1,5 @@
 #include "db.h"
-#define DEBUG_TYPEIDS_HASH false
+#define DEBUG_TYPEIDS_HASH    false
 #include "../submodules/djbhash/src/djbhash.h"
 
 struct djbhash db_get_typeids_hash(ColorsDB *DB){

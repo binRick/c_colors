@@ -1,5 +1,5 @@
 #include "dbmem-test.h"
-#define DBMEM_STORAGE_FILE "etc/dbmem0.sqlite"
+#define DBMEM_STORAGE_FILE    "etc/dbmem0.sqlite"
 
 
 void test(dbmem_db_t *db){

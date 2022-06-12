@@ -4,13 +4,13 @@ unsigned long colordb_hash(char *key, int length);
 #include "../submodules/progress.c/progress.h"
 //#include "../submodules/dbg.h/dbg.h"
 ////////////////////////////////////////////////////////////////////
-#define OPTIMIZE_SQL_SYNC_USING_HASH_TABLE true
+#define OPTIMIZE_SQL_SYNC_USING_HASH_TABLE    true
 ////////////////////////////////////////////////////////////////////
-#define VERBOSE_DEBUG_ITEMS true
-#define VERBOSE_DEBUG_PROGRESS false
+#define VERBOSE_DEBUG_ITEMS                   true
+#define VERBOSE_DEBUG_PROGRESS                false
 ////////////////////////////////////////////////////////////////////
-#define DB_HEX_MODE_ENABLED  false
-#define DB_NAME_MODE_ENABLED true
+#define DB_HEX_MODE_ENABLED                   false
+#define DB_NAME_MODE_ENABLED                  true
 ////////////////////////////////////////////////////////////////////
 
 
@@ -45,125 +45,125 @@ void db_progress_end(progress_data_t *data) {
 }
 
 
-#define HANDLE_ITEM_CALLBACKS()     { do {                                                      \
-                                        if (OPTIONS->ParsedColorHandler != NULL && c != NULL) { \
-                                          OPTIONS->ParsedColorHandler(c);                       \
-                                        }                                                       \
-                                      } while (0); }
+#define HANDLE_ITEM_CALLBACKS()    { do {                                                      \
+                                       if (OPTIONS->ParsedColorHandler != NULL && c != NULL) { \
+                                         OPTIONS->ParsedColorHandler(c);                       \
+                                       }                                                       \
+                                     } while (0); }
 
 
-#define ADD_ITEM_TO_DBS()     { do {                        \
-                                  if (DB_NAME_MODE_ENABLED) \
-                                  ADD_ITEM_TO_NAME_DB();    \
-                                  if (DB_HEX_MODE_ENABLED)  \
-                                  ADD_ITEM_TO_HEX_DB();     \
-                                } while (0); }
+#define ADD_ITEM_TO_DBS()          { do {                        \
+                                       if (DB_NAME_MODE_ENABLED) \
+                                       ADD_ITEM_TO_NAME_DB();    \
+                                       if (DB_HEX_MODE_ENABLED)  \
+                                       ADD_ITEM_TO_HEX_DB();     \
+                                     } while (0); }
 
-#define ADD_ITEM_TO_HEX_DB()  { do {                                                                                                           \
-                                  unsigned long key      = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex));                                \
-                                  char          *key_str = malloc(1024);                                                                       \
-                                  sprintf(key_str, "%lu", key);                                                                                \
-                                  bool          exists_in_typeids_hash = ((TYPEIDS_HASH_ITEM = djbhash_find(&TYPEIDS_HASH, key_str)) != NULL); \
-                                  if (OPTIONS->verbose_mode) {                                                                                 \
-                                    printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu'"                                                \
-                                           "\n"                                                                                                \
-                                           "\t| exists_in_typeids_hash: %s |"                                                                  \
-                                           "\n"                                                                                                \
-                                           , c->Hex, strlen(c->JSON), key                                                                      \
-                                           , exists_in_typeids_hash ?"Yes":"No"                                                                \
-                                           );                                                                                                  \
-                                  }                                                                                                            \
-                                  if (!OPTIMIZE_SQL_SYNC_USING_HASH_TABLE || !exists_in_typeids_hash) {                                        \
-                                    unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db                                     \
-                                                                                           , key                                               \
-                                                                                           , (void *)c->JSON                                   \
-                                                                                           , (char *)c->Hex                                    \
-                                                                                           , (char *)c->Name                                   \
-                                                                                           );                                                  \
-                                    if (OPTIONS->verbose_mode) {                                                                               \
-                                      printf("Hex>  added ID #%lu\n", inserted_id);                                                            \
-                                    }                                                                                                          \
-                                  }                                                                                                            \
-                                } while (0); }
+#define ADD_ITEM_TO_HEX_DB()       { do {                                                                                                           \
+                                       unsigned long key      = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex));                                \
+                                       char          *key_str = malloc(1024);                                                                       \
+                                       sprintf(key_str, "%lu", key);                                                                                \
+                                       bool          exists_in_typeids_hash = ((TYPEIDS_HASH_ITEM = djbhash_find(&TYPEIDS_HASH, key_str)) != NULL); \
+                                       if (OPTIONS->verbose_mode) {                                                                                 \
+                                         printf("Hex>  adding '%s' (%lu bytes) to db with key '%lu'"                                                \
+                                                "\n"                                                                                                \
+                                                "\t| exists_in_typeids_hash: %s |"                                                                  \
+                                                "\n"                                                                                                \
+                                                , c->Hex, strlen(c->JSON), key                                                                      \
+                                                , exists_in_typeids_hash ?"Yes":"No"                                                                \
+                                                );                                                                                                  \
+                                       }                                                                                                            \
+                                       if (!OPTIMIZE_SQL_SYNC_USING_HASH_TABLE || !exists_in_typeids_hash) {                                        \
+                                         unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db                                     \
+                                                                                                , key                                               \
+                                                                                                , (void *)c->JSON                                   \
+                                                                                                , (char *)c->Hex                                    \
+                                                                                                , (char *)c->Name                                   \
+                                                                                                );                                                  \
+                                         if (OPTIONS->verbose_mode) {                                                                               \
+                                           printf("Hex>  added ID #%lu\n", inserted_id);                                                            \
+                                         }                                                                                                          \
+                                       }                                                                                                            \
+                                     } while (0); }
 
-#define ADD_ITEM_TO_NAME_DB() { do {                                                                                                                              \
-                                  unsigned long key = (unsigned long)colordb_hash(c->Name, strlen(c->Name));                                                      \
-                                  if (OPTIONS->verbose_mode)                                                                                                      \
-                                  printf("Name> adding '%s' (%lu bytes) to db with key '%lu' \n", c->Name, strlen(c->JSON), key);                                 \
-                                  unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON, (char *)c->Hex, (char *)c->Name); \
-                                  if (OPTIONS->verbose_mode)                                                                                                      \
-                                  printf("Name> added ID #%lu\n", inserted_id);                                                                                   \
-                                } while (0); }
+#define ADD_ITEM_TO_NAME_DB()      { do {                                                                                                                              \
+                                       unsigned long key = (unsigned long)colordb_hash(c->Name, strlen(c->Name));                                                      \
+                                       if (OPTIONS->verbose_mode)                                                                                                      \
+                                       printf("Name> adding '%s' (%lu bytes) to db with key '%lu' \n", c->Name, strlen(c->JSON), key);                                 \
+                                       unsigned long inserted_id = add_colors_db_if_not_exist(OPTIONS->DB->db, key, (void *)c->JSON, (char *)c->Hex, (char *)c->Name); \
+                                       if (OPTIONS->verbose_mode)                                                                                                      \
+                                       printf("Name> added ID #%lu\n", inserted_id);                                                                                   \
+                                     } while (0); }
 
 
-#define ALLOC_ITEM()  { do {                                                      \
-                          c                 = malloc(sizeof(ParsedColor));        \
-                          c->RGB            = malloc(sizeof(ParsedRGB));          \
-                          c->Seq            = malloc(sizeof(ParsedSeq));          \
-                          c->Seq->Ansi      = malloc(sizeof(ParsedAnsiSeq));      \
-                          c->Seq->Truecolor = malloc(sizeof(ParsedTruecolorSeq)); \
-                        } while (0); }
+#define ALLOC_ITEM()               { do {                                                      \
+                                       c                 = malloc(sizeof(ParsedColor));        \
+                                       c->RGB            = malloc(sizeof(ParsedRGB));          \
+                                       c->Seq            = malloc(sizeof(ParsedSeq));          \
+                                       c->Seq->Ansi      = malloc(sizeof(ParsedAnsiSeq));      \
+                                       c->Seq->Truecolor = malloc(sizeof(ParsedTruecolorSeq)); \
+                                     } while (0); }
 
-#define ASSIGN_ITEM() { do {                                                                                  \
-                          c->JSON               = Lines.strings[i];                                           \
-                          c->Props              = json_object_get_count(ColorObject);                         \
-                          c->Name               = json_object_get_string(ColorObject, "name");                \
-                          c->Ansicode           = json_object_get_number(ColorObject, "ansicode");            \
-                          c->Hex                = json_object_get_string(ColorObject, "hex");                 \
-                          c->PngEncodedContent  = json_object_get_string(ColorObject, "encoded_png_content"); \
-                          c->PngDecodedLength   = json_object_get_number(ColorObject, "decoded_png_length");  \
-                          c->RGB->red           = json_object_dotget_number(ColorObject, "rgb.red");          \
-                          c->RGB->green         = json_object_dotget_number(ColorObject, "rgb.green");        \
-                          c->RGB->blue          = json_object_dotget_number(ColorObject, "rgb.blue");         \
-                          c->Seq->Ansi->fg      = json_object_dotget_string(ColorObject, "seq.ansi.fg");      \
-                          c->Seq->Ansi->bg      = json_object_dotget_string(ColorObject, "seq.ansi.bg");      \
-                          c->Seq->Truecolor->fg = json_object_dotget_string(ColorObject, "seq.truecolor.fg"); \
-                          c->Seq->Truecolor->bg = json_object_dotget_string(ColorObject, "seq.truecolor.bg"); \
-                        } while (0); }
+#define ASSIGN_ITEM()              { do {                                                                                  \
+                                       c->JSON               = Lines.strings[i];                                           \
+                                       c->Props              = json_object_get_count(ColorObject);                         \
+                                       c->Name               = json_object_get_string(ColorObject, "name");                \
+                                       c->Ansicode           = json_object_get_number(ColorObject, "ansicode");            \
+                                       c->Hex                = json_object_get_string(ColorObject, "hex");                 \
+                                       c->PngEncodedContent  = json_object_get_string(ColorObject, "encoded_png_content"); \
+                                       c->PngDecodedLength   = json_object_get_number(ColorObject, "decoded_png_length");  \
+                                       c->RGB->red           = json_object_dotget_number(ColorObject, "rgb.red");          \
+                                       c->RGB->green         = json_object_dotget_number(ColorObject, "rgb.green");        \
+                                       c->RGB->blue          = json_object_dotget_number(ColorObject, "rgb.blue");         \
+                                       c->Seq->Ansi->fg      = json_object_dotget_string(ColorObject, "seq.ansi.fg");      \
+                                       c->Seq->Ansi->bg      = json_object_dotget_string(ColorObject, "seq.ansi.bg");      \
+                                       c->Seq->Truecolor->fg = json_object_dotget_string(ColorObject, "seq.truecolor.fg"); \
+                                       c->Seq->Truecolor->bg = json_object_dotget_string(ColorObject, "seq.truecolor.bg"); \
+                                     } while (0); }
 
-#define FREE_ITEM()   { do {                                              \
-                          if (c->Seq->Truecolor) free(c->Seq->Truecolor); \
-                          if (c->Seq->Ansi) free(c->Seq->Ansi);           \
-                          if (c->Seq) free(c->Seq);                       \
-                          if (c->RGB) free(c->RGB);                       \
-                          if (c) free(c);                                 \
-                        } while (0); }
+#define FREE_ITEM()                { do {                                              \
+                                       if (c->Seq->Truecolor) free(c->Seq->Truecolor); \
+                                       if (c->Seq->Ansi) free(c->Seq->Ansi);           \
+                                       if (c->Seq) free(c->Seq);                       \
+                                       if (c->RGB) free(c->RGB);                       \
+                                       if (c) free(c);                                 \
+                                     } while (0); }
 
-#define DEBUG_ITEM()  { do {                                                                         \
-                          if (VERBOSE_DEBUG_ITEMS) {                                                 \
-                            printf("line is object with %lu props\n", c->Props);                     \
-                            printf("\tname:%s|ansicode:%d|hex:%s|\n", c->Name, c->Ansicode, c->Hex); \
-                            printf("\trgb:%dx%dx%d\n",                                               \
-                                   c->RGB->red                                                       \
-                                   , c->RGB->green                                                   \
-                                   , c->RGB->blue                                                    \
-                                   );                                                                \
-                            printf("\ttruecolor seq fg: %lu bytes\n",                                \
-                                   strlen(c->Seq->Truecolor->fg)                                     \
-                                   );                                                                \
-                            printf("\tansi seq fg: %lu bytes\n",                                     \
-                                   strlen(c->Seq->Ansi->fg)                                          \
-                                   );                                                                \
-                            printf("\tencoded png (%lu bytes decoded): %s\n",                        \
-                                   c->PngDecodedLength, c->PngEncodedContent                         \
-                                   );                                                                \
-                          }                                                                          \
-                        } while (0); }
+#define DEBUG_ITEM()               { do {                                                                         \
+                                       if (VERBOSE_DEBUG_ITEMS) {                                                 \
+                                         printf("line is object with %lu props\n", c->Props);                     \
+                                         printf("\tname:%s|ansicode:%d|hex:%s|\n", c->Name, c->Ansicode, c->Hex); \
+                                         printf("\trgb:%dx%dx%d\n",                                               \
+                                                c->RGB->red                                                       \
+                                                , c->RGB->green                                                   \
+                                                , c->RGB->blue                                                    \
+                                                );                                                                \
+                                         printf("\ttruecolor seq fg: %lu bytes\n",                                \
+                                                strlen(c->Seq->Truecolor->fg)                                     \
+                                                );                                                                \
+                                         printf("\tansi seq fg: %lu bytes\n",                                     \
+                                                strlen(c->Seq->Ansi->fg)                                          \
+                                                );                                                                \
+                                         printf("\tencoded png (%lu bytes decoded): %s\n",                        \
+                                                c->PngDecodedLength, c->PngEncodedContent                         \
+                                                );                                                                \
+                                       }                                                                          \
+                                     } while (0); }
 
-#define START_PROGRESS()  { do {                                                                      \
-                              progress->fmt         = "    Progress (:percent) => {:bar} [:elapsed]"; \
-                              progress->bg_bar_char = BG_PROGRESS_BAR_CHAR;                           \
-                              progress->bar_char    = PROGRESS_BAR_CHAR;                              \
-                              progress_on(progress, PROGRESS_EVENT_START, db_progress_start);         \
-                              progress_on(progress, PROGRESS_EVENT_PROGRESS, db_progress);            \
-                              progress_on(progress, PROGRESS_EVENT_END, db_progress_end);             \
-                            } while (0); }
-#define INSPECT_PROGRESS()  { do {                          \
-                                progress_inspect(progress); \
-                              } while (0); }
-#define END_PROGRESS()  { do {                       \
-                            progress_free(progress); \
-                          } while (0); }
+#define START_PROGRESS()           { do {                                                                      \
+                                       progress->fmt         = "    Progress (:percent) => {:bar} [:elapsed]"; \
+                                       progress->bg_bar_char = BG_PROGRESS_BAR_CHAR;                           \
+                                       progress->bar_char    = PROGRESS_BAR_CHAR;                              \
+                                       progress_on(progress, PROGRESS_EVENT_START, db_progress_start);         \
+                                       progress_on(progress, PROGRESS_EVENT_PROGRESS, db_progress);            \
+                                       progress_on(progress, PROGRESS_EVENT_END, db_progress_end);             \
+                                     } while (0); }
+#define INSPECT_PROGRESS()         { do {                          \
+                                       progress_inspect(progress); \
+                                     } while (0); }
+#define END_PROGRESS()             { do {                       \
+                                       progress_free(progress); \
+                                     } while (0); }
 
 
 int parse_colors_json(parse_json_options *OPTIONS){

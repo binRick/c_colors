@@ -10,7 +10,7 @@ extern "C" {
 
 #include "../vendor/sqlite3-3.6.20.h"
 
-#define DBMEM_NAME "dbmem"
+#define DBMEM_NAME    "dbmem"
 
 typedef struct spmembuffer_t {
   char *data;
