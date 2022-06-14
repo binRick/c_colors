@@ -1,6 +1,46 @@
+#pragma once
+#define PROGRESS_BAR_WIDTH      40
+#define BG_PROGRESS_BAR_CHAR    "."
+#define PROGRESS_BAR_CHAR       "="
+//#define DEBUG_MEMORY_ENABLED
+#ifdef DEBUG_MEMORY_ENABLED
+#include "../submodules/debug-memory/debug_memory.h"
+#endif
 #include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
 #include "../rgb-ansi-utils/rgb-ansi-utils.h"
+#include "../submodules/progress.c/progress.h"
 #include "colors-csv-parser.h"
+
+
+void csv_progress_start(progress_data_t *data) {
+  assert(data);
+  fprintf(stdout,
+          AC_HIDE_CURSOR
+          AC_RESETALL AC_GREEN AC_ITALIC "Processing" AC_RESETALL
+          AC_RESETALL " "
+          AC_RESETALL AC_BLUE AC_REVERSED AC_BOLD "%d"
+          AC_RESETALL " "
+          AC_RESETALL AC_GREEN AC_ITALIC "CSV Lines" AC_RESETALL
+          "\n",
+          data->holder->total
+          );
+  progress_write(data->holder);
+}
+
+
+void csv_progress(progress_data_t *data) {
+  progress_write(data->holder);
+}
+
+
+void csv_progress_end(progress_data_t *data) {
+  fprintf(stdout,
+          AC_SHOW_CURSOR
+          AC_RESETALL "\n"
+          AC_GREEN AC_REVERSED AC_BOLD "Complete" AC_RESETALL
+          "\n"
+          );
+}
 
 
 void ansi_truecolor_fg(FILE *file, int r, int g, int b) {
@@ -22,7 +62,6 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   bool                WRITE_TO_FILE = false;
   struct StringBuffer *sb           = stringbuffer_new_with_options(1024, true);
 
-  stringbuffer_append_string(sb, "");
   if (OPTIONS->output_file != NULL && strlen(OPTIONS->output_file) > 1) {
     WRITE_TO_FILE = true;
   }
@@ -39,8 +78,13 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   uint32_t    r;
   JSON_Value  *o;
   JSON_Object *O;
+  progress_t  *progress = progress_new(Lines.count, PROGRESS_BAR_WIDTH);
 
-  for (int i = 0; i < Lines.count && (qty < OPTIONS->parse_qty - 1); i++) {
+  progress->fmt      = "    Progress (:percent) => {:bar} [:elapsed]";    progress->bg_bar_char = BG_PROGRESS_BAR_CHAR;
+  progress->bar_char = PROGRESS_BAR_CHAR;    progress_on(progress, PROGRESS_EVENT_START, csv_progress_start);
+  progress_on(progress, PROGRESS_EVENT_PROGRESS, csv_progress);    progress_on(progress, PROGRESS_EVENT_END, csv_progress_end);
+
+  for (int i = 0; i < Lines.count && (qty < OPTIONS->parse_qty); i++) {
     LINE = stringfn_trim(Lines.strings[i]);
     struct StringFNStrings SPLIT = stringfn_split(LINE, ',');
     free(LINE);
@@ -66,7 +110,6 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     free(HEX);
     r = rgba_from_string(C->hex, &ok);
     rgba_t rgba = rgba_new(r);
-    ////////////////////
     ////////////////////
     C->ansicode      = hex_to_256_color_ansicode(C->hex);
     C->rgb           = malloc(sizeof(RGB_t));
@@ -111,7 +154,6 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
       js = json_serialize_to_string(o);
     }
     qty++;
-
     if (!WRITE_TO_FILE) {
       if (OPTIONS->output_color_mode) {
         ansi_truecolor_bg(stdout, C->rgb->red, C->rgb->green, C->rgb->blue);
@@ -124,8 +166,21 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
       stringbuffer_append_string(sb, js);
       stringbuffer_append_string(sb, "\n");
     }
+    {
+      free(C->truecolor->fg);
+      free(C->truecolor->bg);
+      free(C->truecolor);
+      free(C->ansi->fg);
+      free(C->ansi->bg);
+      free(C->rgb);
+      free(C->ansi);
+      free(C);
+    }
+    progress_value(progress, i + 1);
   }
   stringbuffer_append_string(sb, "\n");
+  progress_value(progress, Lines.count);
+  progress_free(progress);
   if (WRITE_TO_FILE) {
     int wrote_bytes = fs_write(OPTIONS->output_file, stringbuffer_to_string(sb));
     fprintf(stderr,
@@ -136,6 +191,9 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
             );
   }
   stringbuffer_release(sb);
+#ifdef DEBUG_MEMORY_ENABLED
+  print_allocated_memory();
+#endif
   return(EXIT_SUCCESS);
 } /* parse_colors_csv */
 

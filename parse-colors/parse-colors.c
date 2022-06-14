@@ -1,7 +1,4 @@
 #include "parse-colors.h"
-#include "termpaint.h"
-#include "termpaintx.h"
-#include "termpaintx_ttyrescue.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,12 +12,13 @@ void setup_screen();
 void load_new_palette_type_id();
 
 args_t                 args = {
-  DEFAULT_CSV_INPUT,
-  DEFAULT_OUTPUT,
   DEFAULT_MODE,
   DEFAULT_VERBOSE,
   DEFAULT_COUNT,
-  DEFAULT_COLOR,
+  DEFAULT_PRETTY,
+  DEFAULT_SQLITE_DB_PATH,
+  DEFAULT_CSV_FILE,
+  DEFAULT_JSON_FILE
 };
 
 TerminalCapabilities_t TerminalCapabilities = {
@@ -44,149 +42,6 @@ char *strdup_escaped(const char *tmp) {
   }
   *dst = 0;
   return(ret);
-}
-
-
-void null_callback(void *ctx, termpaint_event *event) {
-  (void)ctx; (void)event;
-}
-
-typedef struct {
-  int        id;
-  const char *name;
-  _Bool      state;
-} Cap;
-
-Cap  caps[] = {
-#define C(name)    { TERMPAINT_CAPABILITY_ ## name, #name, 0 }
-  C(CSI_POSTFIX_MOD),
-  C(TITLE_RESTORE),
-  C(MAY_TRY_CURSOR_SHAPE_BAR),
-  C(CURSOR_SHAPE_OSC50),
-  C(EXTENDED_CHARSET),
-  C(TRUECOLOR_MAYBE_SUPPORTED),
-  C(TRUECOLOR_SUPPORTED),
-  C(88_COLOR),
-  C(CLEARED_COLORING),
-  C(7BIT_ST),
-  C(MAY_TRY_TAGGED_PASTE),
-  C(TRUECOLOR_SUPPORTED),
-  C(SAFE_POSITION_REPORT),
-  C(EXTENDED_CHARSET),
-#undef C
-  { 0,                             NULL,  0 }
-};
-
-char *debug     = NULL;
-bool debug_used = true;
-
-
-void debug_log(termpaint_integration *integration, const char *data, int length) {
-  (void)integration;
-  if (debug_used && !debug) {
-    return;                           // memory allocaton failure
-  }
-  if (debug) {
-    const int oldlen     = strlen(debug);
-    char      *debug_old = debug;
-    debug = realloc(debug, oldlen + length + 1);
-    if (debug) {
-      memcpy(debug + oldlen, data, length);
-      debug[oldlen + length] = 0;
-    } else {
-      free(debug_old);
-    }
-  } else {
-    debug = strndup(data, length);
-  }
-  debug_used = true;
-}
-
-
-void cleanup(){
-  if (args.verbose) {
-#ifdef DEBUG_MEMORY
-    print_allocated_memory();
-#endif
-  }
-  exit(0);
-}
-
-
-int TermpaintQuery(){
-  termpaint_integration *integration = termpaintx_full_integration("+kbdsigint +kbdsigtstp");
-
-  if (!integration) {
-    puts("Could not init termpaint!");
-    return(1);
-  }
-  termpaint_integration_set_logging_func(integration, debug_log);
-  termpaint_terminal *terminal = termpaint_terminal_new(integration);
-
-  termpaint_terminal_set_log_mask(terminal, TERMPAINT_LOG_AUTO_DETECT_TRACE | TERMPAINT_LOG_TRACE_RAW_INPUT);
-  termpaint_terminal_set_event_cb(terminal, null_callback, NULL);
-  termpaintx_full_integration_set_terminal(integration, terminal);
-  termpaint_terminal_auto_detect(terminal);
-  termpaintx_full_integration_wait_for_ready_with_message(integration, 3000, "Terminal auto detection is taking unusually long, press space to abort.");
-
-  char buff[1000];
-  char *self_reported_name_and_version = NULL;
-
-  termpaint_terminal_auto_detect_result_text(terminal, buff, sizeof(buff));
-  if (termpaint_terminal_self_reported_name_and_version(terminal)) {
-    self_reported_name_and_version = strdup_escaped(termpaint_terminal_self_reported_name_and_version(terminal));
-  }
-  termpaint_terminal_free_with_restore(terminal);
-  for (Cap *c = caps; c->name; c++) {
-    c->state = termpaint_terminal_capable(terminal, c->id);
-    if (strcmp(c->name, "TITLE_RESTORE") == 0) {
-      TerminalCapabilities.RestorePalette = c->state;
-    }
-    if (DEBUG_TERMINAL_CAPABILITIES || args.verbose) {
-      printf(AC_RESETALL AC_YELLOW AC_ITALIC "%30s" AC_RESETALL
-             " => "
-             "[" AC_REVERSED AC_BOLD "%3s" AC_RESETALL "]"
-             "\n",
-             c->name,
-             c->state ? AC_GREEN "Yes" : AC_RED "No"
-             );
-    }
-  }
-  if (DEBUG_TERMINAL_CAPABILITIES || args.verbose) {
-    printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", self_reported_name_and_version);
-    printf(AC_RED AC_BOLD "%s" AC_RESETALL "\n", buff);
-    printf(AC_BLUE AC_BOLD "Restore Palette?" AC_RESETALL " " "%s" AC_RESETALL "\n", TerminalCapabilities.RestorePalette ? AC_GREEN "Yes" : AC_RED "No");
-    sleep(0);
-  }
-  return(EXIT_SUCCESS);
-} /* QUERY_TERMINAL */
-
-
-void setup_screen(){
-  if (ALT_SCREEN_MODE_ENABLED) {
-    printf(AC_ALT_SCREEN_ON);
-  }
-  TermpaintQuery();
-  if (TerminalCapabilities.RestorePalette) {
-    printf(AC_SAVE_PALETTE);
-  }
-  printf(AC_HIDE_CURSOR);
-  signal(SIGTERM, restore_screen);
-  signal(SIGQUIT, restore_screen);
-  signal(SIGINT, restore_screen);
-  atexit(restore_screen);
-}
-
-
-void restore_screen(){
-  printf(AC_SHOW_CURSOR);
-  if (ALT_SCREEN_MODE_ENABLED) {
-    printf(AC_ALT_SCREEN_OFF);
-  }
-  if (TerminalCapabilities.RestorePalette) {
-    printf(AC_RESTORE_PALETTE);
-  }
-  cleanup();
 }
 
 
@@ -243,30 +98,24 @@ int main(int argc, char **argv) {
   }
   TerminalCapabilities.IsTTY = isatty(STDIN_FILENO);
 
-  if (TerminalCapabilities.IsTTY) {
-    setup_screen();
-  }
 
   load_new_palette_type_id(DEFAULT_PALETTE);
   if ((strcmp(args.mode, "debug_args") == 0)) {
     load_new_palette_type_id(ARGS_PALETTE);
     return(debug_args());
-  }
-
-  if ((strcmp(args.mode, "csv") == 0)) {
+  }else if ((strcmp(args.mode, "csv") == 0)) {
     load_new_palette_type_id(CSV_PALETTE);
     parse_csv_options *options = malloc(sizeof(parse_csv_options));
-    options->input_file       = args.input;
+    options->input_file       = args.csv_file;
     options->verbose_mode     = args.verbose;
     options->pretty_json_mode = args.pretty;
-    options->output_file      = args.output;
+    options->output_file      = args.json_file;
     options->parse_qty        = args.count;
     return(parse_colors_csv(options));
-  }
-  if ((strcmp(args.mode, "typeids_hash") == 0)) {
+  }else if ((strcmp(args.mode, "typeids_hash") == 0)) {
     load_new_palette_type_id(TYPEIDS_PALETTE);
     ColorsDB       *DB = malloc(sizeof(ColorsDB));
-    DB->Path = COLOR_NAMES_DB_PATH;
+    DB->Path = args.sqlite_file;
     struct djbhash TYPEIDS_HASH = db_get_typeids_hash(DB);
     djbhash_reset_iterator(&TYPEIDS_HASH);
     fprintf(stdout,
@@ -278,27 +127,22 @@ int main(int argc, char **argv) {
             );
 
     return(TYPEIDS_HASH.active_count > 0);
-  }
-  if ((strcmp(args.mode, "typeids") == 0)) {
+  }else if ((strcmp(args.mode, "typeids") == 0)) {
     load_new_palette_type_id(TYPEIDS_PALETTE);
     ColorsDB *DB = malloc(sizeof(ColorsDB));
-    DB->Path = COLOR_NAMES_DB_PATH;
+    DB->Path = args.sqlite_file;
     return(db_list_typeids(DB));
-  }
-  if ((strcmp(args.mode, "db") == 0)) {
+  }else if ((strcmp(args.mode, "db") == 0)) {
     load_new_palette_type_id(DB_PALETTE);
     ColorsDB *DB = malloc(sizeof(ColorsDB));
-    DB->Path = COLOR_NAMES_DB_PATH;
+    DB->Path = args.sqlite_file;
     return(db_list_ids(DB));
-  }
-
-  if ((strcmp(args.mode, "json") == 0)) {
+  }else if ((strcmp(args.mode, "json") == 0)) {
     load_new_palette_type_id(JSON_PALETTE);
-    args.input = DEFAULT_JSON_INPUT;
     parse_json_options *options = malloc(sizeof(parse_json_options));
     options->DB                 = malloc(sizeof(ColorsDB));
-    options->DB->Path           = COLOR_NAMES_DB_PATH;
-    options->input_file         = args.input;
+    options->DB->Path           = args.sqlite_file;
+    options->input_file         = args.json_file;
     options->verbose_mode       = args.verbose;
     options->parse_qty          = args.count;
     options->ParsedColorHandler = print_color_name_handler;
@@ -310,7 +154,6 @@ int main(int argc, char **argv) {
     if (options) {
       free(options);
     }
-    cleanup();
     return(r);
   }
 
@@ -321,21 +164,21 @@ int main(int argc, char **argv) {
 
 int debug_args(){
   fprintf(stderr,
-          acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d")
-          ", "
-          ansistr(AC_RESETALL AC_REVERSE AC_BRIGHT_RED_BLACK "Input: %s")
-          ", "
-          ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Output: %s")
-          ", "
-          ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Mode: %s")
-          ", "
-          ansistr(AC_RESETALL AC_UNDERLINE "Count: %d")
-          "\n"
-          ansistr(AC_RESETALL AC_UNDERLINE "Pretty Mode: %d")
-          "\n"
-          ansistr(AC_RESETALL AC_UNDERLINE "Color Mode: %d")
-          "\n",
-          args.verbose, args.input, args.output, args.mode, args.count, args.pretty, args.color
+          acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d") "\n"
+          ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Mode: %s") "\n"
+          ansistr(AC_RESETALL AC_UNDERLINE "Count: %d") "\n"
+          ansistr(AC_RESETALL AC_UNDERLINE "Pretty Mode: %d") "\n"
+          ansistr(AC_RESETALL AC_UNDERLINE "Sqlite File: %s") "\n"
+          ansistr(AC_RESETALL AC_UNDERLINE "JSON File: %s") "\n"
+          ansistr(AC_RESETALL AC_UNDERLINE "CSV File: %s") "\n"
+          ,
+          args.verbose,
+          args.mode,
+          args.count,
+          args.pretty,
+          args.sqlite_file,
+          args.json_file,
+          args.csv_file
           );
 
   return(EXIT_SUCCESS);
@@ -352,23 +195,9 @@ int parse_args(int argc, char *argv[]){
     identifier = cag_option_get(&context);
 
     switch (identifier) {
-    case 'i':
-      value      = cag_option_get_value(&context);
-      args.input = value;
-      break;
     case 'm':
       value     = cag_option_get_value(&context);
       args.mode = value;
-      break;
-    case 'o':
-      value       = cag_option_get_value(&context);
-      args.output = value;
-      break;
-    case 'p':
-      args.pretty = true;
-      break;
-    case 'x':
-      args.color = true;
       break;
     case 'v':
       args.verbose = true;
@@ -376,6 +205,21 @@ int parse_args(int argc, char *argv[]){
     case 'c':
       value      = cag_option_get_value(&context);
       args.count = atoi(value);
+      break;
+    case 'p':
+      args.pretty = true;
+      break;
+    case 'D':
+      value            = cag_option_get_value(&context);
+      args.sqlite_file = value;
+      break;
+    case 'C':
+      value         = cag_option_get_value(&context);
+      args.csv_file = value;
+      break;
+    case 'J':
+      value          = cag_option_get_value(&context);
+      args.json_file = value;
       break;
     case 'h':
       fprintf(stderr, AC_RESETALL AC_YELLOW AC_BOLD "Usage: parse-colors [OPTION]\n" AC_RESETALL);

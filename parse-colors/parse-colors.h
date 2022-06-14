@@ -1,6 +1,4 @@
 #pragma once
-#ifndef PARSER_H
-#define PARSER_H
 #ifndef AC_SHOW_CURSOR
 #define AC_SHOW_CURSOR    "\x1b[?25h"
 #endif
@@ -24,21 +22,21 @@
 #include "../submodules/c_ansi/ansi-utils/ansi-utils.h"
 #include "../subprojects/cargs/include/cargs.h"
 ////////////////////////////////////////////////////////////////////
-#define RENDER_COLOR_OUTPUT      false
-#define RENDER_PRETTY_JSON       alse
-#define COLORNAMES_CSV_FILE      "vendor/colornames/colornames.csv"
-#define COLORNAMES_JSON_FILE     "etc/parsed-colors.json"
-#define COLOR_NAMES_DB_PATH      "etc/colornames.sqlite"
+#define RENDER_COLOR_OUTPUT       false
+#define COLORNAMES_CSV_FILE       "vendor/colornames/colornames.csv"
+#define COLORNAMES_JSON_FILE      "etc/parsed-colors.json"
+#define COLORNAMES_SQLITE_FILE    "etc/parsed-colors.sqlite"
 ////////////////////////////////////////////////////////////////////
-#define DEFAULT_CSV_INPUT        COLORNAMES_CSV_FILE
-#define DEFAULT_JSON_INPUT       COLORNAMES_JSON_FILE
-#define DEFAULT_OUTPUT           ""
-#define DEFAULT_COUNT            10
-#define DEFAULT_VERBOSE          false
-#define DEFAULT_PRETTY           false
-#define DEFAULT_COLOR            false
-#define DEFAULT_MODE             "csv"
-#define VERBOSE_DEBUG_HANDLER    false
+#define DEFAULT_CSV_FILE          COLORNAMES_CSV_FILE
+#define DEFAULT_JSON_FILE         COLORNAMES_JSON_FILE
+#define DEFAULT_SQLITE_DB_PATH    COLORNAMES_SQLITE_FILE
+#define DEFAULT_OUTPUT            ""
+#define DEFAULT_COUNT             10
+#define DEFAULT_VERBOSE           false
+#define DEFAULT_PRETTY            false
+#define DEFAULT_COLOR             ""
+#define DEFAULT_MODE              "csv"
+#define VERBOSE_DEBUG_HANDLER     false
 ////////////////////////////////////////////////////////////////////
 int parse_args(int argc, char *argv[]);
 int debug_args();
@@ -47,25 +45,15 @@ int parse_csv();
 
 ////////////////////////////////////////////////////////////////////
 typedef struct CLI_ARGS {
-  char *input;
-  char *output;
   char *mode;
   bool verbose;
   int  count;
   bool pretty;
-  int  color;
+  char *sqlite_file;
+  char *csv_file;
+  char *json_file;
 } args_t;
 static struct cag_option options[] = {
-  { .identifier     = 'i',
-    .access_letters = "i",
-    .access_name    = "input",
-    .value_name     = "INPUT",
-    .description    = "Input File Path" },
-  { .identifier     = 'o',
-    .access_letters = "o",
-    .access_name    = "output",
-    .value_name     = "OUTPUT",
-    .description    = "Output File Path" },
   { .identifier     = 'm',
     .access_letters = "m",
     .access_name    = "mode",
@@ -86,11 +74,21 @@ static struct cag_option options[] = {
     .access_name    = "pretty",
     .value_name     = NULL,
     .description    = "JSON Pretty Mode" },
-  { .identifier     = 'x',
+  { .identifier     = 'C',
     .access_letters = "C",
-    .access_name    = "color",
-    .value_name     = NULL,
-    .description    = "Color Mode" },
+    .access_name    = "csv",
+    .value_name     = "CSV_FILE",
+    .description    = "CSV File Path" },
+  { .identifier     = 'J',
+    .access_letters = "J",
+    .access_name    = "json",
+    .value_name     = "JSON_FILE",
+    .description    = "JSON File Path" },
+  { .identifier     = 'D',
+    .access_letters = "D",
+    .access_name    = "db",
+    .value_name     = "SQLITE_FILE",
+    .description    = "Sqlite File Path" },
   { .identifier     = 'h',
     .access_letters = "h",
     .access_name    = "help",
@@ -173,5 +171,3 @@ enum { DEFAULT_PALETTE,
        TYPEIDS_PALETTE,
 };
 
-
-#endif

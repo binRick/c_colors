@@ -1,6 +1,4 @@
 #pragma once
-#ifndef CSV_PARSER_H
-#define CSV_PARSER_H
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -29,4 +27,3 @@ struct parse_csv_options {
 
 int parse_colors_csv(parse_csv_options *OPTIONS);
 
-#endif
