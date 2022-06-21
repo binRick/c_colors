@@ -1,12 +1,11 @@
 #include "colors.h"
 #include "submodules/log.h/log.h"
-#define MAX_COLORS      1000
+#define MAX_COLORS      2000
 #define DEBUG_COLORS    false
 //////////////////////////////////////////////////////////////////////////
 ColorsDB                      *DB;
 static struct djbhash         COLORS_HASH = { 0 }, COLOR_NAME_HASH = { 0 }, COLOR_HEX_HASH = { 0 };
 static struct StringFNStrings COLOR_NAME_STRINGS, COLOR_HEX_STRINGS;
-//////////////////////////////////////////////////////////////////////////
 static int load_color_names();
 static void iterate_color_hex_strings();
 static void iterate_color_name_strings();
@@ -212,8 +211,9 @@ char * get_color_name_hex(const char *COLOR_NAME){
 
 
 void * get_color_name_row_property(const char *COLOR_NAME, const char *ROW_PROPERTY){
-  void *res       = NULL;
-  char *COLOR_ROW = get_color_name_row(COLOR_NAME);
+  void       *res       = NULL;
+  char       *COLOR_ROW = get_color_name_row(COLOR_NAME);
+  JSON_Value *V;
 
   if (DEBUG_COLORS) {
     log_debug("%s", COLOR_NAME);
@@ -232,15 +232,17 @@ void * get_color_name_row_property(const char *COLOR_NAME, const char *ROW_PROPE
 
   assert(O != NULL);
 
-  JSON_Value *V = json_object_dotget_value(O, ROW_PROPERTY);
-
+  V = json_object_dotget_value(O, ROW_PROPERTY);
   assert(V != NULL);
+  log_debug("prop:%s", ROW_PROPERTY);
+  log_debug("val type:%d", json_value_get_type(V));
+
   assert(json_value_get_type(V) != JSONError);
   assert(json_value_get_type(V) != JSONNull);
 
   switch (json_value_get_type(V)) {
   case JSONString:
-    res = (void *)((char *)json_value_get_string(V));
+    res = (void *)strdup_escaped(((char *)json_value_get_string(V)));
     break;
   case JSONBoolean:
     res = (void *)((size_t)json_value_get_boolean(V));

@@ -13,7 +13,6 @@ colors_test_deps = [
  c_stringfn_dep,
  c_string_buffer_dep,
  greatest_dep,
- ansicodes_dep,
  logh_dep,
  parson_dep,
  ee_dep,
@@ -22,6 +21,8 @@ colors_test_deps = [
  db_dep,
  dbg_dep,
  colors_dep,
+ ansi_codes_dep,
+ ansi_utils_dep,
 ]
 
 if get_option('enable-binaries')

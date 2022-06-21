@@ -1,19 +1,20 @@
-project('c_colors', ['c'],default_options:['warning_level=0','c_std=gnu99'])
+project('c_colors', ['c'],default_options:['warning_level=3','c_std=gnu99'])
 cc = meson.get_compiler('c')
 #//////////////////////////////////////////////////////////////////////
 meson_deps_dir = join_paths(meson.current_source_dir(), 'submodules/meson_deps')
-pwd = join_paths(meson.current_source_dir())
-#meson_deps_dir = pwd+'/submodules/meson_deps'
+pwd = meson.current_source_dir()
 #//////////////////////////////////////////////////////////////////////
 inc = [
   include_directories(
-   './',
+   './submodules/meson_deps/vendor',
+   './submodules/meson_deps/vendor/sqlite',
    './submodules/meson_deps/submodules',
-   './submodules/meson_deps/',
+   './submodules/meson_deps',
    './submodules/meson_deps/submodules',
    './submodules/meson_deps/submodules/ee.c',
    './submodules/meson_deps/submodules/ee.c/src',
    './submodules/meson_deps/submodules/list/src',
+   './',
   ),
 ]
 #############################################################################

@@ -2,7 +2,7 @@
 #ifndef _COLORDB_H_INCLDED
 #define _COLORDB_H_INCLDED
 ////////////////////////////////////////////////
-#include "../vendor/sqlite3.h"
+#include "vendor/sqlite/sqlite3.h"
 #include <limits.h>
 #include <stddef.h>
 #include <stdio.h>
