@@ -30,3 +30,6 @@ build
 .*.csv
 .*.json
 .*.sqlite
+.make-log-*
+.make-*log*
+.DU
