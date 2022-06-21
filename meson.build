@@ -8,6 +8,12 @@ pwd = join_paths(meson.current_source_dir())
 inc = [
   include_directories(
    './',
+   './submodules/meson_deps/submodules',
+   './submodules/meson_deps/',
+   './submodules/meson_deps/submodules',
+   './submodules/meson_deps/submodules/ee.c',
+   './submodules/meson_deps/submodules/ee.c/src',
+   './submodules/meson_deps/submodules/list/src',
   ),
 ]
 #############################################################################
@@ -15,6 +21,16 @@ subdir('submodules/meson_deps/meson/args')
 subdir('submodules/meson_deps/meson/inc')
 #//////////////////////////////////////////////////////////////////////
 subdir('submodules/meson_deps/meson/deps/m')
+subdir('submodules/meson_deps/meson/deps/asprintf')
+subdir('submodules/meson_deps/meson/deps/timestamp')
+subdir('submodules/meson_deps/meson/deps/ms')
+subdir('submodules/meson_deps/meson/deps/ansicodes')
+subdir('submodules/meson_deps/meson/deps/tinydir')
+subdir('submodules/meson_deps/meson/deps/list')
+subdir('submodules/meson_deps/meson/deps/greatest')
+subdir('submodules/meson_deps/meson/deps/log.h')
+subdir('submodules/meson_deps/meson/deps/ee')
+subdir('submodules/meson_deps/meson/deps/c_timer')
 subdir('submodules/meson_deps/meson/deps/cargs')
 subdir('submodules/meson_deps/meson/deps/c_string_buffer')
 subdir('submodules/meson_deps/meson/deps/c_stringfn')
@@ -28,12 +44,11 @@ subdir('submodules/meson_deps/meson/deps/termpaint')
 subdir('submodules/meson_deps/meson/deps/rgba')
 subdir('submodules/meson_deps/meson/deps/strdup')
 subdir('submodules/meson_deps/meson/deps/tempdir')
-subdir('submodules/meson_deps/meson/deps/asprintf')
 subdir('submodules/meson_deps/meson/deps/dbg')
 subdir('submodules/meson_deps/meson/deps/progress')
+subdir('submodules/meson_deps/meson/deps/reproc')
 subdir('submodules/meson_deps/meson/deps/smaz')
 subdir('submodules/meson_deps/meson/deps/debug-memory')
-subdir('submodules/meson_deps/meson/deps/c_timer')
 subdir('submodules/meson_deps/meson/deps/embedded_palettes')
 subdir('submodules/meson_deps/submodules/c_ansi/ansi-codes')
 subdir('submodules/meson_deps/submodules/c_ansi/ansi-rgb-utils')
@@ -52,3 +67,5 @@ subdir('hex-png-pixel-creator')
 #//////////////////////////////////////////////////////////////////////
 subdir('dbmem-test')
 #//////////////////////////////////////////////////////////////////////
+subdir('colors')
+subdir('colors-test')

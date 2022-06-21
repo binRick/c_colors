@@ -28,8 +28,9 @@ TIDIED_FILES = \
 			   rgb-ansi-utils/*.c rgb-ansi-utils/*.h \
 			   colors-json-parser/*.c colors-json-parser/*.h \
 			   db/*.h db/*.c \
-			   dbmem*/*.h dbmem*/*.c \
-			   parse-colors/*.c parse-colors/*.h
+			   parse-colors/*.c parse-colors/*.h \
+			   colors-test/*.c colors-test/*.h \
+			   colors/*.c colors/*.h
 ##############################################################
 CD_LOADER = cd $(LOADER_DIR)
 CD_PROJECT = cd $(PROJECT_DIR)
@@ -99,10 +100,19 @@ dev-clean: clean dev
 dev: pull tidy nodemon
 
 dev-loader:
-	@$(PASSH) -L .nodemon.log $(NODEMON) -w '*/meson.build' --delay 1 -i '*/subprojects' -I  -w 'include/*.h' -w meson.build -w src -w Makefile -w loader/meson.build -w loader/src -w loader/include -i '*/embeds/*' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make do-loader||true'
+	@$(PASSH) -L .nodemon.log $(NODEMON) \
+		-V \
+		-w '*/meson.build' --delay 1 -i '*/subprojects' -I  -w 'include/*.h' -w meson.build -w src -w Makefile -w loader/meson.build -w loader/src -w loader/include -i '*/embeds/*' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make do-loader||true'
 
-nodemon:
-	@$(PASSH) -L .nodemon.log $(NODEMON) -w '*/meson.build' -w "*/*.c" -w "*/*.h" --delay 1 -i '*/subprojects' -I  -w 'include/*.h' -w meson.build -w src -w Makefile -w loader/meson.build -w loader/src -w loader/include -i '*/embeds/*' -e tpl,build,sh,c,h,Makefile -x env -- bash -c 'make dev-all||true'
+nodemon: tidy
+	@$(PASSH) -L .nodemon.log $(NODEMON) \
+		--delay .1 \
+		-w '*/meson.build' -w "*/*.c" -w "*/*.h" \
+		-w 'include/*.h' -w meson.build -w src -w Makefile -w "loader/*" \
+		-i build -i '*unc-back*' -i '*/subprojects' -i '*/embeds/*' \
+		-e tpl,build,sh,c,h,Makefile \
+		-x \
+			env -- bash -c 'make dev-all||true'
 
 
 git-pull:
