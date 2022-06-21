@@ -25,4 +25,9 @@ typedef struct {
 int load_colors(ColorsDB *DB);
 struct StringFNStrings get_color_name_strings();
 struct StringFNStrings  get_color_hex_strings();
-
+char * get_color_name_hex(const char *COLOR_NAME);
+char * get_color_hex_name(const char *COLOR_HEX);
+char * get_color_name_row(const char *COLOR_NAME);
+void *get_color_name_row_property(const char *COLOR_NAME, const char *ROW_PROPERTY);
+color_rgb_t get_color_name_rgb(const char *COLOR_NAME);
+color_rgb_t get_color_name_rgb_background(const char *COLOR_NAME);
