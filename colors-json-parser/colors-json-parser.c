@@ -4,10 +4,10 @@
 #define PROGRESS_BAR_CHAR       "="
 #define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-#include "../submodules/debug-memory/debug_memory.h"
+#include "submodules/debug-memory/debug_memory.h"
 #endif
-#include "../submodules/progress.c/progress.h"
 #include "colors-json-parser.h"
+#include "submodules/progress.c/progress.h"
 unsigned long colordb_hash(char *key, int length);
 
 ////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 #pragma once
-#include "../db/db.h"
-#include "../submodules/djbhash/src/djbhash.h"
+#include "db/db.h"
+#include "submodules/djbhash/src/djbhash.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -38,7 +38,7 @@ struct parse_json_options {
 #include "../submodules/fs.c/fs.h"
 #include "../submodules/parson/parson.h"
 #include "../submodules/progress.c/progress.h"
-#include "../vendor/sqlite3.h"
+#include "vendor/sqlite/sqlite3.h"
 
 typedef struct ParsedRGB            ParsedRGB;
 typedef struct ParsedSeq            ParsedSeq;
