@@ -70,3 +70,15 @@
 [submodule "submodules/meson_deps"]
 	path = submodules/meson_deps
 	url = https://github.com/binRick/meson_deps
+[submodule "submodules/color-name-lists"]
+	path = submodules/color-name-lists
+	url = https://github.com/meodai/color-name-lists
+[submodule "submodules/color-names"]
+	path = submodules/color-names
+	url = https://github.com/codebrainz/color-names
+[submodule "submodules/colornames"]
+	path = submodules/colornames
+	url = https://github.com/timoxley/colornames
+[submodule "submodules/c-color-names"]
+	path = submodules/c-color-names
+	url = https://github.com/abhishekmishra/c-color-names

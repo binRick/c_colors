@@ -104,11 +104,9 @@ int db_list_ids(ColorsDB *DB){
   if (init_colors_db(DB) != 0) {
     return(1);
   }
-
   size_t       total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, type_ids_size = 0, type_ids_qty = 0, unique_typeids_size;
   char         *tmp;
   colordb_type TYPEID = 2588928;
-
 
   unique_typeids_qty  = 0;
   unique_typeids_size = 0;
