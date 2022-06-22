@@ -4,7 +4,7 @@
 #define PROGRESS_BAR_CHAR       "="
 #define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-#include "submodules/debug-memory/debug_memory.h"
+#include "debug_memory.h"
 #endif
 #include "colors-json-parser/colors-json-parser.h"
 #include "progress.h"
