@@ -35,9 +35,9 @@ struct parse_json_options {
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "../submodules/c_stringfn/include/stringfn.h"
 #include "../submodules/c_timer/include/c_timer.h"
-#include "submodules/fs.c/fs.h"
-#include "submodules/parson/parson.h"
-#include "submodules/progress.c/progress.h"
+#include "../submodules/fs.c/fs.h"
+#include "../submodules/parson/parson.h"
+#include "../submodules/progress.c/progress.h"
 #include "vendor/sqlite/sqlite3.h"
 
 typedef struct ParsedRGB            ParsedRGB;
