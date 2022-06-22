@@ -23,7 +23,6 @@ subdir('hex-png-pixel-utils')
 subdir('rgb-ansi-utils')
 subdir('colors-csv-parser')
 subdir('colors-json-parser')
-#subdir('parse-colors')
 subdir('dbmem')
 #//////////////////////////////////////////////////////////////////////
 subdir('hex-png-pixel-creator')
@@ -32,3 +31,4 @@ subdir('dbmem-test')
 #//////////////////////////////////////////////////////////////////////
 subdir('colors')
 subdir('colors-test')
+subdir('parse-colors')

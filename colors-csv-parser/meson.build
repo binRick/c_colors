@@ -9,12 +9,16 @@ colors_csv_parser_deps = [
   rgb_ansi_utils_dep,
   hex_png_pixel_utils_dep,
   progress_dep,
+  parson_dep,
+  c_fsio_dep,
+  fs_dep,
+  rgba_dep,
   debug_memory_dep,
   djbhash_dep,
 ]
-colors_csv_parser_lib = static_library('colors-csv-parser',
+colors_csv_parser_lib = library('colors-csv-parser',
   colors_csv_srcs,
-  install: false, 
+  install: true, 
   dependencies: colors_csv_parser_deps,
   include_directories: colors_csv_parser_dirs,
 )
