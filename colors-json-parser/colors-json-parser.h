@@ -1,6 +1,6 @@
 #pragma once
 #include "db/db.h"
-#include "submodules/djbhash/src/djbhash.h"
+#include "djbhash.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
