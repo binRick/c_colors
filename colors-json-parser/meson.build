@@ -3,6 +3,9 @@ colors_json_srcs = [
 ]
 colors_json_parser_dirs = [
   inc,
+  '../submodules/meson_deps/submodules/progress.c',
+  '../submodules/meson_deps/submodules/debug-memory',
+  '../submodules/meson_deps/submodules/bytes',
 ]
 colors_json_parser_deps = [
   rgb_ansi_utils_dep,

@@ -7,7 +7,7 @@
 #include "submodules/debug-memory/debug_memory.h"
 #endif
 #include "colors-json-parser/colors-json-parser.h"
-#include "submodules/progress.c/progress.h"
+#include "progress.h"
 unsigned long colordb_hash(char *key, int length);
 
 ////////////////////////////////////////////////////////////////////
