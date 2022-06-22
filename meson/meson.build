@@ -1,6 +1,0 @@
-subdir('db')                                                                                                              
-subdir('hex-png-pixel-utils')
-subdir('rgb-ansi-utils')
-subdir('colors-csv-parser')
-subdir('colors-json-parser')
-subdir('parse-colors')

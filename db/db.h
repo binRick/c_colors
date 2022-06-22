@@ -14,8 +14,8 @@
  #include "../submodules/fs.c/fs.h"
  #include "../submodules/parson/parson.h"*/
 /////////////////////////////////////////////////////////
-#include "vendor/sqlite/sqlite3.h"
 #include "db-mgr.h"
+#include "vendor/sqlite/sqlite3.h"
 /////////////////////////////////////////////////////////
 typedef struct ColorsDB ColorsDB;
 struct ColorsDB {

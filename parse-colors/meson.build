@@ -5,13 +5,13 @@ parse_colors_dirs = [
   inc,
 ]
 parse_colors_deps = [
+     rgba_dep, 
      cargs_dep,
      colors_csv_parser_dep,
      colors_json_parser_dep,
      c_stringfn_dep,
      parson_dep,
      fs_dep,
-     #rgba_dep, 
      #   rgb_ansi_utils_dep, 
      #ansi_codes_dep, 
      #ansi_rgb_utils_dep,

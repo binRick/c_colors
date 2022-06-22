@@ -7,7 +7,6 @@ pwd = meson.current_source_dir()
 inc = [
   include_directories(
    '.',
-   pwd+'/vendor',
    'vendor',
    'vendor/sqlite',
    'rgb-ansi-utils',
@@ -65,7 +64,7 @@ subdir('hex-png-pixel-utils')
 subdir('rgb-ansi-utils')
 subdir('colors-csv-parser')
 subdir('colors-json-parser')
-subdir('parse-colors')
+#subdir('parse-colors')
 subdir('dbmem')
 #//////////////////////////////////////////////////////////////////////
 subdir('hex-png-pixel-creator')
