@@ -1,4 +1,5 @@
-#include "rgb-ansi-utils.h"
+#pragma once
+#include "rgb-ansi-utils/rgb-ansi-utils.h"
 #include <stdbool.h>
 #define RGB_UTILS_DEBUG_MODE    false
 #define DELTA_E_K_L             2

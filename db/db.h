@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 //#include "../submodules/djbhash/src/djbhash.h"
-#include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
+#include "ansi-codes/ansi-codes.h"
 /////////////////////////////////////////////////////////
 /*#include "../submodules/bytes/bytes.h"
  #include "../submodules/c_stringfn/include/stringfn.h"
@@ -14,7 +14,7 @@
  #include "../submodules/fs.c/fs.h"
  #include "../submodules/parson/parson.h"*/
 /////////////////////////////////////////////////////////
-#include "../vendor/sqlite/sqlite3.h"
+#include "vendor/sqlite/sqlite3.h"
 #include "db-mgr.h"
 /////////////////////////////////////////////////////////
 typedef struct ColorsDB ColorsDB;

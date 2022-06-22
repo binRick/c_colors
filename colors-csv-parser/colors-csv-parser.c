@@ -4,12 +4,12 @@
 #define PROGRESS_BAR_CHAR       "="
 //#define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-#include "../submodules/debug-memory/debug_memory.h"
+#include "submodules/debug-memory/debug_memory.h"
 #endif
-#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
-#include "../rgb-ansi-utils/rgb-ansi-utils.h"
-#include "../submodules/progress.c/progress.h"
-#include "colors-csv-parser.h"
+#include "hex-png-pixel-utils/hex-png-pixel-utils.h"
+#include "rgb-ansi-utils/rgb-ansi-utils.h"
+#include "submodules/progress.c/progress.h"
+#include "colors-csv-parser/colors-csv-parser.h"
 
 
 void csv_progress_start(progress_data_t *data) {

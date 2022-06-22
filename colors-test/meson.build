@@ -8,7 +8,6 @@ colors_test_inc = [
 colors_test_deps = [
  reproc_dep,
  list_dep,
- ansicodes_dep,
  c_fsio_dep,
  c_stringfn_dep,
  c_string_buffer_dep,

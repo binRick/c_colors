@@ -1,6 +1,9 @@
 colors_json_srcs = [
   'colors-json-parser.c',
 ]
+colors_json_parser_dirs = [
+  inc,
+]
 colors_json_parser_deps = [
   rgb_ansi_utils_dep,
   parson_dep,
@@ -16,16 +19,10 @@ colors_json_parser_lib = static_library('colors-json-parser',
   colors_json_srcs,
   install: false, 
   dependencies: colors_json_parser_deps,
-  include_directories: [
-    inc,
-
-    ],
+  include_directories: colors_json_parser_dirs,
   )
 colors_json_parser_dep = declare_dependency(
-  include_directories: [
-    inc,
-
-    ],
+  include_directories: colors_json_parser_dirs,
   link_with: colors_json_parser_lib,
 )
 

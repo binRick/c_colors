@@ -1,4 +1,4 @@
-#include "parse-colors.h"
+#include "parse-colors/parse-colors.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>

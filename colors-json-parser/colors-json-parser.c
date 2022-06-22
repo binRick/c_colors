@@ -6,7 +6,7 @@
 #ifdef DEBUG_MEMORY_ENABLED
 #include "submodules/debug-memory/debug_memory.h"
 #endif
-#include "colors-json-parser.h"
+#include "colors-json-parser/colors-json-parser.h"
 #include "submodules/progress.c/progress.h"
 unsigned long colordb_hash(char *key, int length);
 

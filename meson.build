@@ -1,4 +1,4 @@
-project('c_colors', ['c'],default_options:['warning_level=3','c_std=gnu99'])
+project('c_colors', ['c'],default_options:['warning_level=0','c_std=gnu99'])
 cc = meson.get_compiler('c')
 #//////////////////////////////////////////////////////////////////////
 meson_deps_dir = join_paths(meson.current_source_dir(), 'submodules/meson_deps')
@@ -6,15 +6,19 @@ pwd = meson.current_source_dir()
 #//////////////////////////////////////////////////////////////////////
 inc = [
   include_directories(
-   './submodules/meson_deps/vendor',
-   './submodules/meson_deps/vendor/sqlite',
-   './submodules/meson_deps/submodules',
-   './submodules/meson_deps',
-   './submodules/meson_deps/submodules',
-   './submodules/meson_deps/submodules/ee.c',
-   './submodules/meson_deps/submodules/ee.c/src',
-   './submodules/meson_deps/submodules/list/src',
-   './',
+   '.',
+   pwd+'/vendor',
+   'vendor',
+   'vendor/sqlite',
+   'rgb-ansi-utils',
+   'colors',
+   'submodules/meson_deps/submodules/c_ansi',
+   'submodules/meson_deps/submodules',
+   'submodules/meson_deps/submodules',
+   'submodules/meson_deps',
+   'submodules/meson_deps/submodules/ee.c',
+   'submodules/meson_deps/submodules/ee.c/src',
+   'submodules/meson_deps/submodules/list/src',
   ),
 ]
 #############################################################################
@@ -22,7 +26,7 @@ subdir('submodules/meson_deps/meson/args')
 subdir('submodules/meson_deps/meson/inc')
 #//////////////////////////////////////////////////////////////////////
 subdir('submodules/meson_deps/submodules/c_ansi/ansi-codes')
-subdir('submodules/meson_deps/meson/deps/ansicodes')
+#subdir('submodules/meson_deps/meson/deps/ansicodes')
 subdir('submodules/meson_deps/meson/deps/m')
 subdir('submodules/meson_deps/meson/deps/asprintf')
 subdir('submodules/meson_deps/meson/deps/timestamp')
@@ -52,7 +56,7 @@ subdir('submodules/meson_deps/meson/deps/reproc')
 subdir('submodules/meson_deps/meson/deps/smaz')
 subdir('submodules/meson_deps/meson/deps/debug-memory')
 subdir('submodules/meson_deps/meson/deps/embedded_palettes')
-subdir('submodules/meson_deps/submodules/c_ansi/ansi-rgb-utils')
+#subdir('submodules/meson_deps/submodules/c_ansi/ansi-rgb-utils')
 subdir('submodules/meson_deps/submodules/c_ansi/ansi-utils')
 subdir('submodules/meson_deps/submodules/c_ansi/term-utils')
 #//////////////////////////////////////////////////////////////////////

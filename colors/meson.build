@@ -4,7 +4,6 @@ colors_srcs = [
 ]
 colors_inc = [
  inc,
- '../colors',
 ]
 colors_deps = [
    djbhash_dep,
@@ -16,7 +15,7 @@ colors_deps = [
    fs_dep,
    rgba_dep,
    ansi_codes_dep,
-   ansi_rgb_utils_dep,
+   #ansi_rgb_utils_dep,
    bytes_dep,
    c_string_buffer_dep,
    db_dep,
@@ -29,9 +28,7 @@ colors_lib = static_library('colors',
   install: false,
   dependencies: colors_deps,
   c_args: [],
-  include_directories: [
-    colors_inc,
-  ],
+  include_directories: colors_inc,
 )
 
 colors_dep = declare_dependency(
