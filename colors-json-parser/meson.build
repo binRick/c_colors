@@ -6,6 +6,8 @@ colors_json_parser_dirs = [
   '../submodules/meson_deps/submodules/progress.c',
   '../submodules/meson_deps/submodules/debug-memory',
   '../submodules/meson_deps/submodules/bytes',
+  '../submodules/meson_deps/submodules/djbhash',
+  '../submodules/meson_deps/submodules/djbhash/src',
 ]
 colors_json_parser_deps = [
   rgb_ansi_utils_dep,
