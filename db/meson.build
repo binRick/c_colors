@@ -1,7 +1,7 @@
 db_srcs = [
   'db.c',
   'db-mgr.c',
-  'vendor/sqlite/sqlite3.c',
+  '../vendor/sqlite/sqlite3.c',
 ]
 db_dirs = [
   '../',
