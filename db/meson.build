@@ -7,6 +7,8 @@ db_dirs = [
   '../',
   '../vendor',
   '../vendor/sqlite',
+  '../submodules/meson_deps/submodules/c_ansi',
+  '../submodules/meson_deps/submodules/c_ansi/ansi-codes',
   inc,
   ]
 db_deps = [

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 //#include "../submodules/djbhash/src/djbhash.h"
-#include "ansi-codes/ansi-codes.h"
+#include "ansi-codes.h"
 /////////////////////////////////////////////////////////
 /*#include "../submodules/bytes/bytes.h"
  #include "../submodules/c_stringfn/include/stringfn.h"
