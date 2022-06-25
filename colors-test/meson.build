@@ -31,6 +31,6 @@ if get_option('enable-binaries')
      include_directories: colors_test_inc,
   )
   if get_option('enable-binary-tests')
-    test('colors-test', colors_test_exec, args: [])
+    test('colors-test', passh_program, args:[colors_test_exec])
   endif
 endif

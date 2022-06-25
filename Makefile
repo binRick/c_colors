@@ -13,7 +13,6 @@ FIND=$(shell command -v find)
 ##############################################################
 DIR=$(shell $(PWD))
 LOADER_DIR=$(DIR)/loader
-EMBEDS_DIR=$(DIR)/embeds
 VENDOR_DIR=$(DIR)/vendor
 PROJECT_DIR=$(DIR)
 MESON_DEPS_DIR=$(DIR)/meson/deps
@@ -32,7 +31,7 @@ TIDIED_FILES = \
 			   colors/*.c colors/*.h
 ##############################################################
 ##############################################################
-all: ensure dirs do-build do-test
+all: do-build do-test
 do-write-etc-color-names:
 	@./build/parse-colors/parse-colors -c 50000 -o ./etc/parsed-colors.json
 do-meson:
@@ -45,12 +44,8 @@ do-build: do-meson
 do-test:
 	@passh meson test -C build -v --print-errorlogs
 clean: 
-	@rm -rf $(EMBEDS_DIR) build
+	@rm -rf build
 	@rm -rf *.png
-ensure: dirs-embeds
-dirs: ensure dirs-embeds 
-dirs-embeds:
-	@mkdir -p $(EMBEDS_DIR)
 uncrustify:
 	@$(UNCRUSTIFY) -c submodules/meson_deps/etc/uncrustify.cfg --replace $(TIDIED_FILES) 
 uncrustify-clean:
