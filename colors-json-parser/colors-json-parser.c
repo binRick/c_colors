@@ -15,7 +15,7 @@ static void db_progress_end(progress_data_t *data);
 
 ////////////////////////////////////////////////////////////////////
 #define OPTIMIZE_SQL_SYNC_USING_HASH_TABLE    true
-#define VERBOSE_DEBUG_ITEMS                   true
+#define VERBOSE_DEBUG_ITEMS                   false
 #define VERBOSE_DEBUG_PROGRESS                false
 #define DB_HEX_MODE_ENABLED                   false
 #define DB_NAME_MODE_ENABLED                  true

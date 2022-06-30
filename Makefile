@@ -76,6 +76,13 @@ git-submodules-pull-master:
 	@git submodule foreach git pull origin master --jobs=10
 git-submodules-update:
 	@git submodule update --init	
+meson-introspect-all:
+	@meson introspect --all -i meson.build
+meson-introspect-targets:
+	@meson introspect --targets -i meson.build
 meson-binaries:
-	@meson introspect --targets  meson.build -i | jq 'map(select(.type == "executable").filename)|flatten|join("\n")' -Mrc
+	@meson introspect --targets  meson.build -i | jq 'map(select(.type == "executable").filename)|flatten|join("\n")' -Mrc|xargs -I % echo ./build/%
+run-binary:
+	@make meson-binaries | fzf --reverse | xargs -I % passh "./%" 
+
 

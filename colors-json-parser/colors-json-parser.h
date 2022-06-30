@@ -1,23 +1,28 @@
 #pragma once
-#include "db/db.h"
-#include "djbhash.h"
+///////////////////////////////////////////////////////////////////////////
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 ///////////////////////////////////////////////////////////////////////////
-#ifndef AC_HIDE_CURSOR
-#define AC_HIDE_CURSOR    "\x1b[?25l"
-#endif
-#ifndef AC_SHOW_CURSOR
-#define AC_SHOW_CURSOR    "\x1b[?25h"
-#endif
-///////////////////////////////////////////////////////////////////////////
+#include "ansi-codes/ansi-codes.h"
+#include "bytes/bytes.h"
+#include "c_stringfn/include/stringfn.h"
+#include "c_timer/include/c_timer.h"
+#include "db/db.h"
+#include "djbhash/src/djbhash.h"
+#include "fs.c/fs.h"
+#include "hex-png-pixel-utils/hex-png-pixel-utils.h"
+#include "parson/parson.h"
+#include "progress.c/progress.h"
 ///////////////////////////////////////////////////////////////////////////
 typedef struct parse_json_options   parse_json_options;
 typedef struct ParsedColor          ParsedColor;
-
-
+typedef struct ParsedRGB            ParsedRGB;
+typedef struct ParsedSeq            ParsedSeq;
+typedef struct ParsedAnsiSeq        ParsedAnsiSeq;
+typedef struct ParsedTruecolorSeq   ParsedTruecolorSeq;
 typedef void (*json_item_cb_t)(ParsedColor *PARSED_COLOR_ITEM);
+///////////////////////////////////////////////////////////////////////////
 struct parse_json_options {
   char           *input_file, *duration;
   bool           verbose_mode;
@@ -28,22 +33,6 @@ struct parse_json_options {
   ColorsDB       *DB;
   json_item_cb_t ParsedColorHandler;
 };
-
-#include "../db/db.h"
-#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
-#include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
-#include "../submodules/c_timer/include/c_timer.h"
-#include "../submodules/meson_deps/submodules/bytes/bytes.h"
-#include "../submodules/meson_deps/submodules/c_stringfn/include/stringfn.h"
-#include "../submodules/meson_deps/submodules/fs.c/fs.h"
-#include "../submodules/meson_deps/submodules/parson/parson.h"
-#include "../submodules/meson_deps/submodules/progress.c/progress.h"
-
-typedef struct ParsedRGB            ParsedRGB;
-typedef struct ParsedSeq            ParsedSeq;
-typedef struct ParsedAnsiSeq        ParsedAnsiSeq;
-typedef struct ParsedTruecolorSeq   ParsedTruecolorSeq;
-
 struct ParsedTruecolorSeq { char *fg, *bg; };
 struct ParsedAnsiSeq { char *fg, *bg; };
 struct ParsedRGB { int red, green, blue; };
@@ -58,9 +47,9 @@ struct ParsedColor {
   char      *PngEncodedContent;
   size_t    PngDecodedLength;
 };
-
-
+///////////////////////////////////////////////////////////////////////////
 int parse_colors_json(parse_json_options *OPTIONS);
 int iterate_parsed_results(parse_json_options *OPTIONS);
 int free_parsed_results(parse_json_options *OPTIONS);
 
+///////////////////////////////////////////////////////////////////////////
