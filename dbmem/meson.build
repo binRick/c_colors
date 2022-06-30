@@ -1,8 +1,8 @@
 dbmem_lib = static_library('dbmem', 
   'dbmem.c',
-  '../vendor/sqlite3-3.6.20.c',
 install: false, 
 dependencies: [
+  sqlite3_dep,
   ], 
   include_directories: [
   ]

@@ -5,17 +5,21 @@ cc = meson.get_compiler('c')
 #//////////////////////////////////////////////////////////////////////
 meson_deps_dir = join_paths(meson.current_source_dir(), 'submodules/meson_deps')
 pwd = meson.current_source_dir()
+subdir('submodules/meson_deps/meson/sqlite3')
 subdir('meson')
 #//////////////////////////////////////////////////////////////////////
 inc = [
   include_directories(
-   '.','vendor','vendor/sqlite','rgb-ansi-utils','colors',
+   '.','rgb-ansi-utils','colors',
   ),
   include_directories(
+   'submodules/meson_deps/submodules',
    'submodules/meson_deps/submodules/c_ansi',
-   'submodules/meson_deps/submodules/ee.c','submodules/meson_deps/submodules/ee.c/src',
+   'submodules/meson_deps/submodules/ee.c',
+   'submodules/meson_deps/submodules/ee.c/src',
    'submodules/meson_deps/submodules/list/src',
-   'submodules/meson_deps/submodules','submodules/meson_deps',
+   'submodules/meson_deps/submodules',
+   'submodules/meson_deps',
   ),
 ]
 #############################################################################
@@ -35,3 +39,4 @@ subdir('dbmem-test')
 subdir('colors')
 subdir('colors-test')
 subdir('parse-colors')
+#//////////////////////////////////////////////////////////////////////

@@ -14,12 +14,12 @@
 #define HEX_LEN 6
 #define MAX_PATH_LEN 1024
 /////////////////////////////////////////////////////////
-#include "../submodules/tempdir.c/tempdir.h"
-#include "../submodules/b64.c/b64.h"
-#include "../submodules/c_fsio/include/fsio.h"
-#include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
-#include "../submodules/bytes/bytes.h"
-#include "../submodules/c_stringfn/include/stringfn.h"
+#include "tempdir.c/tempdir.h"
+#include "b64.c/b64.h"
+#include "c_fsio/include/fsio.h"
+#include "c_ansi/ansi-codes/ansi-codes.h"
+#include "bytes/bytes.h"
+#include "c_stringfn/include/stringfn.h"
 //////////////////////////////////////////////////////////
 typedef struct EncodedPngResult EncodedPngResult;
 typedef struct HexPngWriterConfig HexPngWriterConfig;

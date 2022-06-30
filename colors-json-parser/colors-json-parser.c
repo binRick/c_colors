@@ -9,6 +9,9 @@
 #include "colors-json-parser/colors-json-parser.h"
 #include "progress.h"
 unsigned long colordb_hash(char *key, int length);
+static void db_progress_start(progress_data_t *data);
+static void db_progress(progress_data_t *data);
+static void db_progress_end(progress_data_t *data);
 
 ////////////////////////////////////////////////////////////////////
 #define OPTIMIZE_SQL_SYNC_USING_HASH_TABLE    true
@@ -19,7 +22,7 @@ unsigned long colordb_hash(char *key, int length);
 ////////////////////////////////////////////////////////////////////
 
 
-void db_progress_start(progress_data_t *data) {
+static void db_progress_start(progress_data_t *data) {
   assert(data);
   fprintf(stdout,
           AC_HIDE_CURSOR
@@ -35,12 +38,12 @@ void db_progress_start(progress_data_t *data) {
 }
 
 
-void db_progress(progress_data_t *data) {
+static void db_progress(progress_data_t *data) {
   progress_write(data->holder);
 }
 
 
-void db_progress_end(progress_data_t *data) {
+static void db_progress_end(progress_data_t *data) {
   fprintf(stdout,
           AC_SHOW_CURSOR
           AC_RESETALL "\n"

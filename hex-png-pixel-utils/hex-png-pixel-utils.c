@@ -1,10 +1,10 @@
 //#define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-#include "../submodules/debug-memory/debug_memory.h"
+#include "debug-memory/debug_memory.h"
 #endif
 #include "hex-png-pixel-utils.h"
 #include "stb_image_write.h"
-#include "../submodules/dbg.h/dbg.h"
+#include "dbg.h/dbg.h"
 //////////////////////////////////////////////////////////
 static const char *str_substring(char *str, int start, int size);
 //////////////////////////////////////////////////////////

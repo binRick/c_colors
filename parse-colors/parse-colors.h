@@ -2,12 +2,17 @@
 #ifndef AC_SHOW_CURSOR
 #define AC_SHOW_CURSOR    "\x1b[?25h"
 #endif
+#include <stdint.h>
+static int hex_to_closest_ansi_code(const uint32_t trp);
+static int parse_args(int argc, char *argv[]);
+static int debug_args();
+static int parse_csv();
+
 ////////////////////////////////////////////////////////////////////
 #include <ctype.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,11 +42,6 @@
 #define DEFAULT_MODE              "csv"
 #define VERBOSE_DEBUG_HANDLER     false
 ////////////////////////////////////////////////////////////////////
-int parse_args(int argc, char *argv[]);
-int debug_args();
-int hex_to_closest_ansi_code(const uint32_t trp);
-int parse_csv();
-
 ////////////////////////////////////////////////////////////////////
 typedef struct CLI_ARGS {
   char *mode;
@@ -52,50 +52,9 @@ typedef struct CLI_ARGS {
   char *csv_file;
   char *json_file;
 } args_t;
-static struct cag_option options[] = {
-  { .identifier     = 'm',
-    .access_letters = "m",
-    .access_name    = "mode",
-    .value_name     = "MODE",
-    .description    = "Mode" },
-  { .identifier     = 'v',
-    .access_letters = "v",
-    .access_name    = "verbose",
-    .value_name     = NULL,
-    .description    = "Verbose Mode" },
-  { .identifier     = 'c',
-    .access_letters = "c",
-    .access_name    = "count",
-    .value_name     = "COUNT",
-    .description    = "Item Count" },
-  { .identifier     = 'p',
-    .access_letters = "p",
-    .access_name    = "pretty",
-    .value_name     = NULL,
-    .description    = "JSON Pretty Mode" },
-  { .identifier     = 'C',
-    .access_letters = "C",
-    .access_name    = "csv",
-    .value_name     = "CSV_FILE",
-    .description    = "CSV File Path" },
-  { .identifier     = 'J',
-    .access_letters = "J",
-    .access_name    = "json",
-    .value_name     = "JSON_FILE",
-    .description    = "JSON File Path" },
-  { .identifier     = 'D',
-    .access_letters = "D",
-    .access_name    = "db",
-    .value_name     = "SQLITE_FILE",
-    .description    = "Sqlite File Path" },
-  { .identifier     = 'h',
-    .access_letters = "h",
-    .access_name    = "help",
-    .description    = "Shows the command help" }
-};
 
 
-const char CURPALETTE[] = "\
+static const char CURPALETTE[] = "\
 \x1b[48;5;0m  \x1b[0m\
 \x1b[48;5;1m  \x1b[0m\
 \x1b[48;5;2m  \x1b[0m\
@@ -113,7 +72,7 @@ const char CURPALETTE[] = "\
 \x1b[48;5;14m  \x1b[0m\
 \x1b[48;5;15m  \x1b[0m\n";
 
-const char NEWPALETTE[] = "\
+static const char NEWPALETTE[] = "\
 \x1b]4;0;#%s\x1b\\ \
 \x1b]4;1;#%s\x1b\\ \
 \x1b]4;2;#%s\x1b\\ \

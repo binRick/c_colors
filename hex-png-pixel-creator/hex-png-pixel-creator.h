@@ -10,10 +10,10 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <string.h>
-#include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
-#include "../subprojects/cargs/include/cargs.h"
-#include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
-#include "../submodules/c_fsio/include/fsio.h"
+#include "c_ansi/ansi-codes/ansi-codes.h"
+#include "cargs/include/cargs.h"
+#include "hex-png-pixel-utils/hex-png-pixel-utils.h"
+#include "c_fsio/include/fsio.h"
 
 int parse_args(int, char **);
 int debug_args();
@@ -21,7 +21,7 @@ int write_png_images();
 int hex_png_pixel(char *COLOR);
 char *str_substring(char *str, int start, int size);
 
-#define PARSED_COLORS_JSON_FILE    "etc/parsed-colors.json"
+#define PARSED_COLORS_JSON_FILE    "etc/colornames.json"
 ////////////////////////////////////////////////////////////////////
 #define DEFAULT_INPUT           PARSED_COLORS_JSON_FILE
 #define DEFAULT_OUTPUT_DIR      "etc/images"

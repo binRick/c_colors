@@ -15,7 +15,6 @@
  #include "../submodules/parson/parson.h"*/
 /////////////////////////////////////////////////////////
 #include "db-mgr.h"
-#include "vendor/sqlite/sqlite3.h"
 /////////////////////////////////////////////////////////
 typedef struct ColorsDB ColorsDB;
 struct ColorsDB {

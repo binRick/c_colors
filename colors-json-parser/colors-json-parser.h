@@ -31,14 +31,13 @@ struct parse_json_options {
 
 #include "../db/db.h"
 #include "../hex-png-pixel-utils/hex-png-pixel-utils.h"
-#include "../submodules/meson_deps/submodules/bytes/bytes.h"
 #include "../submodules/c_ansi/ansi-codes/ansi-codes.h"
-#include "../submodules/meson_deps/submodules/c_stringfn/include/stringfn.h"
 #include "../submodules/c_timer/include/c_timer.h"
+#include "../submodules/meson_deps/submodules/bytes/bytes.h"
+#include "../submodules/meson_deps/submodules/c_stringfn/include/stringfn.h"
 #include "../submodules/meson_deps/submodules/fs.c/fs.h"
 #include "../submodules/meson_deps/submodules/parson/parson.h"
 #include "../submodules/meson_deps/submodules/progress.c/progress.h"
-#include "vendor/sqlite/sqlite3.h"
 
 typedef struct ParsedRGB            ParsedRGB;
 typedef struct ParsedSeq            ParsedSeq;

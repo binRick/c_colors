@@ -1,8 +1,8 @@
 #pragma once
 #ifndef _COLORDB_H_INCLDED
 #define _COLORDB_H_INCLDED
-////////////////////////////////////////////////
-#include "vendor/sqlite/sqlite3.h"
+///////////////////////////////////////////////a
+#include "sqlite3.h"
 #include <limits.h>
 #include <stddef.h>
 #include <stdio.h>

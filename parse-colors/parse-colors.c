@@ -1,4 +1,52 @@
+static int debug_args();
+static void load_new_palette_type_id(int PALETTE_TYPE_ID);
+static char *strdup_escaped(const char *tmp);
+static int parse_args(int argc, char *argv[]);
+
 #include "parse-colors/parse-colors.h"
+static struct cag_option options[] = {
+  { .identifier     = 'm',
+    .access_letters = "m",
+    .access_name    = "mode",
+    .value_name     = "MODE",
+    .description    = "Mode" },
+  { .identifier     = 'v',
+    .access_letters = "v",
+    .access_name    = "verbose",
+    .value_name     = NULL,
+    .description    = "Verbose Mode" },
+  { .identifier     = 'c',
+    .access_letters = "c",
+    .access_name    = "count",
+    .value_name     = "COUNT",
+    .description    = "Item Count" },
+  { .identifier     = 'p',
+    .access_letters = "p",
+    .access_name    = "pretty",
+    .value_name     = NULL,
+    .description    = "JSON Pretty Mode" },
+  { .identifier     = 'C',
+    .access_letters = "C",
+    .access_name    = "csv",
+    .value_name     = "CSV_FILE",
+    .description    = "CSV File Path" },
+  { .identifier     = 'J',
+    .access_letters = "J",
+    .access_name    = "json",
+    .value_name     = "JSON_FILE",
+    .description    = "JSON File Path" },
+  { .identifier     = 'D',
+    .access_letters = "D",
+    .access_name    = "db",
+    .value_name     = "SQLITE_FILE",
+    .description    = "Sqlite File Path" },
+  { .identifier     = 'h',
+    .access_letters = "h",
+    .access_name    = "help",
+    .description    = "Shows the command help" }
+};
+static void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM);
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +59,7 @@ void restore_screen();
 void setup_screen();
 void load_new_palette_type_id();
 
-args_t                 args = {
+static args_t                 args = {
   DEFAULT_MODE,
   DEFAULT_VERBOSE,
   DEFAULT_COUNT,
@@ -21,14 +69,14 @@ args_t                 args = {
   DEFAULT_JSON_FILE
 };
 
-TerminalCapabilities_t TerminalCapabilities = {
+static TerminalCapabilities_t TerminalCapabilities = {
   .RestorePalette            = false,
   .AltScreenInitiallyEnabled = false,
   .IsTTY                     = false,
 };
 
 
-char *strdup_escaped(const char *tmp) {
+static char *strdup_escaped(const char *tmp) {
   char *ret = malloc(strlen(tmp) * 4 + 1);
   char *dst = ret;
 
@@ -45,7 +93,7 @@ char *strdup_escaped(const char *tmp) {
 }
 
 
-void load_new_palette_type_id(int PALETTE_TYPE_ID){
+static void load_new_palette_type_id(int PALETTE_TYPE_ID){
   if (!TerminalCapabilities.RestorePalette || !TerminalCapabilities.IsTTY) {
     return;
   }
@@ -84,7 +132,7 @@ void load_new_palette_type_id(int PALETTE_TYPE_ID){
 }
 
 
-void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
+static void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
   if (VERBOSE_DEBUG_HANDLER || args.verbose) {
     fprintf(stderr, "\nhandler, name: %s!\n", PARSED_COLOR_ITEM->Name);
   }
@@ -162,7 +210,7 @@ int main(int argc, char **argv) {
 } /* main */
 
 
-int debug_args(){
+static int debug_args(){
   fprintf(stderr,
           acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d") "\n"
           ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Mode: %s") "\n"
@@ -185,7 +233,7 @@ int debug_args(){
 }
 
 
-int parse_args(int argc, char *argv[]){
+static int parse_args(int argc, char *argv[]){
   char               identifier;
   const char         *value;
   cag_option_context context;

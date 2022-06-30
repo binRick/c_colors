@@ -1,17 +1,15 @@
 db_srcs = [
   'db.c',
   'db-mgr.c',
-  '../vendor/sqlite/sqlite3.c',
 ]
 db_dirs = [
   '../',
-  '../vendor',
-  '../vendor/sqlite',
   '../submodules/meson_deps/submodules/c_ansi',
   '../submodules/meson_deps/submodules/c_ansi/ansi-codes',
   inc,
   ]
 db_deps = [
+     sqlite3_dep,
      cargs_dep,
      c_stringfn_dep,
      parson_dep,

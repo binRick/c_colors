@@ -3,12 +3,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "sqlite3.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include "../vendor/sqlite3-3.6.20.h"
 
 #define DBMEM_NAME    "dbmem"
 
