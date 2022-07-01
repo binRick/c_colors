@@ -27,9 +27,9 @@ static int parse_csv();
 #include "db/db.h"
 ////////////////////////////////////////////////////////////////////
 #define RENDER_COLOR_OUTPUT       false
-#define COLORNAMES_CSV_FILE       "vendor/colornames/colornames.csv"
-#define COLORNAMES_JSON_FILE      "etc/parsed-colors.json"
-#define COLORNAMES_SQLITE_FILE    "etc/parsed-colors.sqlite"
+#define COLORNAMES_CSV_FILE       "etc/colornames.bestof.csv"
+#define COLORNAMES_JSON_FILE      "etc/colornames.default.json"
+#define COLORNAMES_SQLITE_FILE    "etc/colornames.default.sqlite"
 ////////////////////////////////////////////////////////////////////
 #define DEFAULT_CSV_FILE          COLORNAMES_CSV_FILE
 #define DEFAULT_JSON_FILE         COLORNAMES_JSON_FILE
@@ -41,7 +41,6 @@ static int parse_csv();
 #define DEFAULT_COLOR             ""
 #define DEFAULT_MODE              "csv"
 #define VERBOSE_DEBUG_HANDLER     false
-////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 typedef struct CLI_ARGS {
   char *mode;

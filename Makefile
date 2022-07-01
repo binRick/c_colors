@@ -83,6 +83,23 @@ meson-introspect-targets:
 meson-binaries:
 	@meson introspect --targets  meson.build -i | jq 'map(select(.type == "executable").filename)|flatten|join("\n")' -Mrc|xargs -I % echo ./build/%
 run-binary:
-	@make meson-binaries | fzf --reverse | xargs -I % passh "./%" 
-
-
+	@make meson-binaries | fzf --reverse | xargs -I % sh -xc "./%" 
+meson-tests-list:
+	@meson test -C build --list
+meson-tests:
+	@make meson-tests-list\
+		|fzf --reverse -m \
+		|xargs -I % env cmd="\
+		command meson test\
+ --num-processes 1 \
+ -C build\
+ -v\
+ --no-stdsplit\
+ --print-errorlogs \"%\""\
+ env bash -c '\
+  eval "$$cmd" &&\
+	ansi -n --green --bold "OK" &&\
+	echo -n "> " &&\
+	ansi -n --yellow --italic "$$cmd" &&\
+	echo\
+'	
