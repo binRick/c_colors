@@ -167,7 +167,9 @@ TEST t_color_name_strings(){
 TEST t_colors_load(){
   int qty = load_colors(DB);
 
+  dbg(DB->Path, %s);
   if (DEBUG_LOAD_COLORS) {
+    printf("loaded db path %s\n", DB->Path);
     printf("loaded %d colors to hash\n", qty);
     printf("loaded %d color names\n", get_color_name_strings().count);
     printf("loaded %d color hexes\n", get_color_hex_strings().count);

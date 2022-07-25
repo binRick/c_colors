@@ -1,22 +1,20 @@
 #pragma once
-#ifndef AC_SHOW_CURSOR
-#define AC_SHOW_CURSOR    "\x1b[?25h"
-#endif
-#include <stdint.h>
-static int hex_to_closest_ansi_code(const uint32_t trp);
-static int parse_args(int argc, char *argv[]);
-static int debug_args();
-static int parse_csv();
-
 ////////////////////////////////////////////////////////////////////
 #include <ctype.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
+////////////////////////////////////////////////////////////////////
+static int hex_to_closest_ansi_code(const uint32_t trp);
+static int parse_args(int argc, char *argv[]);
+static int debug_args();
+static int parse_csv();
+
 ////////////////////////////////////////////////////////////////////
 #include "ansi-codes/ansi-codes.h"
 #include "ansi-rgb-utils/ansi-rgb-utils.h"
@@ -25,6 +23,17 @@ static int parse_csv();
 #include "colors-csv-parser/colors-csv-parser.h"
 #include "colors-json-parser/colors-json-parser.h"
 #include "db/db.h"
+////////////////////////////////////////////////////////////////////
+typedef struct WorkerPaletteType_t WorkerPaletteType_t;
+typedef struct CLI_ARGS {
+  char *mode;
+  bool verbose;
+  int  count;
+  bool pretty;
+  char *sqlite_file;
+  char *csv_file;
+  char *json_file;
+} args_t;
 ////////////////////////////////////////////////////////////////////
 #define RENDER_COLOR_OUTPUT       false
 #define COLORNAMES_CSV_FILE       "etc/colornames.bestof.csv"
@@ -42,16 +51,6 @@ static int parse_csv();
 #define DEFAULT_MODE              "csv"
 #define VERBOSE_DEBUG_HANDLER     false
 ////////////////////////////////////////////////////////////////////
-typedef struct CLI_ARGS {
-  char *mode;
-  bool verbose;
-  int  count;
-  bool pretty;
-  char *sqlite_file;
-  char *csv_file;
-  char *json_file;
-} args_t;
-
 
 static const char CURPALETTE[] = "\
 \x1b[48;5;0m  \x1b[0m\
@@ -93,7 +92,6 @@ static const char NEWPALETTE[] = "\
 \x1b]12;#%s\x1b\\ \
 \x1b[21D\n";
 
-typedef struct WorkerPaletteType_t WorkerPaletteType_t;
 struct WorkerPaletteType_t {
   char *Name;
   char *Colors;

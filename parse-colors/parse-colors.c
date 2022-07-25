@@ -1,9 +1,28 @@
+////////////////////////////////////////////////////
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+////////////////////////////////////////////////////
+////////////////////////////////////////////////////
+#define streq(a, b)    (strcmp(a, b) == 0)
+#define DEBUG_TERMINAL_CAPABILITIES    false
+#define ALT_SCREEN_MODE_ENABLED        true
+////////////////////////////////////////////////////
 static int debug_args();
 static void load_new_palette_type_id(int PALETTE_TYPE_ID);
 static char *strdup_escaped(const char *tmp);
 static int parse_args(int argc, char *argv[]);
 
+////////////////////////////////////////////////////
+void cleanup();
+void restore_screen();
+void setup_screen();
+void load_new_palette_type_id();
+
+////////////////////////////////////////////////////
 #include "parse-colors/parse-colors.h"
+////////////////////////////////////////////////////
 static struct cag_option options[] = {
   { .identifier     = 'm',
     .access_letters = "m",
@@ -46,18 +65,6 @@ static struct cag_option options[] = {
     .description    = "Shows the command help" }
 };
 static void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM);
-
-#include <stdbool.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#define streq(a, b)    (strcmp(a, b) == 0)
-#define DEBUG_TERMINAL_CAPABILITIES    false
-#define ALT_SCREEN_MODE_ENABLED        true
-void cleanup();
-void restore_screen();
-void setup_screen();
-void load_new_palette_type_id();
 
 static args_t                 args = {
   DEFAULT_MODE,
