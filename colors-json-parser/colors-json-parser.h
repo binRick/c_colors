@@ -13,7 +13,6 @@
 #include "fs.c/fs.h"
 #include "hex-png-pixel-utils/hex-png-pixel-utils.h"
 #include "parson/parson.h"
-#include "progress.c/progress.h"
 ///////////////////////////////////////////////////////////////////////////
 typedef struct parse_json_options   parse_json_options;
 typedef struct ParsedColor          ParsedColor;

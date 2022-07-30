@@ -7,6 +7,9 @@ parse_colors_dirs = [
   '../',
   inc,
 ]
+parse_colors_cargs = [
+  '-Wno-macro-redefined',
+  ]
 parse_colors_deps = [
      rgba_dep, 
      cargs_dep,
@@ -22,6 +25,7 @@ parse_colors_deps = [
 if get_option('enable-binaries')
   parse_colors_exec = executable('parse-colors',
      parse_colors_srcs,
+     c_args: parse_colors_cargs,
      dependencies: parse_colors_deps,
      include_directories: parse_colors_dirs,
   )

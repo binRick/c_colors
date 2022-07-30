@@ -379,7 +379,7 @@ int hex_to_256_color_ansicode(char *HEX){
   if (*colp == '#') {
     *colp++;
   }
-  int closest = hex_to_closest_ansi_code(colp);
+  int closest = hex_to_closest_ansi_code((const uint32_t)colp);
 
   if (RGB_UTILS_DEBUG_MODE) {
     printf("hex:       %s\n", HEX);

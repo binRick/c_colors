@@ -9,6 +9,9 @@ colors_json_parser_dirs = [
   '../submodules/meson_deps/submodules/djbhash',
   '../submodules/meson_deps/submodules/djbhash/src',
 ]
+colors_json_parser_cargs = [
+  '-Wno-macro-redefined',
+  ]
 colors_json_parser_deps = [
   rgb_ansi_utils_dep,
   parson_dep,
@@ -24,6 +27,7 @@ colors_json_parser_lib = static_library('colors-json-parser',
   colors_json_srcs,
   install: false, 
   dependencies: colors_json_parser_deps,
+  c_args: colors_json_parser_cargs,
   include_directories: colors_json_parser_dirs,
   )
 colors_json_parser_dep = declare_dependency(

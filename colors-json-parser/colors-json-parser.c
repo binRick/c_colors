@@ -7,7 +7,7 @@
 #include "debug_memory.h"
 #endif
 #include "colors-json-parser/colors-json-parser.h"
-#include "progress.h"
+#include "progress.c/progress.h"
 unsigned long colordb_hash(char *key, int length);
 static void db_progress_start(progress_data_t *data);
 static void db_progress(progress_data_t *data);

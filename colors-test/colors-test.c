@@ -61,32 +61,29 @@ TEST t_colors_init(){
   PASS();
 }
 
-#define DEBUG_COLOR()                                 \
-  { do {                                              \
-      if (DEBUG_COLOR_STRINGS) {                      \
-        dbg(color_name, %s);                         \
-        dbg(color_hex, %s);                          \
-        dbg(color_hex[0], % c);                       \
-        dbg(color_row, %s);                          \
-        dbg(color_row[0], % c);                       \
-        dbg(color_row[strlen(color_row) - 1], % c);   \
-        dbg(color_ansicode, %lu);                    \
-        dbg(color_rgb.red, %d);                      \
-        dbg(color_rgb.green, %d);                    \
-        dbg(color_rgb.blue, %d);                     \
-        dbg(color_rgb_bg.red, %d);                   \
-        dbg(color_rgb_bg.green, %d);                 \
-        dbg(color_rgb_bg.blue, %d);                  \
-        dbg(color_decoded_png_length, %lu);          \
-        dbg((char *)color_encoded_png_content, %s);  \
-        dbg(strlen((char *)color_seq_ansi_fg), %lu); \
-        dbg(strlen((char *)color_seq_ansi_bg), %lu); \
-        dbg((char *)color_seq_ansi_fg, %s);          \
-        dbg((char *)color_seq_ansi_bg, %s);          \
-        dbg((char *)color_seq_truecolor_fg, %s);     \
-        dbg((char *)color_seq_truecolor_bg, %s);     \
-      }                                               \
-    } while (0); }
+#define DEBUG_COLOR()    { do {                                            \
+                             dbg(color_name, %s);                         \
+                             dbg(color_hex, %s);                          \
+                             dbg(color_hex[0], %c);                       \
+                             dbg(color_row, %s);                          \
+                             dbg(color_row[0], %c);                       \
+                             dbg(color_row[strlen(color_row) - 1], %c);   \
+                             dbg(color_ansicode, %lu);                    \
+                             dbg(color_rgb.red, %d);                      \
+                             dbg(color_rgb.green, %d);                    \
+                             dbg(color_rgb.blue, %d);                     \
+                             dbg(color_rgb_bg.red, %d);                   \
+                             dbg(color_rgb_bg.green, %d);                 \
+                             dbg(color_rgb_bg.blue, %d);                  \
+                             dbg(color_decoded_png_length, %lu);          \
+                             dbg((char *)color_encoded_png_content, %s);  \
+                             dbg(strlen((char *)color_seq_ansi_fg), %lu); \
+                             dbg(strlen((char *)color_seq_ansi_bg), %lu); \
+                             dbg((char *)color_seq_ansi_fg, %s);          \
+                             dbg((char *)color_seq_ansi_bg, %s);          \
+                             dbg((char *)color_seq_truecolor_fg, %s);     \
+                             dbg((char *)color_seq_truecolor_bg, %s);     \
+                           } while (0); }
 
 #define ASSERT_COLOR()                                  \
   { do {                                                \
