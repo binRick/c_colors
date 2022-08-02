@@ -4,8 +4,8 @@ db_srcs = [
 ]
 db_dirs = [
   '../',
-  '../submodules/meson_deps/submodules/c_ansi',
-  '../submodules/meson_deps/submodules/c_ansi/ansi-codes',
+  '../submodules/c_deps/submodules/c_ansi',
+  '../submodules/c_deps/submodules/c_ansi/ansi-codes',
   inc,
   ]
 db_deps = [

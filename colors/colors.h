@@ -13,12 +13,12 @@
 
 
 #include "db/db.h"
-#include "submodules/meson_deps/submodules/c_ansi/ansi-codes/ansi-codes.h"
-#include "submodules/meson_deps/submodules/c_ansi/ansi-utils/ansi-utils.h"
-#include "submodules/meson_deps/submodules/c_string_buffer/include/stringbuffer.h"
-#include "submodules/meson_deps/submodules/c_stringfn/include/stringfn.h"
-#include "submodules/meson_deps/submodules/djbhash/src/djbhash.h"
-#include "submodules/meson_deps/submodules/parson/parson.h"
+#include "submodules/c_deps/submodules/c_ansi/ansi-codes/ansi-codes.h"
+#include "submodules/c_deps/submodules/c_ansi/ansi-utils/ansi-utils.h"
+#include "submodules/c_deps/submodules/c_string_buffer/include/stringbuffer.h"
+#include "submodules/c_deps/submodules/c_stringfn/include/stringfn.h"
+#include "submodules/c_deps/submodules/djbhash/src/djbhash.h"
+#include "submodules/c_deps/submodules/parson/parson.h"
 
 typedef struct {
   int red, green, blue;

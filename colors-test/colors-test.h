@@ -6,10 +6,10 @@
 #include "cargs/include/cargs.h"
 #include "colors/colors.h"
 #include "db/db.h"
-#include "submodules/greatest/greatest.h"
+#include "submodules/c_deps/submodules/c_ansi/ansi-codes/ansi-codes.h"
+#include "submodules/c_deps/submodules/parson/parson.h"
+#include "submodules/c_greatest/greatest/greatest.h"
 #include "submodules/log.h/log.h"
-#include "submodules/meson_deps/submodules/c_ansi/ansi-codes/ansi-codes.h"
-#include "submodules/meson_deps/submodules/parson/parson.h"
 #include "submodules/tinydir/tinydir.h"
 #include <ctype.h>
 #include <stdarg.h>
