@@ -13,6 +13,7 @@ inc = [
   ),
   include_directories(
    'submodules/c_deps/submodules',
+   'submodules/c_deps/submodules/c_ansi',
    'submodules/c_deps',
   ),
 ]

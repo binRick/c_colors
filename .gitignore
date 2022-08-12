@@ -33,3 +33,4 @@ build
 .make-log-*
 .make-*log*
 .DU
+submodules/c_deps
