@@ -16,7 +16,7 @@ colors_csv_parser_deps = [
   c_fsio_dep,
   fs_dep,
   rgba_dep,
-  debug_memory_dep,
+  #  debug_memory_dep,
   djbhash_dep,
 ]
 colors_csv_parser_lib = static_library('colors-csv-parser',

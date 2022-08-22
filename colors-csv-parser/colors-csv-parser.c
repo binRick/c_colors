@@ -4,10 +4,9 @@
 #define BG_PROGRESS_BAR_CHAR    "."
 #define PROGRESS_BAR_CHAR       "="
 #include "colors-csv-parser/colors-csv-parser.h"
-#ifdef DEBUG_MEMORY_ENABLED
-#include "debug-memory/debug_memory.h"
-#endif
-
+//#ifdef DEBUG_MEMORY_ENABLED
+//#include "debug-memory/debug_memory.h"
+//#endif
 
 static void csv_progress_start(progress_data_t *data) {
   assert(data);
@@ -24,11 +23,9 @@ static void csv_progress_start(progress_data_t *data) {
   progress_write(data->holder);
 }
 
-
 static void csv_progress(progress_data_t *data) {
   progress_write(data->holder);
 }
-
 
 static void csv_progress_end(progress_data_t *data) {
   fprintf(stdout,
@@ -38,7 +35,6 @@ static void csv_progress_end(progress_data_t *data) {
           "\n"
           );
 }
-
 
 int parse_colors_csv(parse_csv_options *OPTIONS){
   bool                WRITE_TO_FILE = false;
@@ -174,28 +170,23 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   }
   stringbuffer_release(sb);
 #ifdef DEBUG_MEMORY_ENABLED
-  print_allocated_memory();
+  //print_allocated_memory();
 #endif
   return(EXIT_SUCCESS);
 } /* parse_colors_csv */
-
 
 void ansi_truecolor_fg(FILE *file, int r, int g, int b) {
   fprintf(file, TRUECOLOR_FG_CODE, r, g, b);
 }
 
-
 void ansi_truecolor_bg(FILE *file, int r, int g, int b) {
   fprintf(file, TRUECOLOR_BG_CODE, r, g, b);
 }
-
 
 void ansi_reset(FILE *file) {
   fputs(RESET_CODE, file);
 }
 
-
 void ansi_truecolor_fg(FILE *file, int r, int g, int b);
 void ansi_reset(FILE *file);
 void ansi_truecolor_bg(FILE *file, int r, int g, int b);
-

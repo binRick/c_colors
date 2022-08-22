@@ -15,7 +15,7 @@ colors_test_deps = [
  logh_dep,
  parson_dep,
  ee_dep,
- debug_memory_dep,
+ # debug_memory_dep,
  tinydir_dep,
  db_dep,
  dbg_dep,

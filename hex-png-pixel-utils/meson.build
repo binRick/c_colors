@@ -11,7 +11,7 @@ hex_png_pixel_utils_deps = [
      c_stringfn_dep,
      tempdir_dep,
      b64_dep,
-     debug_memory_dep,
+     #debug_memory_dep,
 ]
 
 hex_png_pixel_utils_lib = static_library('hex-png-pixel-utils',

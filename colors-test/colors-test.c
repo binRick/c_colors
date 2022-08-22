@@ -1,5 +1,5 @@
 #include <stdbool.h>
-#define DEBUG_MEMORY_ENABLED      true
+//#define DEBUG_MEMORY_ENABLED
 #define DEBUG_DB_PATH             false
 #define DEBUG_LOAD_COLORS         false
 #define DEBUG_COLOR_STRINGS       true
@@ -8,19 +8,17 @@
 #include "submodules/dbg.h/dbg.h"
 #include "submodules/log.h/log.h"
 #ifdef DEBUG_MEMORY_ENABLED
-#include "submodules/debug-memory/debug_memory.h"
+//#include "submodules/debug-memory/debug_memory.h"
 #endif
 //////////////////////////////////////////////
 extern ColorsDB *DB;
 //////////////////////////////////////////////
-
 
 TEST t_colors_free(){
   free(DB->Path);
   free(DB);
   PASS();
 }
-
 
 TEST t_colors_init(){
   int  res = -1;
@@ -132,7 +130,6 @@ TEST t_colors_init(){
   color_rgb_t color_rgb, color_rgb_bg;                                                                 \
   size_t      color_ansicode, color_decoded_png_length;
 
-
 TEST t_color_hex_strings(){
   for (size_t i = 0; (i < TEST_COLOR_STRINGS_QTY) && (i < get_color_hex_strings().count); i++) {
     char *_color_hex = get_color_hex_strings().strings[i];
@@ -147,7 +144,6 @@ TEST t_color_hex_strings(){
   PASS();
 }
 
-
 TEST t_color_name_strings(){
   for (size_t i = 0; (i < TEST_COLOR_STRINGS_QTY) && (i < get_color_name_strings().count); i++) {
     char *color_name = get_color_name_strings().strings[i];
@@ -159,7 +155,6 @@ TEST t_color_name_strings(){
   }
   PASS();
 }
-
 
 TEST t_colors_load(){
   int qty = load_colors(DB);
@@ -190,15 +185,13 @@ SUITE(s_colors){
 
 GREATEST_MAIN_DEFS();
 
-
 int main(int argc, char **argv) {
   GREATEST_MAIN_BEGIN();
   (void)argc; (void)argv;
   RUN_SUITE(s_colors);
 #ifdef DEBUG_MEMORY_ENABLED
-  print_allocated_memory();
+  //print_allocated_memory();
 #endif
   GREATEST_MAIN_END();
   return(0);
 }
-

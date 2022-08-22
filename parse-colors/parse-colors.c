@@ -82,7 +82,6 @@ static TerminalCapabilities_t TerminalCapabilities = {
   .IsTTY                     = false,
 };
 
-
 static char *strdup_escaped(const char *tmp) {
   char *ret = malloc(strlen(tmp) * 4 + 1);
   char *dst = ret;
@@ -98,7 +97,6 @@ static char *strdup_escaped(const char *tmp) {
   *dst = 0;
   return(ret);
 }
-
 
 static void load_new_palette_type_id(int PALETTE_TYPE_ID){
   if (!TerminalCapabilities.RestorePalette || !TerminalCapabilities.IsTTY) {
@@ -138,13 +136,11 @@ static void load_new_palette_type_id(int PALETTE_TYPE_ID){
   stringfn_release_strings_struct(p);
 }
 
-
 static void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
   if (VERBOSE_DEBUG_HANDLER || args.verbose) {
     fprintf(stderr, "\nhandler, name: %s!\n", PARSED_COLOR_ITEM->Name);
   }
 }
-
 
 int main(int argc, char **argv) {
   parse_args(argc, argv);
@@ -152,7 +148,6 @@ int main(int argc, char **argv) {
     printf("Test OK\n"); return(0);
   }
   TerminalCapabilities.IsTTY = isatty(STDIN_FILENO);
-
 
   load_new_palette_type_id(DEFAULT_PALETTE);
   if ((strcmp(args.mode, "debug_args") == 0)) {
@@ -216,7 +211,6 @@ int main(int argc, char **argv) {
   return(1);
 } /* main */
 
-
 static int debug_args(){
   fprintf(stderr,
           acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d") "\n"
@@ -238,7 +232,6 @@ static int debug_args(){
 
   return(EXIT_SUCCESS);
 }
-
 
 static int parse_args(int argc, char *argv[]){
   char               identifier;
@@ -284,4 +277,3 @@ static int parse_args(int argc, char *argv[]){
   }
   return(EXIT_SUCCESS);
 } /* parse_args */
-

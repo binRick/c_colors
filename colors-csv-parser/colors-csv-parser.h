@@ -28,4 +28,3 @@ int parse_colors_csv(parse_csv_options *OPTIONS);
 #include "progress.c/progress.h"
 #include "rgb-ansi-utils/rgb-ansi-utils.h"
 #include "rgba/src/rgba.h"
-

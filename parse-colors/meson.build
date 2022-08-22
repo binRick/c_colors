@@ -16,6 +16,7 @@ parse_colors_deps = [
      colors_csv_parser_dep,
      colors_json_parser_dep,
      c_stringfn_dep,
+     #     debug_memory_dep,
      parson_dep,
      fs_dep,
      bytes_dep,

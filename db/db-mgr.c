@@ -38,7 +38,6 @@
   " hex VARCHAR(7) NOT NULL"                                           \
   ")"
 
-
 void *colordb_get_distinct_typeids(colordb db, size_t *size, size_t *rows_qty){
   const void    *p;
   unsigned char *copy = NULL;
@@ -69,7 +68,6 @@ reset:
   sqlite3_reset(db->distinct_typeids);
   return(copy);
 }
-
 
 void *colordb_get_typeid_ids(colordb db, const colordb_type type, size_t *size, size_t *rows_qty){
   const void    *p;
@@ -105,7 +103,6 @@ reset:
   return(copy);
 }
 
-
 void *colordb_count_ids(colordb db, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
@@ -123,7 +120,6 @@ reset:
   return(copy);
 }
 
-
 void *colordb_count_typeids(colordb db, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
@@ -137,7 +133,6 @@ reset:
   sqlite3_reset(db->count_typeids);
   return(copy);
 }
-
 
 void *colordb_count_typeid(colordb db, const colordb_type type, size_t *size){
   const void    *p;
@@ -159,7 +154,6 @@ reset:
 
   return(copy);
 }
-
 
 colordb_id colordb_add_typeid_name(colordb            db,
                                    const colordb_type type,
@@ -196,7 +190,6 @@ reset:
   return(id);
 }
 
-
 colordb_id colordb_add_typeid_hex(colordb            db,
                                   const colordb_type type,
                                   char               *hex,
@@ -231,7 +224,6 @@ reset:
 
   return(id);
 }
-
 
 colordb_id colordb_add(colordb            db,
                        const colordb_type type,
@@ -268,7 +260,6 @@ reset:
   return(id);
 }
 
-
 void *colordb_get(colordb db, colordb_id id, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
@@ -298,7 +289,6 @@ reset:
 
   return(copy);
 }
-
 
 void *colordb_one(colordb            db,
                   const colordb_type type,
@@ -335,7 +325,6 @@ reset:
   return(copy);
 }
 
-
 void colordb_delete(colordb db, colordb_id id){
   if (sqlite3_bind_int64(db->delete, 1, id) != SQLITE_OK) {
     return;
@@ -347,11 +336,9 @@ void colordb_delete(colordb db, colordb_id id){
   sqlite3_reset(db->delete);
 }
 
-
 static int try_again(void *arg, int times){
   return(1);
 }
-
 
 colordb colordb_open(const char *path){
   colordb db;
@@ -365,7 +352,6 @@ colordb colordb_open(const char *path){
     free(db);
     return(NULL);
   }
-
 
   if (sqlite3_busy_handler(db->db, try_again, NULL) != SQLITE_OK) {
     sqlite3_close(db->db);
@@ -536,10 +522,8 @@ colordb colordb_open(const char *path){
     return(NULL);
   }
 
-
   return(db);
 } /* colordb_open */
-
 
 void colordb_close(colordb db){
   if (!db) {

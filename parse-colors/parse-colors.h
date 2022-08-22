@@ -125,4 +125,3 @@ enum { DEFAULT_PALETTE,
        ARGS_PALETTE,
        TYPEIDS_PALETTE,
 };
-

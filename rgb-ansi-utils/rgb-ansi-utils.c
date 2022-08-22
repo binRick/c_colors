@@ -253,7 +253,6 @@ uint32_t set[] = {
   0xeeeeee,
 };
 
-
 void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2) {
   float x, y, z;
 
@@ -314,7 +313,6 @@ void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2) {
   *b2 = 200.0 * (y - z);
 } /* rgb2lab */
 
-
 /*
  * calc delta E
  */
@@ -344,7 +342,6 @@ float delta_e(float l1, float a1, float b1, float l2, float a2, float b2) {
   return(deltaE);
 }
 
-
 int hex_to_closest_ansi_code(const uint32_t trp) {
   float l1, a1, b1;
   float l2, a2, b2;
@@ -367,7 +364,6 @@ int hex_to_closest_ansi_code(const uint32_t trp) {
   }
   return(t + 16);
 }
-
 
 int hex_to_256_color_ansicode(char *HEX){
   char gnd = '3';

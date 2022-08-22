@@ -11,7 +11,6 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-
 #include "db/db.h"
 #include "submodules/c_deps/submodules/c_ansi/ansi-codes/ansi-codes.h"
 #include "submodules/c_deps/submodules/c_ansi/ansi-utils/ansi-utils.h"

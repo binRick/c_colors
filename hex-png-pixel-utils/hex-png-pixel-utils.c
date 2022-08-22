@@ -1,6 +1,6 @@
 //#define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-#include "debug-memory/debug_memory.h"
+//#include "debug-memory/debug_memory.h"
 #endif
 #include "hex-png-pixel-utils.h"
 #include "stb_image_write.h"
@@ -47,7 +47,7 @@ EncodedPngResult hex_to_png_encoded_bytes(char *COLOR){
   };
 
 #ifdef DEBUG_MEMORY_ENABLED
-    print_allocated_memory();
+    //print_allocated_memory();
 #endif    
 
   return(ENC_RES);

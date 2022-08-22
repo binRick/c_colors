@@ -14,7 +14,6 @@ static void iterate_colors_hash();
 
 //////////////////////////////////////////////////////////////////////////
 
-
 static void iterate_color_hex_strings(){
   for (size_t i = 0; i < COLOR_HEX_STRINGS.count; i++) {
     char *color_name = get_color_hex_name(COLOR_HEX_STRINGS.strings[i]);
@@ -29,7 +28,6 @@ static void iterate_color_hex_strings(){
     }
   }
 }
-
 
 static void iterate_color_name_strings(){
   for (size_t i = 0; i < COLOR_NAME_STRINGS.count; i++) {
@@ -46,13 +44,11 @@ static void iterate_color_name_strings(){
   }
 }
 
-
 static void iterate_colors_hash(){
   for (size_t i = 0; i < COLOR_HEX_STRINGS.count; i++) {
     fprintf(stderr, "\t  - " AC_RESETALL AC_CYAN AC_ITALIC "#%lu> %s" AC_RESETALL "\n", i, COLOR_HEX_STRINGS.strings[i]);
   }
 }
-
 
 static int load_colors_hash(){
   struct djbhash_node *HASH_ITEM;
@@ -112,7 +108,6 @@ static int load_colors_hash(){
   return(qty);
 } /* load_colors_hash */
 
-
 static int load_color_names(){
   struct StringBuffer *NAME_STRINGS = stringbuffer_new();
   struct StringBuffer *HEX_STRINGS  = stringbuffer_new();
@@ -149,7 +144,6 @@ static int load_color_names(){
   return(qty);
 }
 
-
 struct StringFNStrings get_color_name_strings(){
   return(COLOR_NAME_STRINGS);
 }
@@ -157,7 +151,6 @@ struct StringFNStrings get_color_name_strings(){
 struct StringFNStrings  get_color_hex_strings(){
   return(COLOR_HEX_STRINGS);
 }
-
 
 int load_colors(ColorsDB *DB){
   int qty = 0, names_qty = 0;
@@ -187,7 +180,6 @@ int load_colors(ColorsDB *DB){
   return(qty);
 }
 
-
 char * get_color_hex_name(const char *COLOR_HEX){
   struct djbhash_node *HASH_ITEM;
 
@@ -198,7 +190,6 @@ char * get_color_hex_name(const char *COLOR_HEX){
   return((char *)((HASH_ITEM)->value));
 }
 
-
 char * get_color_name_hex(const char *COLOR_NAME){
   struct djbhash_node *HASH_ITEM;
 
@@ -208,7 +199,6 @@ char * get_color_name_hex(const char *COLOR_NAME){
   }
   return((char *)((HASH_ITEM)->value));
 }
-
 
 void * get_color_name_row_property(const char *COLOR_NAME, const char *ROW_PROPERTY){
   void       *res       = NULL;
@@ -257,7 +247,6 @@ void * get_color_name_row_property(const char *COLOR_NAME, const char *ROW_PROPE
   return(res);
 } /* get_color_name_row_property */
 
-
 char * get_color_name_row(const char *COLOR_NAME){
   struct djbhash_node *HASH_ITEM;
 
@@ -268,14 +257,12 @@ char * get_color_name_row(const char *COLOR_NAME){
   return((char *)((HASH_ITEM)->value));
 }
 
-
 color_rgb_t get_color_name_rgb_background(const char *COLOR_NAME){
   color_rgb_t color_rgb = { 0, 0, 0 };
 
   color_rgb = get_color_name_rgb(COLOR_NAME);
   return(color_rgb);
 }
-
 
 color_rgb_t get_color_name_rgb(const char *COLOR_NAME){
   struct djbhash_node *HASH_ITEM;
@@ -298,4 +285,3 @@ color_rgb_t get_color_name_rgb(const char *COLOR_NAME){
   }
   return(color_rgb);
 }
-

@@ -4,7 +4,7 @@
 #define PROGRESS_BAR_CHAR       "="
 #define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-#include "debug_memory.h"
+//#include "debug_memory.h"
 #endif
 #include "colors-json-parser/colors-json-parser.h"
 #include "progress.c/progress.h"
@@ -21,7 +21,6 @@ static void db_progress_end(progress_data_t *data);
 #define DB_NAME_MODE_ENABLED                  true
 ////////////////////////////////////////////////////////////////////
 
-
 static void db_progress_start(progress_data_t *data) {
   assert(data);
   fprintf(stdout,
@@ -37,11 +36,9 @@ static void db_progress_start(progress_data_t *data) {
   progress_write(data->holder);
 }
 
-
 static void db_progress(progress_data_t *data) {
   progress_write(data->holder);
 }
-
 
 static void db_progress_end(progress_data_t *data) {
   fprintf(stdout,
@@ -51,7 +48,6 @@ static void db_progress_end(progress_data_t *data) {
           "\n"
           );
 }
-
 
 #define ADD_ITEM_TO_HEX_DB()     { do {                                                                                                           \
                                      unsigned long key      = (unsigned long)colordb_hash(c->Hex, strlen(c->Hex));                                \
@@ -98,7 +94,6 @@ static void db_progress_end(progress_data_t *data) {
                                      if (c) free(c);                                 \
                                    } while (0); }
 
-
 int parse_colors_json(parse_json_options *OPTIONS){
   ct_start(NULL);
   struct djbhash      TYPEIDS_HASH = db_get_typeids_hash(OPTIONS->DB);
@@ -112,7 +107,6 @@ int parse_colors_json(parse_json_options *OPTIONS){
           "\n",
           TYPEIDS_HASH.active_count
           );
-
 
   djbhash_init(&(OPTIONS->ResultsHash));
   char                   *json_data = fs_read(OPTIONS->input_file);
@@ -211,11 +205,10 @@ int parse_colors_json(parse_json_options *OPTIONS){
     fprintf(stderr, "Parsed %d items in %s\n", OPTIONS->ResultsHash.active_count, OPTIONS->duration);
   }
 #ifdef DEBUG_MEMORY_ENABLED
-  print_allocated_memory();
+  //print_allocated_memory();
 #endif
   return(EXIT_SUCCESS);
 } /* parse_colors_json */
-
 
 int free_parsed_results(parse_json_options *OPTIONS){
   djbhash_reset_iterator(&OPTIONS->ResultsHash);
@@ -232,7 +225,6 @@ int free_parsed_results(parse_json_options *OPTIONS){
   return(0);
 }
 
-
 int iterate_parsed_results(parse_json_options *OPTIONS){
   djbhash_reset_iterator(&OPTIONS->ResultsHash);
   struct djbhash_node *item = djbhash_iterate(&OPTIONS->ResultsHash);
@@ -248,4 +240,3 @@ int iterate_parsed_results(parse_json_options *OPTIONS){
   }
   return(0);
 }
-

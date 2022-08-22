@@ -6,7 +6,6 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
   struct djbhash      TYPEIDS_HASH;
   struct djbhash_node *HASH_ITEM;
 
-
   djbhash_init(&TYPEIDS_HASH);
   if (init_colors_db(DB) != 0) {
     return(TYPEIDS_HASH);
@@ -59,7 +58,6 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
   return(TYPEIDS_HASH);
 } /* db_get_typeids_hash */
 
-
 int db_list_typeids(ColorsDB *DB){
   if (init_colors_db(DB) != 0) {
     return(1);
@@ -98,7 +96,6 @@ int db_list_typeids(ColorsDB *DB){
 
   return(0);
 }
-
 
 int db_list_ids(ColorsDB *DB){
   if (init_colors_db(DB) != 0) {
@@ -168,7 +165,6 @@ int db_list_ids(ColorsDB *DB){
   return(0);
 } /* db_list_ids */
 
-
 colordb_id db_get_typeid_id(ColorsDB *DB, colordb_type TYPEID){
   colordb_id id  = 0;
   size_t     len = 0;
@@ -180,11 +176,9 @@ colordb_id db_get_typeid_id(ColorsDB *DB, colordb_type TYPEID){
   return(-1);
 }
 
-
 bool db_typeid_exists(ColorsDB *DB, colordb_type TYPEID){
   return(db_get_typeid_id(DB, TYPEID) > 0);
 }
-
 
 colordb_id add_colors_db_typeid_name(ColorsDB *DB, colordb_type TYPEID, char *NAME){
   colordb_id id = colordb_add_typeid_name(DB, TYPEID, (char *)NAME, strlen(NAME));
@@ -192,20 +186,17 @@ colordb_id add_colors_db_typeid_name(ColorsDB *DB, colordb_type TYPEID, char *NA
   return(id);
 }
 
-
 colordb_id add_colors_db_typeid_hex(ColorsDB *DB, colordb_type TYPEID, char *HEX){
   colordb_id id = colordb_add_typeid_hex(DB, TYPEID, (char *)HEX, strlen(HEX));
 
   return(id);
 }
 
-
 colordb_id add_colors_db(ColorsDB *DB, colordb_type TYPEID, char *RECORD){
   colordb_id id = colordb_add(DB, TYPEID, (void *)RECORD, strlen(RECORD));
 
   return(id);
 }
-
 
 colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD, char *HEX, char *NAME){
   colordb_id id = db_get_typeid_id(DB, TYPEID);
@@ -225,12 +216,10 @@ colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *R
   return(new_id);
 }
 
-
 int init_colors_db(ColorsDB *DB){
   DB->db = colordb_open(DB->Path);
   return((DB->db != NULL) ? 0 : 1);
 }
-
 
 unsigned long colordb_hash(char *key, int length){
   unsigned long i;
