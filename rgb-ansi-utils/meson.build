@@ -9,7 +9,7 @@ rgb_ansi_utils_dirs = [
 ]
 rgb_ansi_utils_deps = [
 ]
-rgb_ansi_utils_lib = static_library('rgb-ansi-utils',
+rgb_ansi_utils_lib = library('rgb-ansi-utils',
   rgb_ansi_utils_srcs,
   dependencies: rgb_ansi_utils_deps,
   c_args: rgb_ansi_utils_cargs,

@@ -1,6 +1,6 @@
-#include "db.h"
+#include "db/db.h"
 #define DEBUG_TYPEIDS_HASH    false
-#include "../submodules/djbhash/src/djbhash.h"
+#include "djbhash/src/djbhash.h"
 
 struct djbhash db_get_typeids_hash(ColorsDB *DB){
   struct djbhash      TYPEIDS_HASH;
@@ -11,7 +11,7 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
     return(TYPEIDS_HASH);
   }
   char   *tmp = NULL;
-  size_t total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, type_ids_size = 0, type_ids_qty = 0, unique_typeids_size;
+  size_t unique_typeids_qty = 0, unique_typeids_size;
   char   *unique_typeids = (char *)colordb_get_distinct_typeids(DB->db, &unique_typeids_size, &unique_typeids_qty);
 
   tmp = unique_typeids;
@@ -63,7 +63,7 @@ int db_list_typeids(ColorsDB *DB){
     return(1);
   }
   char   *tmp = NULL;
-  size_t total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, type_ids_size = 0, type_ids_qty = 0, unique_typeids_size;
+  size_t unique_typeids_qty = 0, unique_typeids_size;
   char   *unique_typeids = (char *)colordb_get_distinct_typeids(DB->db, &unique_typeids_size, &unique_typeids_qty);
 
   tmp = unique_typeids;
@@ -101,7 +101,7 @@ int db_list_ids(ColorsDB *DB){
   if (init_colors_db(DB) != 0) {
     return(1);
   }
-  size_t       total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, type_ids_size = 0, type_ids_qty = 0, unique_typeids_size;
+  size_t       total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, unique_typeids_size;
   char         *tmp;
   colordb_type TYPEID = 2588928;
 
@@ -222,11 +222,10 @@ int init_colors_db(ColorsDB *DB){
 }
 
 unsigned long colordb_hash(char *key, int length){
-  unsigned long i;
   unsigned long hash;
 
   hash = 5381;
-  for ( i = 0; i < length; key++, i++ ) {
+  for (int i = 0; i < length; key++, i++ ) {
     hash = ((hash << 5) + hash) + (*key);
   }
   return(hash % COLORDB_MAX_HASH_BUCKETS);

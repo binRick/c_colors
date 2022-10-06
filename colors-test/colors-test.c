@@ -5,10 +5,8 @@
 #define DEBUG_COLOR_STRINGS       true
 #define TEST_COLOR_STRINGS_QTY    5
 #include "colors-test.h"
-#include "submodules/dbg.h/dbg.h"
-#include "submodules/log.h/log.h"
+#include "log/log.h"
 #ifdef DEBUG_MEMORY_ENABLED
-//#include "submodules/debug-memory/debug_memory.h"
 #endif
 //////////////////////////////////////////////
 extern ColorsDB *DB;
@@ -39,49 +37,16 @@ TEST t_colors_init(){
       res = fsio_file_exists(DB->Path);
     }
   }
-  if (DEBUG_DB_PATH) {
-    dbg(DB->Path, %s);
-  }
   fsize = fsio_file_size(DB->Path);
-  if (DEBUG_DB_PATH) {
-    dbg(fsize, %u);
-  }
   ASSERT_EQ(1, res);
   ASSERT_GTE(fsize, 1024 * 10);
   ASSERT_LTE(fsize, 1024 * 1024 * 10);
 
   res = init_colors_db(DB);
-  if (DEBUG_DB_PATH) {
-    dbg(res, %d);
-  }
   ASSERT_EQ(0, res);
 
   PASS();
 }
-
-#define DEBUG_COLOR()    { do {                                           \
-                             dbg(color_name, %s);                        \
-                             dbg(color_hex, %s);                         \
-                             dbg(color_hex[0], %c);                      \
-                             dbg(color_row, %s);                         \
-                             dbg(color_row[0], %c);                      \
-                             dbg(color_row[strlen(color_row) - 1], %c);  \
-                             dbg(color_ansicode, %u);                    \
-                             dbg(color_rgb.red, %d);                     \
-                             dbg(color_rgb.green, %d);                   \
-                             dbg(color_rgb.blue, %d);                    \
-                             dbg(color_rgb_bg.red, %d);                  \
-                             dbg(color_rgb_bg.green, %d);                \
-                             dbg(color_rgb_bg.blue, %d);                 \
-                             dbg(color_decoded_png_length, %u);          \
-                             dbg((char *)color_encoded_png_content, %s); \
-                             dbg(strlen((char *)color_seq_ansi_fg), %u); \
-                             dbg(strlen((char *)color_seq_ansi_bg), %u); \
-                             dbg((char *)color_seq_ansi_fg, %s);         \
-                             dbg((char *)color_seq_ansi_bg, %s);         \
-                             dbg((char *)color_seq_truecolor_fg, %s);    \
-                             dbg((char *)color_seq_truecolor_bg, %s);    \
-                           } while (0); }
 
 #define ASSERT_COLOR()                                  \
   { do {                                                \
@@ -109,35 +74,28 @@ TEST t_colors_init(){
       ASSERT_LTE(color_decoded_png_length, 1024 * 32);  \
     } while (0); }
 
-#define GET_COLOR()                                                                                       \
-  { do{                                                                                                   \
-      color_row                 = get_color_name_row(color_name);                                         \
-      color_hex                 = get_color_name_hex(color_name);                                         \
-      color_rgb                 = get_color_name_rgb(color_name);                                         \
-      color_rgb_bg              = get_color_name_rgb_background(color_name);                              \
-      color_ansicode            = (size_t)get_color_name_row_property(color_name, "ansicode");            \
-      color_decoded_png_length  = (size_t)get_color_name_row_property(color_name, "decoded_png_length");  \
-      color_encoded_png_content = (char *)get_color_name_row_property(color_name, "encoded_png_content"); \
-      color_seq_truecolor_fg    = (char *)get_color_name_row_property(color_name, "seq.truecolor.fg");    \
-      color_seq_truecolor_bg    = (char *)get_color_name_row_property(color_name, "seq.truecolor.bg");    \
-      color_seq_ansi_fg         = (char *)get_color_name_row_property(color_name, "seq.ansi.fg");         \
-      color_seq_ansi_bg         = (char *)get_color_name_row_property(color_name, "seq.ansi.bg");         \
+#define GET_COLOR()                                                                                     \
+  { do{                                                                                                 \
+      color_row                = get_color_name_row(color_name);                                        \
+      color_hex                = get_color_name_hex(color_name);                                        \
+      color_rgb                = get_color_name_rgb(color_name);                                        \
+      color_rgb_bg             = get_color_name_rgb_background(color_name);                             \
+      color_ansicode           = (size_t)get_color_name_row_property(color_name, "ansicode");           \
+      color_decoded_png_length = (size_t)get_color_name_row_property(color_name, "decoded_png_length"); \
     } while (0); }
 
-#define INIT_COLOR                                                                                     \
-  char        *color_row, *color_hex, *color_seq_ansi_fg, *color_seq_ansi_bg, *color_seq_truecolor_fg, \
-              *color_seq_truecolor_bg, *color_encoded_png_content;                                     \
-  color_rgb_t color_rgb, color_rgb_bg;                                                                 \
+#define INIT_COLOR                     \
+  char        *color_row, *color_hex;  \
+  color_rgb_t color_rgb, color_rgb_bg; \
   size_t      color_ansicode, color_decoded_png_length;
 
 TEST t_color_hex_strings(){
-  for (size_t i = 0; (i < TEST_COLOR_STRINGS_QTY) && (i < get_color_hex_strings().count); i++) {
+  for (size_t i = 0; (i < TEST_COLOR_STRINGS_QTY) && (i < (size_t)get_color_hex_strings().count); i++) {
     char *_color_hex = get_color_hex_strings().strings[i];
     char *color_name = get_color_hex_name(_color_hex);
     INIT_COLOR
     GET_COLOR();
 
-    DEBUG_COLOR();
     ASSERT_STR_EQ(color_hex, _color_hex);
     ASSERT_COLOR();
   }
@@ -145,12 +103,11 @@ TEST t_color_hex_strings(){
 }
 
 TEST t_color_name_strings(){
-  for (size_t i = 0; (i < TEST_COLOR_STRINGS_QTY) && (i < get_color_name_strings().count); i++) {
+  for (size_t i = 0; (i < (size_t)TEST_COLOR_STRINGS_QTY) && (i < (size_t)(get_color_name_strings().count)); i++) {
     char *color_name = get_color_name_strings().strings[i];
     INIT_COLOR
     GET_COLOR();
 
-    DEBUG_COLOR();
     ASSERT_COLOR();
   }
   PASS();
@@ -159,7 +116,6 @@ TEST t_color_name_strings(){
 TEST t_colors_load(){
   int qty = load_colors(DB);
 
-  dbg(DB->Path, %s);
   if (DEBUG_LOAD_COLORS) {
     printf("loaded db path %s\n", DB->Path);
     printf("loaded %d colors to hash\n", qty);

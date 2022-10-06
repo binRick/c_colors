@@ -1,6 +1,10 @@
-dbmem_lib = static_library('dbmem', 
+dbmem_c_args = [
+  '-Wno-missing-field-initializers',
+  ]
+dbmem_lib = library('dbmem', 
   'dbmem.c',
 install: false, 
+c_args: dbmem_c_args,
 dependencies: [
   sqlite3_dep,
   ], 

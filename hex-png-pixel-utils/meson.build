@@ -4,7 +4,6 @@ hex_png_pixel_utils_srcs = [
 ]
 hex_png_pixel_utils_deps = [
      cargs_dep,
-     #//     dbg_dep,
      asprintf_dep,
      bytes_dep,
      c_fsio_dep,
@@ -14,7 +13,7 @@ hex_png_pixel_utils_deps = [
      #debug_memory_dep,
 ]
 
-hex_png_pixel_utils_lib = static_library('hex-png-pixel-utils',
+hex_png_pixel_utils_lib = library('hex-png-pixel-utils',
   hex_png_pixel_utils_srcs,
   install: false,
   dependencies: hex_png_pixel_utils_deps,

@@ -18,7 +18,6 @@ colors_test_deps = [
  # debug_memory_dep,
  tinydir_dep,
  db_dep,
- dbg_dep,
  colors_dep,
  ansi_codes_dep,
  ansi_utils_dep,

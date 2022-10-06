@@ -4,7 +4,6 @@
 #define PROGRESS_BAR_CHAR       "="
 #define DEBUG_MEMORY_ENABLED
 #ifdef DEBUG_MEMORY_ENABLED
-//#include "debug_memory.h"
 #endif
 #include "colors-json-parser/colors-json-parser.h"
 #include "progress.c/progress.h"
@@ -40,7 +39,7 @@ static void db_progress(progress_data_t *data) {
   progress_write(data->holder);
 }
 
-static void db_progress_end(progress_data_t *data) {
+static void db_progress_end(progress_data_t __attribute__((unused)) *data) {
   fprintf(stdout,
           AC_SHOW_CURSOR
           AC_RESETALL "\n"
@@ -121,7 +120,7 @@ int parse_colors_json(parse_json_options *OPTIONS){
   JSON_Value  *ColorLine;
   JSON_Object *ColorObject;
   ParsedColor *c;
-  int         items_qty = (Lines.count < OPTIONS->parse_qty) ? Lines.count : OPTIONS->parse_qty;
+  int         items_qty = ((int)(Lines.count) < (int)(OPTIONS->parse_qty)) ? Lines.count : OPTIONS->parse_qty;
   progress_t  *progress = progress_new(items_qty, PROGRESS_BAR_WIDTH);
   {
     progress->fmt         = "    Progress (:percent) => {:bar} [:elapsed]";
@@ -131,7 +130,7 @@ int parse_colors_json(parse_json_options *OPTIONS){
     progress_on(progress, PROGRESS_EVENT_PROGRESS, db_progress);
     progress_on(progress, PROGRESS_EVENT_END, db_progress_end);
   }
-  for (int i = 0; i < Lines.count && (i < OPTIONS->parse_qty); i++) {
+  for (size_t i = 0; i < (size_t)Lines.count && (i < OPTIONS->parse_qty); i++) {
     {
       ColorLine = json_parse_string(Lines.strings[i]);
       if (ColorLine == NULL) {

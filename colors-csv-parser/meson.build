@@ -8,7 +8,7 @@ colors_csv_parser_cargs = [
   '-Wno-macro-redefined',
   ]
 colors_csv_parser_deps = [
-  ansi_codes_dep,
+  ansi_codes_dep,ms_dep,bytes_dep,c_stringfn_dep,c_string_buffer_dep,
   rgb_ansi_utils_dep,
   hex_png_pixel_utils_dep,
   progress_dep,
@@ -19,7 +19,7 @@ colors_csv_parser_deps = [
   #  debug_memory_dep,
   djbhash_dep,
 ]
-colors_csv_parser_lib = static_library('colors-csv-parser',
+colors_csv_parser_lib = library('colors-csv-parser',
   colors_csv_srcs,
   install: true, 
   dependencies: colors_csv_parser_deps,

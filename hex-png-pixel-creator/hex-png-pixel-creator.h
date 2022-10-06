@@ -1,19 +1,19 @@
 #pragma once
+#include "c_ansi/ansi-codes/ansi-codes.h"
+#include "c_fsio/include/fsio.h"
+#include "cargs/include/cargs.h"
+#include "hex-png-pixel-utils/hex-png-pixel-utils.h"
 #include <ctype.h>
 #include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
-#include <stdio.h>
 #include <string.h>
-#include "c_ansi/ansi-codes/ansi-codes.h"
-#include "cargs/include/cargs.h"
-#include "hex-png-pixel-utils/hex-png-pixel-utils.h"
-#include "c_fsio/include/fsio.h"
+#include <sys/time.h>
 
 int parse_args(int, char **);
 int debug_args();
@@ -23,12 +23,12 @@ char *str_substring(char *str, int start, int size);
 
 #define PARSED_COLORS_JSON_FILE    "etc/colornames.json"
 ////////////////////////////////////////////////////////////////////
-#define DEFAULT_INPUT           PARSED_COLORS_JSON_FILE
-#define DEFAULT_OUTPUT_DIR      "etc/images"
-#define DEFAULT_COUNT           10
-#define DEFAULT_VERBOSE         false
-#define DEFAULT_MODE            "write"
-#define DEFAULT_HEX             "FFFFFF"
+#define DEFAULT_INPUT              PARSED_COLORS_JSON_FILE
+#define DEFAULT_OUTPUT_DIR         "etc/images"
+#define DEFAULT_COUNT              10
+#define DEFAULT_VERBOSE            false
+#define DEFAULT_MODE               "write"
+#define DEFAULT_HEX                "FFFFFF"
 ////////////////////////////////////////////////////////////////////
 
 typedef struct CLI_ARGS {
@@ -76,5 +76,3 @@ static struct cag_option options[] = {
     .access_name    = "help",
     .description    = "Shows the command help" }
 };
-
-

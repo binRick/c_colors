@@ -11,12 +11,13 @@ args_t args = {
 };
 
 HexPngWriterConfig gen_hex_write_config(){
-    HexPngWriterConfig CONFIG = {
-        .COLOR = args.hex,
-        .PATH = args.output_dir,
-        .DEBUG = args.verbose,
-    };
-    return(CONFIG);
+  HexPngWriterConfig CONFIG = {
+    .COLOR = args.hex,
+    .PATH  = args.output_dir,
+    .DEBUG = args.verbose,
+  };
+
+  return(CONFIG);
 }
 
 int main(int argc, char **argv) {
@@ -38,22 +39,21 @@ int main(int argc, char **argv) {
   return(1);
 }
 
-
 int debug_args(){
-    fprintf(stderr,
-    acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d")
-    ", "
-    ansistr(AC_RESETALL AC_REVERSE AC_BRIGHT_RED_BLACK "Input: %s")
-    ", "
-    ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Output Directory: %s")
-    ", "
-    ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Mode: %s")
-    ", "
-    ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Count: %d")
-    ", "
-    "\n"
-    , args.verbose, args.input, args.output_dir, args.mode, args.count
-    );
+  fprintf(stderr,
+          acs(AC_BRIGHT_BLUE_BLACK AC_ITALIC  "Verbose: %d")
+          ", "
+          ansistr(AC_RESETALL AC_REVERSE AC_BRIGHT_RED_BLACK "Input: %s")
+          ", "
+          ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Output Directory: %s")
+          ", "
+          ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Mode: %s")
+          ", "
+          ansistr(AC_RESETALL AC_BRIGHT_GREEN_BLACK "Count: %d")
+          ", "
+          "\n",
+          args.verbose, args.input, args.output_dir, args.mode, args.count
+          );
 
   return(EXIT_SUCCESS);
 }
@@ -72,7 +72,7 @@ int parse_args(int argc, char **argv){
       args.hex = cag_option_get_value(&context);
       break;
     case 'm':
-      value      = cag_option_get_value(&context);
+      value     = cag_option_get_value(&context);
       args.mode = value;
       break;
     case 'i':
@@ -80,7 +80,7 @@ int parse_args(int argc, char **argv){
       args.input = value;
       break;
     case 'o':
-      value       = cag_option_get_value(&context);
+      value           = cag_option_get_value(&context);
       args.output_dir = value;
       break;
     case 'v':

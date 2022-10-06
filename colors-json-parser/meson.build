@@ -12,7 +12,7 @@ colors_json_parser_cargs = [
   '-Wno-macro-redefined',
   ]
 colors_json_parser_deps = [
-  rgb_ansi_utils_dep,
+  rgb_ansi_utils_dep,c_string_buffer_dep,c_stringfn_dep,
   parson_dep,
   fs_dep,
   #debug_memory_dep,
@@ -22,7 +22,7 @@ colors_json_parser_deps = [
   db_dep,
   progress_dep,
 ]
-colors_json_parser_lib = static_library('colors-json-parser',
+colors_json_parser_lib = library('colors-json-parser',
   colors_json_srcs,
   install: false, 
   dependencies: colors_json_parser_deps,

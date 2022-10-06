@@ -12,7 +12,7 @@ parse_colors_cargs = [
   ]
 parse_colors_deps = [
      rgba_dep, 
-     cargs_dep,
+     cargs_dep,djbhash_dep,
      colors_csv_parser_dep,
      colors_json_parser_dep,
      c_stringfn_dep,

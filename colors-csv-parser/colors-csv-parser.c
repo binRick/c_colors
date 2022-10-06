@@ -27,7 +27,7 @@ static void csv_progress(progress_data_t *data) {
   progress_write(data->holder);
 }
 
-static void csv_progress_end(progress_data_t *data) {
+static void csv_progress_end(progress_data_t __attribute__((unused)) *data) {
   fprintf(stdout,
           AC_SHOW_CURSOR
           AC_RESETALL "\n"
@@ -49,10 +49,9 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   if (OPTIONS->verbose_mode) {
     fprintf(stderr, "%d lines\n", Lines.count);
   }
-  int         qty = 0, ui;
-
+  size_t      qty = 0;
   short       ok;
-  char        *LINE, *NAME, *HEX, *colp, *ptr, *js;
+  char        *LINE, *NAME, *HEX, *js;
   uint32_t    r;
   JSON_Value  *o;
   JSON_Object *O;
@@ -62,7 +61,7 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   progress->bar_char = PROGRESS_BAR_CHAR;    progress_on(progress, PROGRESS_EVENT_START, csv_progress_start);
   progress_on(progress, PROGRESS_EVENT_PROGRESS, csv_progress);    progress_on(progress, PROGRESS_EVENT_END, csv_progress_end);
 
-  for (int i = 0; i < Lines.count && (qty < OPTIONS->parse_qty); i++) {
+  for (size_t i = 0; i < (size_t)Lines.count && ((size_t)qty < (size_t)OPTIONS->parse_qty); i++) {
     LINE = stringfn_trim(Lines.strings[i]);
     struct StringFNStrings SPLIT = stringfn_split(LINE, ',');
     free(LINE);
@@ -87,7 +86,6 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     C->hex = strdup(HEX);
     free(HEX);
     r = rgba_from_string(C->hex, &ok);
-    rgba_t rgba = rgba_new(r);
     ////////////////////
     C->ansicode      = hex_to_256_color_ansicode(C->hex);
     C->rgb           = malloc(sizeof(RGB_t));

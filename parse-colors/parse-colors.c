@@ -11,7 +11,6 @@
 ////////////////////////////////////////////////////
 static int debug_args();
 static void load_new_palette_type_id(int PALETTE_TYPE_ID);
-static char *strdup_escaped(const char *tmp);
 static int parse_args(int argc, char *argv[]);
 
 ////////////////////////////////////////////////////
@@ -81,22 +80,6 @@ static TerminalCapabilities_t TerminalCapabilities = {
   .AltScreenInitiallyEnabled = false,
   .IsTTY                     = false,
 };
-
-static char *strdup_escaped(const char *tmp) {
-  char *ret = malloc(strlen(tmp) * 4 + 1);
-  char *dst = ret;
-
-  for ( ; *tmp; tmp++) {
-    if (*tmp >= ' ' && *tmp <= 126 && *tmp != '\\') {
-      *dst = *tmp;
-      ++dst;
-    } else {
-      dst += sprintf(dst, "\\x%02hhx", (unsigned char)*tmp);
-    }
-  }
-  *dst = 0;
-  return(ret);
-}
 
 static void load_new_palette_type_id(int PALETTE_TYPE_ID){
   if (!TerminalCapabilities.RestorePalette || !TerminalCapabilities.IsTTY) {

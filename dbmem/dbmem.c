@@ -3,7 +3,6 @@
 #define DBMEM_MIN(x, y)    ((x) < (y)?(x):(y))
 #define DBMEM_MAX(x, y)    ((x) > (y)?(x):(y))
 
-
 static void dbmemDebug(const char *format, ...){
 #if defined (DBMEM_DEBUG)
   char    logTemp[1024] = { 0 };
@@ -59,7 +58,6 @@ static sqlite3_io_methods g_spmemfile_io_memthods = {
   spmemfileDeviceCharacteristics            /* xDeviceCharacteristics */
 };
 
-
 int spmemfileClose(sqlite3_file *file){
   spmemfile_t *memfile = (spmemfile_t *)file;
 
@@ -81,7 +79,6 @@ int spmemfileClose(sqlite3_file *file){
   return(SQLITE_OK);
 }
 
-
 int spmemfileRead(sqlite3_file *file, void *buffer, int len, sqlite3_int64 offset){
   spmemfile_t *memfile = (spmemfile_t *)file;
 
@@ -96,7 +93,6 @@ int spmemfileRead(sqlite3_file *file, void *buffer, int len, sqlite3_int64 offse
 
   return(SQLITE_OK);
 }
-
 
 int spmemfileWrite(sqlite3_file *file, const void *buffer, int len, sqlite3_int64 offset){
   spmemfile_t   *memfile = (spmemfile_t *)file;
@@ -123,7 +119,6 @@ int spmemfileWrite(sqlite3_file *file, const void *buffer, int len, sqlite3_int6
   return(SQLITE_OK);
 }
 
-
 int spmemfileTruncate(sqlite3_file *file, sqlite3_int64 size){
   spmemfile_t *memfile = (spmemfile_t *)file;
 
@@ -134,13 +129,11 @@ int spmemfileTruncate(sqlite3_file *file, sqlite3_int64 size){
   return(SQLITE_OK);
 }
 
-
 int spmemfileSync(sqlite3_file *file, int flags){
   dbmemDebug("call %s( %p )", __func__, file);
 
   return(SQLITE_OK);
 }
-
 
 int spmemfileFileSize(sqlite3_file *file, sqlite3_int64 *size){
   spmemfile_t *memfile = (spmemfile_t *)file;
@@ -152,20 +145,17 @@ int spmemfileFileSize(sqlite3_file *file, sqlite3_int64 *size){
   return(SQLITE_OK);
 }
 
-
 int spmemfileLock(sqlite3_file *file, int type){
   dbmemDebug("call %s( %p )", __func__, file);
 
   return(SQLITE_OK);
 }
 
-
 int spmemfileUnlock(sqlite3_file *file, int type){
   dbmemDebug("call %s( %p )", __func__, file);
 
   return(SQLITE_OK);
 }
-
 
 int spmemfileCheckReservedLock(sqlite3_file *file, int *result){
   dbmemDebug("call %s( %p )", __func__, file);
@@ -175,20 +165,17 @@ int spmemfileCheckReservedLock(sqlite3_file *file, int *result){
   return(SQLITE_OK);
 }
 
-
 int spmemfileFileControl(sqlite3_file *file, int op, void *arg){
   dbmemDebug("call %s( %p )", __func__, file);
 
   return(SQLITE_OK);
 }
 
-
 int spmemfileSectorSize(sqlite3_file *file){
   dbmemDebug("call %s( %p )", __func__, file);
 
   return(0);
 }
-
 
 int spmemfileDeviceCharacteristics(sqlite3_file *file){
   dbmemDebug("call %s( %p )", __func__, file);
@@ -246,7 +233,6 @@ static dbmem_t g_dbmem = {
   0                                                      /* pParent */
 };
 
-
 int dbmemOpen(sqlite3_vfs *vfs, const char *path, sqlite3_file *file, int flags, int *outflags){
   dbmem_t     *memvfs  = (dbmem_t *)vfs;
   spmemfile_t *memfile = (spmemfile_t *)file;
@@ -269,7 +255,6 @@ int dbmemOpen(sqlite3_vfs *vfs, const char *path, sqlite3_file *file, int flags,
   return(memfile->mem ? SQLITE_OK : SQLITE_ERROR);
 }
 
-
 int dbmemDelete(sqlite3_vfs *vfs, const char *path, int syncDir){
   dbmemDebug("call %s( %p(%p), %s, %d )\n",
              __func__, vfs, &g_dbmem, path, syncDir);
@@ -277,57 +262,47 @@ int dbmemDelete(sqlite3_vfs *vfs, const char *path, int syncDir){
   return(SQLITE_OK);
 }
 
-
-int dbmemAccess(sqlite3_vfs *vfs, const char *path, int flags, int *result){
+int dbmemAccess(sqlite3_vfs __attribute__((unused)) *vfs, const char __attribute__((unused)) *path, int __attribute__((unused)) flags, int *result){
   *result = 0;
   return(SQLITE_OK);
 }
 
-
-int dbmemFullPathname(sqlite3_vfs *vfs, const char *path, int len, char *fullpath){
+int dbmemFullPathname(sqlite3_vfs __attribute__((unused)) *vfs, const char *path, int len, char *fullpath){
   strncpy(fullpath, path, len);
   fullpath[len - 1] = '\0';
 
   return(SQLITE_OK);
 }
 
-
-void * dbmemDlOpen(sqlite3_vfs *vfs, const char *path){
+void * dbmemDlOpen(sqlite3_vfs __attribute__((unused)) *vfs, const char __attribute__((unused)) *path){
   return(NULL);
 }
 
-
-void dbmemDlError(sqlite3_vfs *vfs, int len, char *errmsg){
+void dbmemDlError(sqlite3_vfs __attribute__((unused)) *vfs, int __attribute__((unused)) len, char __attribute__((unused)) *errmsg){
   // noop
 }
 
-void(*dbmemDlSym(sqlite3_vfs * vfs, void *handle, const char *symbol)) (void){
+void(*dbmemDlSym(sqlite3_vfs __attribute__((unused)) * vfs, void __attribute__((unused)) * handle, const char __attribute__((unused)) * symbol)) (void){
   return(NULL);
 }
 
-
-void dbmemDlClose(sqlite3_vfs *vfs, void *handle){
+void dbmemDlClose(sqlite3_vfs __attribute__((unused)) *vfs, void __attribute__((unused)) *handle){
   // noop
 }
 
-
-int dbmemRandomness(sqlite3_vfs *vfs, int len, char *buffer){
+int dbmemRandomness(sqlite3_vfs __attribute__((unused)) *vfs, int __attribute__((unused)) len, char __attribute__((unused)) *buffer){
   return(SQLITE_OK);
 }
 
-
-int dbmemSleep(sqlite3_vfs *vfs, int microseconds){
+int dbmemSleep(sqlite3_vfs __attribute__((unused)) *vfs, int __attribute__((unused)) microseconds){
   return(SQLITE_OK);
 }
 
-
-int dbmemCurrentTime(sqlite3_vfs *vfs, double *result){
+int dbmemCurrentTime(sqlite3_vfs __attribute__((unused)) *vfs, double __attribute__((unused)) *result){
   return(SQLITE_OK);
 }
-
 
 //===========================================================================
-
 
 int dbmem_init(dbmem_cb_t *cb){
   sqlite3_vfs *parent = NULL;
@@ -356,7 +331,6 @@ typedef struct spmembuffer_link_t {
   struct spmembuffer_link_t *next;
 } spmembuffer_link_t;
 
-
 spmembuffer_link_t * spmembuffer_link_remove(spmembuffer_link_t **head, const char *path){
   spmembuffer_link_t *ret = NULL;
 
@@ -377,7 +351,6 @@ spmembuffer_link_t * spmembuffer_link_remove(spmembuffer_link_t **head, const ch
   return(ret);
 }
 
-
 void spmembuffer_link_free(spmembuffer_link_t *iter){
   free(iter->path);
   free(iter->mem->data);
@@ -393,7 +366,6 @@ typedef struct dbmem_env_t {
 } dbmem_env_t;
 
 static dbmem_env_t *g_dbmem_env = NULL;
-
 
 static spmembuffer_t * load_cb(void *arg, const char *path){
   spmembuffer_t *ret = NULL;
@@ -415,7 +387,6 @@ static spmembuffer_t * load_cb(void *arg, const char *path){
   return(ret);
 }
 
-
 int dbmem_env_init(){
   int ret = 0;
 
@@ -433,7 +404,6 @@ int dbmem_env_init(){
 
   return(ret);
 }
-
 
 void dbmem_env_fini(){
   if (NULL != g_dbmem_env) {
@@ -457,7 +427,6 @@ void dbmem_env_fini(){
     g_dbmem_env = NULL;
   }
 }
-
 
 int dbmem_open_db(dbmem_db_t *db, const char *path, spmembuffer_t *mem){
   int                ret = 0;
@@ -496,7 +465,6 @@ int dbmem_open_db(dbmem_db_t *db, const char *path, spmembuffer_t *mem){
   return(ret);
 }
 
-
 int dbmem_close_db(dbmem_db_t *db){
   int ret = 0;
 
@@ -519,4 +487,3 @@ int dbmem_close_db(dbmem_db_t *db){
 
   return(ret);
 }
-

@@ -1,7 +1,6 @@
 #include "dbmem-test.h"
 #define DBMEM_STORAGE_FILE    "etc/dbmem0.sqlite"
 
-
 void test(dbmem_db_t *db){
   char         errcode = 0;
   int          i       = 0;
@@ -55,7 +54,6 @@ void test(dbmem_db_t *db){
   errcode = sqlite3_finalize(stmt);
 } /* test */
 
-
 int readFile(const char *path, spmembuffer_t *mem){
   int  ret = -1;
 
@@ -81,7 +79,6 @@ int readFile(const char *path, spmembuffer_t *mem){
   return(ret);
 }
 
-
 int writeFile(const char *path, spmembuffer_t *mem){
   int  ret = -1;
 
@@ -96,8 +93,7 @@ int writeFile(const char *path, spmembuffer_t *mem){
   return(ret);
 }
 
-
-int main(int argc, char *argv[]){
+int main(){
   const char    *path = DBMEM_STORAGE_FILE;
 
   dbmem_db_t    db;
@@ -121,4 +117,3 @@ int main(int argc, char *argv[]){
 
   return(0);
 }
-

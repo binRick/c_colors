@@ -34,3 +34,5 @@ build
 .make-*log*
 .DU
 submodules/c_deps
+.meson.build*.log
+.meson-build*.log

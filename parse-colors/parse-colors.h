@@ -10,11 +10,12 @@
 #include <string.h>
 #include <sys/time.h>
 ////////////////////////////////////////////////////////////////////
-static int hex_to_closest_ansi_code(const uint32_t trp);
-static int parse_args(int argc, char *argv[]);
-static int debug_args();
-static int parse_csv();
-
+/*
+ * static int hex_to_closest_ansi_code(const uint32_t trp);
+ * static int parse_args(int argc, char *argv[]);
+ * static int debug_args();
+ * static int parse_csv();
+ */
 ////////////////////////////////////////////////////////////////////
 #include "ansi-codes/ansi-codes.h"
 #include "ansi-rgb-utils/ansi-rgb-utils.h"

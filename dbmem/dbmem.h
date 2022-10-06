@@ -1,9 +1,9 @@
 #ifndef __dbmem_h__
 #define __dbmem_h__
+#include "sqlite3.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "sqlite3.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,4 +35,3 @@ int dbmem_close_db(dbmem_db_t *db);
 #endif
 
 #endif
-

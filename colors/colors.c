@@ -1,5 +1,5 @@
 #include "colors.h"
-#include "submodules/log.h/log.h"
+#include "log/log.h"
 #define MAX_COLORS      2000
 #define DEBUG_COLORS    false
 //////////////////////////////////////////////////////////////////////////
@@ -44,12 +44,6 @@ static void iterate_color_name_strings(){
   }
 }
 
-static void iterate_colors_hash(){
-  for (size_t i = 0; i < COLOR_HEX_STRINGS.count; i++) {
-    fprintf(stderr, "\t  - " AC_RESETALL AC_CYAN AC_ITALIC "#%lu> %s" AC_RESETALL "\n", i, COLOR_HEX_STRINGS.strings[i]);
-  }
-}
-
 static int load_colors_hash(){
   struct djbhash_node *HASH_ITEM;
 
@@ -57,18 +51,17 @@ static int load_colors_hash(){
   djbhash_init(&COLOR_NAME_HASH);
   djbhash_init(&COLOR_HEX_HASH);
   int    qty = 0;
-  size_t total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, type_ids_size = 0, type_ids_qty = 0, unique_typeids_size = 0;
+  size_t unique_typeids_qty = 0, unique_typeids_size = 0;
   char   *unique_typeids = (char *)colordb_get_distinct_typeids(DB->db, &unique_typeids_size, &unique_typeids_qty);
 
   fprintf(stderr, "read %lu bytes from %lu items\n", unique_typeids_size, unique_typeids_qty);
-  size_t      row_type_ids_size = 0, row_type_ids_qty = 0, row_data_size = 0;
+  size_t      row_type_ids_size = 0, row_type_ids_qty = 0;
   JSON_Value  *ColorLine;
   JSON_Object *ColorObject;
 
   for (size_t processed_items = 0; (processed_items < unique_typeids_qty) && (qty < MAX_COLORS); ) {
     if ((unique_typeids != NULL) && strlen(unique_typeids) > 0) {
-      colordb_type row_typeid = atoi(unique_typeids);
-      row_data_size = 0;
+      colordb_type row_typeid   = atoi(unique_typeids);
       char         *id_type_ids = (char *)colordb_get_typeid_ids(DB->db, row_typeid, &row_type_ids_size, &row_type_ids_qty);
       for (size_t _processed_items = 0; (_processed_items < row_type_ids_qty) && (_processed_items < MAX_COLORS); ) {
         if (strlen(id_type_ids) > 0) {
@@ -265,9 +258,8 @@ color_rgb_t get_color_name_rgb_background(const char *COLOR_NAME){
 }
 
 color_rgb_t get_color_name_rgb(const char *COLOR_NAME){
-  struct djbhash_node *HASH_ITEM;
-  color_rgb_t         color_rgb  = { 0, 0, 0 };
-  char                *color_row = get_color_name_row(COLOR_NAME);
+  color_rgb_t color_rgb  = { 0, 0, 0 };
+  char        *color_row = get_color_name_row(COLOR_NAME);
 
   if (color_row == NULL) {
     return(color_rgb);

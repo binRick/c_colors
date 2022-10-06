@@ -5,10 +5,13 @@ colors_srcs = [
 colors_inc = [
  inc,
 ]
+colors_c_args = [
+  '-Wno-sign-compare',
+  ]
 colors_deps = [
    djbhash_dep,
-   cargs_dep,
-   colors_csv_parser_dep,
+   cargs_dep,string_utils_dep,
+   colors_csv_parser_dep,ansi_utils_dep,
    colors_json_parser_dep,
    c_stringfn_dep,
    parson_dep,
@@ -23,11 +26,11 @@ colors_deps = [
 ]
 
 
-colors_lib = static_library('colors',
+colors_lib = library('colors',
   colors_srcs,
   install: false,
   dependencies: colors_deps,
-  c_args: [],
+  c_args: colors_c_args,
   include_directories: colors_inc,
 )
 
