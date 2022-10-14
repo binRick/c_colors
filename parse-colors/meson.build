@@ -11,7 +11,7 @@ parse_colors_cargs = [
   '-Wno-macro-redefined',
   ]
 parse_colors_deps = [
-     rgba_dep, 
+     rgba_dep, hsluv_c_dep,
      cargs_dep,djbhash_dep,
      colors_csv_parser_dep,
      colors_json_parser_dep,

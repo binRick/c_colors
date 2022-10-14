@@ -4,9 +4,14 @@
 #define BG_PROGRESS_BAR_CHAR    "."
 #define PROGRESS_BAR_CHAR       "="
 #include "colors-csv-parser/colors-csv-parser.h"
-//#ifdef DEBUG_MEMORY_ENABLED
-//#include "debug-memory/debug_memory.h"
-//#endif
+#include "hsluv-c/src/hsluv.h"
+#include "slug.c/src/slug.h"
+
+
+
+
+
+
 
 static void csv_progress_start(progress_data_t *data) {
   assert(data);
@@ -106,13 +111,25 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     sprintf(C->ansi->fg, "\x1b[38;5;%dm", C->ansicode);
     sprintf(C->ansi->bg, "\x1b[48;5;%dm", C->ansicode);
     ////////////////////
-
+    double hsluv[3];
+    rgb2hsluv(C->rgb->red, C->rgb->green,C->rgb->blue, &hsluv[0], &hsluv[2], &hsluv[2]);
     /////////////////////////////////////////////////////////////////////////
     o = json_value_init_object();
     O = json_value_get_object(o);
     EncodedPngResult PNG_RESULT = hex_to_png_encoded_bytes(C->hex);
     json_object_set_string(O, "name", C->name);
+ char *sl =    ""; 
+ if(stringfn_is_ascii(C->name))
+  sl = slug(C->name);
+    json_object_set_string(O, "slug", sl);
     json_object_set_string(O, "hex", C->hex);
+    json_object_dotset_number(O, "hsl.hue", (int)hsluv[0]);
+    json_object_dotset_number(O, "hsl.saturation", (int)hsluv[1]);
+    json_object_dotset_number(O, "hsl.brightness", (int)(hsluv[2]/100));
+    json_object_dotset_boolean(O, "hsl.bright",(hsluv[2]/100>50)?true:false);
+    json_object_dotset_boolean(O, "hsl.very_bright",(hsluv[2]/100>90)?true:false);
+    json_object_dotset_boolean(O, "hsl.dark",(hsluv[2]/100<30)?true:false);
+    json_object_dotset_boolean(O, "hsl.very_dark",(hsluv[2]/100<10)?true:false);
     json_object_set_string(O, "encoded_png_content", PNG_RESULT.EncodedContent);
     json_object_set_number(O, "decoded_png_length", PNG_RESULT.DecodedLength);
     json_object_dotset_number(O, "ansicode", C->ansicode);

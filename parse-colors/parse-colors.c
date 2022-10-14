@@ -3,25 +3,31 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-////////////////////////////////////////////////////
+
 ////////////////////////////////////////////////////
 #define streq(a, b)    (strcmp(a, b) == 0)
 #define DEBUG_TERMINAL_CAPABILITIES    false
 #define ALT_SCREEN_MODE_ENABLED        true
-////////////////////////////////////////////////////
 static int debug_args();
 static void load_new_palette_type_id(int PALETTE_TYPE_ID);
 static int parse_args(int argc, char *argv[]);
-
-////////////////////////////////////////////////////
 void cleanup();
 void restore_screen();
 void setup_screen();
 void load_new_palette_type_id();
-
 ////////////////////////////////////////////////////
 #include "parse-colors/parse-colors.h"
 ////////////////////////////////////////////////////
+static args_t                 args = {
+  DEFAULT_MODE,
+  DEFAULT_VERBOSE,
+  DEFAULT_COUNT,
+  DEFAULT_PRETTY,
+  DEFAULT_SQLITE_DB_PATH,
+  DEFAULT_CSV_FILE,
+  DEFAULT_JSON_FILE
+};
+
 static struct cag_option options[] = {
   { .identifier     = 'm',
     .access_letters = "m",
@@ -64,16 +70,6 @@ static struct cag_option options[] = {
     .description    = "Shows the command help" }
 };
 static void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM);
-
-static args_t                 args = {
-  DEFAULT_MODE,
-  DEFAULT_VERBOSE,
-  DEFAULT_COUNT,
-  DEFAULT_PRETTY,
-  DEFAULT_SQLITE_DB_PATH,
-  DEFAULT_CSV_FILE,
-  DEFAULT_JSON_FILE
-};
 
 static TerminalCapabilities_t TerminalCapabilities = {
   .RestorePalette            = false,

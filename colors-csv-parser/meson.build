@@ -8,7 +8,7 @@ colors_csv_parser_cargs = [
   '-Wno-macro-redefined',
   ]
 colors_csv_parser_deps = [
-  ansi_codes_dep,ms_dep,bytes_dep,c_stringfn_dep,c_string_buffer_dep,
+  ansi_codes_dep,ms_dep,bytes_dep,c_stringfn_dep,c_string_buffer_dep,hsluv_c_dep,slug_dep,
   rgb_ansi_utils_dep,
   hex_png_pixel_utils_dep,
   progress_dep,
