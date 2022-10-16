@@ -58,6 +58,7 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   short       ok;
   char        *LINE, *NAME, *HEX, *js;
   uint32_t    r;
+  char *sl =    "none"; 
   JSON_Value  *o;
   JSON_Object *O;
   progress_t  *progress = progress_new(Lines.count, PROGRESS_BAR_WIDTH);
@@ -112,15 +113,18 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     sprintf(C->ansi->bg, "\x1b[48;5;%dm", C->ansicode);
     ////////////////////
     double hsluv[3];
-    rgb2hsluv(C->rgb->red, C->rgb->green,C->rgb->blue, &hsluv[0], &hsluv[2], &hsluv[2]);
+    rgb2hsluv(C->rgb->red, C->rgb->green,C->rgb->blue, &hsluv[0], &hsluv[1], &hsluv[2]);
     /////////////////////////////////////////////////////////////////////////
     o = json_value_init_object();
     O = json_value_get_object(o);
     EncodedPngResult PNG_RESULT = hex_to_png_encoded_bytes(C->hex);
     json_object_set_string(O, "name", C->name);
- char *sl =    ""; 
- if(stringfn_is_ascii(C->name))
-  sl = slug(C->name);
+    if(C->name && stringfn_is_ascii(C->name)){
+      sl = stringfn_trim(stringfn_to_lowercase(C->name));
+      stringfn_mut_replace(sl,' ','-');
+      stringfn_mut_replace(sl,'\'','-');
+      stringfn_mut_replace(sl,'"','-');
+    }
     json_object_set_string(O, "slug", sl);
     json_object_set_string(O, "hex", C->hex);
     json_object_dotset_number(O, "hsl.hue", (int)hsluv[0]);
