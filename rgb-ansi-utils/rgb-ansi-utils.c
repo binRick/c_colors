@@ -260,23 +260,20 @@ void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2) {
   g1 /= 255.0;
   b1 /= 255.0;
 
-  if (r1 > 0.04045) {
+  if (r1 > 0.04045)
     r1 = powf((r1 + 0.055) / 1.055, 2.4);
-  }else{
+  else
     r1 /= 12.92;
-  }
 
-  if (g1 > 0.04045) {
+  if (g1 > 0.04045)
     g1 = powf((g1 + 0.055) / 1.055, 2.4);
-  }else{
+  else
     g1 /= 12.92;
-  }
 
-  if (b1 > 0.04045) {
+  if (b1 > 0.04045)
     b1 = powf((b1 + 0.055) / 1.055, 2.4);
-  }else{
+  else
     b1 /= 12.92;
-  }
 
   r1 *= 100.0;
   g1 *= 100.0;
@@ -290,23 +287,20 @@ void rgb2lab(float r1, float g1, float b1, float *l2, float *a2, float *b2) {
   y /= 100.000;
   z /= 108.883;
 
-  if (x > 0.008856) {
+  if (x > 0.008856)
     x = powf(x, 0.3333);
-  }else{
+  else
     x = (7.787 * x) + 0.1379;
-  }
 
-  if (y > 0.008856) {
+  if (y > 0.008856)
     y = powf(y, 0.3333);
-  }else{
+  else
     y = (7.787 * y) + 0.1379;
-  }
 
-  if (z > 0.008856) {
+  if (z > 0.008856)
     z = powf(z, 0.3333);
-  }else{
+  else
     z = (7.787 * z) + 0.1379;
-  }
 
   *l2 = (116.0 * y) - 16.0;
   *a2 = 500.0 * (x - y);
@@ -328,11 +322,10 @@ float delta_e(float l1, float a1, float b1, float l2, float a2, float b2) {
   deltaB        = b1 - b2;
   deltaHSquared = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC;
 
-  if (deltaHSquared > 0) {
+  if (deltaHSquared > 0)
     deltaH = sqrtf(deltaHSquared);
-  }else{
+  else
     deltaH = 0;
-  }
 
   q1     = deltaL / DELTA_E_K_L;
   q2     = deltaC / (1 + DELTA_E_K_1 * c1);
@@ -372,9 +365,8 @@ int hex_to_256_color_ansicode(char *HEX){
 
   colp = HEX;
 
-  if (*colp == '#') {
+  if (*colp == '#')
     *colp++;
-  }
   int closest = hex_to_closest_ansi_code((const uint32_t)colp);
 
   if (RGB_UTILS_DEBUG_MODE) {

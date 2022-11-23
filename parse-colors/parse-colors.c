@@ -18,7 +18,7 @@ void load_new_palette_type_id();
 ////////////////////////////////////////////////////
 #include "parse-colors/parse-colors.h"
 ////////////////////////////////////////////////////
-static args_t                 args = {
+static args_t            args = {
   DEFAULT_MODE,
   DEFAULT_VERBOSE,
   DEFAULT_COUNT,
@@ -78,14 +78,13 @@ static TerminalCapabilities_t TerminalCapabilities = {
 };
 
 static void load_new_palette_type_id(int PALETTE_TYPE_ID){
-  if (!TerminalCapabilities.RestorePalette || !TerminalCapabilities.IsTTY) {
+  if (!TerminalCapabilities.RestorePalette || !TerminalCapabilities.IsTTY)
     return;
-  }
+
   struct StringFNStrings p = stringfn_split(WorkerPaletteTypes[PALETTE_TYPE_ID].Colors, ' ');
 
-  if (args.verbose) {
+  if (args.verbose)
     fprintf(stdout, "Loading %s Colors\n", WorkerPaletteTypes[PALETTE_TYPE_ID].Name);
-  }
   char *new_palette_codes = malloc(1024);
 
   sprintf(new_palette_codes, NEWPALETTE,
@@ -116,9 +115,8 @@ static void load_new_palette_type_id(int PALETTE_TYPE_ID){
 }
 
 static void print_color_name_handler(ParsedColor *PARSED_COLOR_ITEM){
-  if (VERBOSE_DEBUG_HANDLER || args.verbose) {
+  if (VERBOSE_DEBUG_HANDLER || args.verbose)
     fprintf(stderr, "\nhandler, name: %s!\n", PARSED_COLOR_ITEM->Name);
-  }
 }
 
 int main(int argc, char **argv) {
@@ -180,9 +178,8 @@ int main(int argc, char **argv) {
       exit(1);
     }
     int r = parse_colors_json(options);
-    if (options) {
+    if (options)
       free(options);
-    }
     return(r);
   }
 

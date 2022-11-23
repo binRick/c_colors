@@ -22,6 +22,13 @@
   ")"
 #define INSERT_TYPEID_HEX_QUERY          "INSERT INTO hexcodes(blobid, hex) VALUES (?, ?)"
 #define INSERT_TYPEID_NAME_QUERY         "INSERT INTO colornames(blobid, colorname) VALUES (?, ?)"
+#define CREATE_ANSI_TABLE_QUERY          "CREATE TABLE IF NOT EXISTS " \
+  "ansi"                                                               \
+  "("                                                                  \
+  "id INTEGER PRIMARY KEY,"                                            \
+  " code INTEGER REFERENCES,"                                          \
+  " colorname VARCHAR(32) NOT NULL"                                    \
+  ")"
 #define CREATE_NAME_TABLE_QUERY          "CREATE TABLE IF NOT EXISTS " \
   "colornames"                                                         \
   "("                                                                  \
@@ -50,14 +57,12 @@ void *colordb_get_distinct_typeids(colordb db, size_t *size, size_t *rows_qty){
     unsigned char *row_data = malloc(row_size + 1);
     memcpy(row_data, p, row_size);
     row_data[row_size] = '\0';
-    if (copy == NULL) {
+    if (copy == NULL)
       copy = malloc(row_size + 1);
-    }else{
+    else
       copy = realloc(copy, (*size) + row_size + 1 + (*rows_qty));
-    }
-    if (!copy) {
+    if (!copy)
       goto reset;
-    }
     memcpy(copy + *size + (*rows_qty), p, row_size);
     copy[*size + (*rows_qty) + row_size] = '\0';
     *size                               += row_size;
@@ -75,23 +80,21 @@ void *colordb_get_typeid_ids(colordb db, const colordb_type type, size_t *size, 
 
   *size     = 0;
   *rows_qty = 0;
-  if (sqlite3_bind_int(db->typeid_ids, 1, type) != SQLITE_OK) {
+  if (sqlite3_bind_int(db->typeid_ids, 1, type) != SQLITE_OK)
     return(copy);
-  }
+
   while (sqlite3_step(db->typeid_ids) == SQLITE_ROW) {
     p = sqlite3_column_blob(db->typeid_ids, 0);
     size_t        row_size  = (size_t)sqlite3_column_bytes(db->typeid_ids, 0);
     unsigned char *row_data = malloc(row_size + 1);
     memcpy(row_data, p, row_size);
     row_data[row_size] = '\0';
-    if (copy == NULL) {
+    if (copy == NULL)
       copy = malloc(row_size + 1);
-    }else{
+    else
       copy = realloc(copy, (*size) + row_size + 1 + (*rows_qty));
-    }
-    if (!copy) {
+    if (!copy)
       goto reset;
-    }
     memcpy(copy + *size + (*rows_qty), p, row_size);
     copy[*size + (*rows_qty) + row_size] = '\0';
     *size                               += row_size;
@@ -107,9 +110,8 @@ void *colordb_count_ids(colordb db, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
 
-  if (sqlite3_step(db->count_ids) != SQLITE_ROW) {
+  if (sqlite3_step(db->count_ids) != SQLITE_ROW)
     goto reset;
-  }
 
   *size = sqlite3_column_int64(db->count_ids, 0);
 
@@ -124,9 +126,8 @@ void *colordb_count_typeids(colordb db, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
 
-  if (sqlite3_step(db->count_typeids) != SQLITE_ROW) {
+  if (sqlite3_step(db->count_typeids) != SQLITE_ROW)
     goto reset;
-  }
   *size = sqlite3_column_int64(db->count_typeids, 0);
 reset:
   sqlite3_clear_bindings(db->count_typeids);
@@ -138,13 +139,12 @@ void *colordb_count_typeid(colordb db, const colordb_type type, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
 
-  if (sqlite3_bind_int(db->count_typeid, 1, type) != SQLITE_OK) {
+  if (sqlite3_bind_int(db->count_typeid, 1, type) != SQLITE_OK)
     return(copy);
-  }
 
-  if (sqlite3_step(db->count_typeid) != SQLITE_ROW) {
+
+  if (sqlite3_step(db->count_typeid) != SQLITE_ROW)
     goto reset;
-  }
 
   *size = sqlite3_column_int64(db->count_typeid, 0);
 
@@ -161,25 +161,23 @@ colordb_id colordb_add_typeid_name(colordb            db,
                                    size_t             size){
   sqlite3_int64 id = -1;
 
-  if (size > INT_MAX) {
+  if (size > INT_MAX)
     return(id);
-  }
 
-  if (sqlite3_bind_int64(db->insert_typeid_name, 1, type) != SQLITE_OK) {
+
+  if (sqlite3_bind_int64(db->insert_typeid_name, 1, type) != SQLITE_OK)
     return(id);
-  }
+
 
   if (sqlite3_bind_text(db->insert_typeid_name,
                         2,
                         name,
                         (int)size,
-                        SQLITE_STATIC) != SQLITE_OK) {
+                        SQLITE_STATIC) != SQLITE_OK)
     goto reset;
-  }
 
-  if (sqlite3_step(db->insert_typeid_name) != SQLITE_DONE) {
+  if (sqlite3_step(db->insert_typeid_name) != SQLITE_DONE)
     goto reset;
-  }
 
   id = sqlite3_last_insert_rowid(db->db);
 
@@ -196,25 +194,23 @@ colordb_id colordb_add_typeid_hex(colordb            db,
                                   size_t             size){
   sqlite3_int64 id = -1;
 
-  if (size > INT_MAX) {
+  if (size > INT_MAX)
     return(id);
-  }
 
-  if (sqlite3_bind_int64(db->insert_typeid_hex, 1, type) != SQLITE_OK) {
+
+  if (sqlite3_bind_int64(db->insert_typeid_hex, 1, type) != SQLITE_OK)
     return(id);
-  }
+
 
   if (sqlite3_bind_text(db->insert_typeid_hex,
                         2,
                         hex,
                         (int)size,
-                        SQLITE_STATIC) != SQLITE_OK) {
+                        SQLITE_STATIC) != SQLITE_OK)
     goto reset;
-  }
 
-  if (sqlite3_step(db->insert_typeid_hex) != SQLITE_DONE) {
+  if (sqlite3_step(db->insert_typeid_hex) != SQLITE_DONE)
     goto reset;
-  }
 
   id = sqlite3_last_insert_rowid(db->db);
 
@@ -231,25 +227,23 @@ colordb_id colordb_add(colordb            db,
                        size_t             size){
   sqlite3_int64 id = -1;
 
-  if (size > INT_MAX) {
+  if (size > INT_MAX)
     return(id);
-  }
 
-  if (sqlite3_bind_int64(db->insert, 1, type) != SQLITE_OK) {
+
+  if (sqlite3_bind_int64(db->insert, 1, type) != SQLITE_OK)
     return(id);
-  }
+
 
   if (sqlite3_bind_blob(db->insert,
                         2,
                         blob,
                         (int)size,
-                        SQLITE_STATIC) != SQLITE_OK) {
+                        SQLITE_STATIC) != SQLITE_OK)
     goto reset;
-  }
 
-  if (sqlite3_step(db->insert) != SQLITE_DONE) {
+  if (sqlite3_step(db->insert) != SQLITE_DONE)
     goto reset;
-  }
 
   id = sqlite3_last_insert_rowid(db->db);
 
@@ -264,21 +258,19 @@ void *colordb_get(colordb db, colordb_id id, size_t *size){
   const void    *p;
   unsigned char *copy = NULL;
 
-  if (sqlite3_bind_int64(db->select, 1, id) != SQLITE_OK) {
+  if (sqlite3_bind_int64(db->select, 1, id) != SQLITE_OK)
     return(copy);
-  }
 
-  if (sqlite3_step(db->select) != SQLITE_ROW) {
+
+  if (sqlite3_step(db->select) != SQLITE_ROW)
     goto reset;
-  }
 
   p     = sqlite3_column_blob(db->select, 0);
   *size = (size_t)sqlite3_column_bytes(db->select, 0);
 
   copy = malloc(*size + 1);
-  if (!copy) {
+  if (!copy)
     goto reset;
-  }
 
   memcpy(copy, p, *size);
   copy[*size] = '\0';
@@ -297,13 +289,12 @@ void *colordb_one(colordb            db,
   const void    *p;
   unsigned char *copy = NULL;
 
-  if (sqlite3_bind_int(db->one, 1, type) != SQLITE_OK) {
+  if (sqlite3_bind_int(db->one, 1, type) != SQLITE_OK)
     return(copy);
-  }
 
-  if (sqlite3_step(db->one) != SQLITE_ROW) {
+
+  if (sqlite3_step(db->one) != SQLITE_ROW)
     goto reset;
-  }
 
   *id = sqlite3_column_int64(db->one, 0);
 
@@ -311,9 +302,8 @@ void *colordb_one(colordb            db,
   *size = (size_t)sqlite3_column_bytes(db->one, 1);
 
   copy = malloc(*size + 1);
-  if (!copy) {
+  if (!copy)
     goto reset;
-  }
 
   memcpy(copy, p, *size);
   copy[*size] = '\0';
@@ -326,9 +316,9 @@ reset:
 }
 
 void colordb_delete(colordb db, colordb_id id){
-  if (sqlite3_bind_int64(db->delete, 1, id) != SQLITE_OK) {
+  if (sqlite3_bind_int64(db->delete, 1, id) != SQLITE_OK)
     return;
-  }
+
 
   sqlite3_step(db->delete);
 
@@ -344,9 +334,9 @@ colordb colordb_open(const char *path){
   colordb db;
 
   db = malloc(sizeof(*db));
-  if (!db) {
+  if (!db)
     return(NULL);
-  }
+
 
   if (sqlite3_open_v2(path, &db->db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK) {
     free(db);
@@ -526,9 +516,7 @@ colordb colordb_open(const char *path){
 } /* colordb_open */
 
 void colordb_close(colordb db){
-  if (!db) {
-    return;
-  }
+  if (!db)
 
   sqlite3_finalize(db->insert_typeid_hex);
   sqlite3_finalize(db->distinct_typeids);

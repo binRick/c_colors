@@ -18,14 +18,13 @@ static void iterate_color_hex_strings(){
   for (size_t i = 0; i < COLOR_HEX_STRINGS.count; i++) {
     char *color_name = get_color_hex_name(COLOR_HEX_STRINGS.strings[i]);
     char *color_row  = get_color_name_row(color_name);
-    if (DEBUG_COLORS) {
+    if (DEBUG_COLORS)
       fprintf(stderr, "\t  - " AC_RESETALL AC_CYAN AC_ITALIC "#%lu> %s|%s- %s" AC_RESETALL "\n",
               i,
               COLOR_HEX_STRINGS.strings[i],
               color_name,
               color_row
               );
-    }
   }
 }
 
@@ -33,14 +32,13 @@ static void iterate_color_name_strings(){
   for (size_t i = 0; i < COLOR_NAME_STRINGS.count; i++) {
     char *color_hex = get_color_name_hex(COLOR_NAME_STRINGS.strings[i]);
     char *color_row = get_color_name_row(COLOR_NAME_STRINGS.strings[i]);
-    if (DEBUG_COLORS) {
+    if (DEBUG_COLORS)
       fprintf(stderr, "\t  - " AC_RESETALL AC_CYAN AC_ITALIC "#%lu> %s|%s- %s" AC_RESETALL "\n",
               i,
               COLOR_NAME_STRINGS.strings[i],
               color_hex,
               color_row
               );
-    }
   }
 }
 
@@ -82,22 +80,19 @@ static int load_colors_hash(){
           }
           id_type_ids += strlen(id_type_ids);
           _processed_items++;
-        }else{
+        }else
           id_type_ids++;
-        }
       }
       unique_typeids += strlen(unique_typeids);
       processed_items++;
-    }else{
+    }else
       unique_typeids++;
-    }
   }
   djbhash_reset_iterator(&COLORS_HASH);
   djbhash_reset_iterator(&COLOR_NAME_HASH);
   djbhash_reset_iterator(&COLOR_NAME_HASH);
-  if (ColorLine) {
+  if (ColorLine)
     json_value_free(ColorLine);
-  }
   return(qty);
 } /* load_colors_hash */
 
@@ -112,9 +107,8 @@ static int load_color_names(){
   while (item) {
     char *row_data = (char *)((item)->value);
     if (strlen(row_data) > 0) {
-      if (DEBUG_COLORS) {
+      if (DEBUG_COLORS)
         fprintf(stderr, "\t  - " AC_RESETALL AC_GREEN AC_ITALIC "#%lu> %s" AC_RESETALL "\n", qty, row_data);
-      }
       ColorLine   = json_parse_string(row_data);
       ColorObject = json_value_get_object(ColorLine);
       const char *color_name = json_object_get_string(ColorObject, "name");
@@ -131,9 +125,8 @@ static int load_color_names(){
   COLOR_HEX_STRINGS  = stringfn_split_lines(stringfn_trim(stringbuffer_to_string(HEX_STRINGS)));
   stringbuffer_release(NAME_STRINGS);
   stringbuffer_release(HEX_STRINGS);
-  if (ColorLine) {
+  if (ColorLine)
     json_value_free(ColorLine);
-  }
   return(qty);
 }
 
@@ -150,16 +143,14 @@ int load_colors(ColorsDB *DB){
 
   qty = load_colors_hash(DB);
 
-  if (DEBUG_COLORS) {
+  if (DEBUG_COLORS)
     printf("loaded %d colors into hash\n", qty);
-  }
 
   assert(qty > 10);
 
   names_qty = load_color_names();
-  if (DEBUG_COLORS) {
+  if (DEBUG_COLORS)
     printf("loaded %d color names\n", names_qty);
-  }
   assert(qty == names_qty);
 
   printf("loaded %d color names\n", COLOR_NAME_STRINGS.count);
@@ -177,9 +168,9 @@ char * get_color_hex_name(const char *COLOR_HEX){
   struct djbhash_node *HASH_ITEM;
 
   HASH_ITEM = djbhash_find(&COLOR_HEX_HASH, (char *)COLOR_HEX);
-  if (HASH_ITEM == NULL) {
+  if (HASH_ITEM == NULL)
     return(NULL);
-  }
+
   return((char *)((HASH_ITEM)->value));
 }
 
@@ -187,9 +178,9 @@ char * get_color_name_hex(const char *COLOR_NAME){
   struct djbhash_node *HASH_ITEM;
 
   HASH_ITEM = djbhash_find(&COLOR_NAME_HASH, (char *)COLOR_NAME);
-  if (HASH_ITEM == NULL) {
+  if (HASH_ITEM == NULL)
     return(NULL);
-  }
+
   return((char *)((HASH_ITEM)->value));
 }
 
@@ -234,9 +225,8 @@ void * get_color_name_row_property(const char *COLOR_NAME, const char *ROW_PROPE
     res = (void *)((size_t)json_value_get_number(V));
     break;
   }
-  if (ROW) {
+  if (ROW)
     json_value_free(ROW);
-  }
   return(res);
 } /* get_color_name_row_property */
 
@@ -244,9 +234,9 @@ char * get_color_name_row(const char *COLOR_NAME){
   struct djbhash_node *HASH_ITEM;
 
   HASH_ITEM = djbhash_find(&COLORS_HASH, (char *)COLOR_NAME);
-  if (HASH_ITEM == NULL) {
+  if (HASH_ITEM == NULL)
     return(NULL);
-  }
+
   return((char *)((HASH_ITEM)->value));
 }
 
@@ -261,9 +251,9 @@ color_rgb_t get_color_name_rgb(const char *COLOR_NAME){
   color_rgb_t color_rgb  = { 0, 0, 0 };
   char        *color_row = get_color_name_row(COLOR_NAME);
 
-  if (color_row == NULL) {
+  if (color_row == NULL)
     return(color_rgb);
-  }
+
   JSON_Value  *ColorLine;
   JSON_Object *ColorObject;
 
@@ -272,8 +262,7 @@ color_rgb_t get_color_name_rgb(const char *COLOR_NAME){
   color_rgb.red   = json_object_dotget_number(ColorObject, "rgb.red");
   color_rgb.green = json_object_dotget_number(ColorObject, "rgb.green");
   color_rgb.blue  = json_object_dotget_number(ColorObject, "rgb.blue");
-  if (ColorLine) {
+  if (ColorLine)
     json_value_free(ColorLine);
-  }
   return(color_rgb);
 }

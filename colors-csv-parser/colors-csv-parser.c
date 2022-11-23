@@ -7,12 +7,6 @@
 #include "hsluv-c/src/hsluv.h"
 #include "slug.c/src/slug.h"
 
-
-
-
-
-
-
 static void csv_progress_start(progress_data_t *data) {
   assert(data);
   fprintf(stdout,
@@ -45,20 +39,18 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
   bool                WRITE_TO_FILE = false;
   struct StringBuffer *sb           = stringbuffer_new_with_options(1024, true);
 
-  if (OPTIONS->output_file != NULL && strlen(OPTIONS->output_file) > 1) {
+  if (OPTIONS->output_file != NULL && strlen(OPTIONS->output_file) > 1)
     WRITE_TO_FILE = true;
-  }
   char                   *content = fs_read(OPTIONS->input_file);
   struct StringFNStrings Lines    = stringfn_split_lines_and_trim(content);
 
-  if (OPTIONS->verbose_mode) {
+  if (OPTIONS->verbose_mode)
     fprintf(stderr, "%d lines\n", Lines.count);
-  }
   size_t      qty = 0;
   short       ok;
   char        *LINE, *NAME, *HEX, *js;
   uint32_t    r;
-  char *sl =    "none"; 
+  char        *sl = "none";
   JSON_Value  *o;
   JSON_Object *O;
   progress_t  *progress = progress_new(Lines.count, PROGRESS_BAR_WIDTH);
@@ -72,9 +64,8 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     struct StringFNStrings SPLIT = stringfn_split(LINE, ',');
     free(LINE);
     NAME = stringfn_trim(SPLIT.strings[0]);
-    if (strlen(NAME) < 3) {
+    if (strlen(NAME) < 3)
       continue;
-    }
     HEX = stringfn_to_uppercase(stringfn_trim(SPLIT.strings[1]));
     if (!stringfn_starts_with(HEX, "#")) {
       char *ns = malloc(strlen(HEX) + 1);
@@ -82,9 +73,8 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
       HEX = strdup(ns);
       free(ns);
     }
-    if (strlen(HEX) != 7) {
+    if (strlen(HEX) != 7)
       continue;
-    }
     ////////////////////
     ColorInfo *C = malloc(sizeof(ColorInfo));
     C->name = strdup(NAME);
@@ -113,27 +103,27 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     sprintf(C->ansi->bg, "\x1b[48;5;%dm", C->ansicode);
     ////////////////////
     double hsluv[3];
-    rgb2hsluv(C->rgb->red, C->rgb->green,C->rgb->blue, &hsluv[0], &hsluv[1], &hsluv[2]);
+    rgb2hsluv(C->rgb->red, C->rgb->green, C->rgb->blue, &hsluv[0], &hsluv[1], &hsluv[2]);
     /////////////////////////////////////////////////////////////////////////
     o = json_value_init_object();
     O = json_value_get_object(o);
     EncodedPngResult PNG_RESULT = hex_to_png_encoded_bytes(C->hex);
     json_object_set_string(O, "name", C->name);
-    if(C->name && stringfn_is_ascii(C->name)){
+    if (C->name && stringfn_is_ascii(C->name)) {
       sl = stringfn_trim(stringfn_to_lowercase(C->name));
-      stringfn_mut_replace(sl,' ','-');
-      stringfn_mut_replace(sl,'\'','-');
-      stringfn_mut_replace(sl,'"','-');
+      stringfn_mut_replace(sl, ' ', '-');
+      stringfn_mut_replace(sl, '\'', '-');
+      stringfn_mut_replace(sl, '"', '-');
     }
     json_object_set_string(O, "slug", sl);
     json_object_set_string(O, "hex", C->hex);
     json_object_dotset_number(O, "hsl.hue", (int)hsluv[0]);
     json_object_dotset_number(O, "hsl.saturation", (int)hsluv[1]);
-    json_object_dotset_number(O, "hsl.brightness", (int)(hsluv[2]/100));
-    json_object_dotset_boolean(O, "hsl.bright",(hsluv[2]/100>50)?true:false);
-    json_object_dotset_boolean(O, "hsl.very_bright",(hsluv[2]/100>90)?true:false);
-    json_object_dotset_boolean(O, "hsl.dark",(hsluv[2]/100<30)?true:false);
-    json_object_dotset_boolean(O, "hsl.very_dark",(hsluv[2]/100<10)?true:false);
+    json_object_dotset_number(O, "hsl.brightness", (int)(hsluv[2] / 100));
+    json_object_dotset_boolean(O, "hsl.bright", (hsluv[2] / 100 > 50)?true:false);
+    json_object_dotset_boolean(O, "hsl.very_bright", (hsluv[2] / 100 > 90)?true:false);
+    json_object_dotset_boolean(O, "hsl.dark", (hsluv[2] / 100 < 30)?true:false);
+    json_object_dotset_boolean(O, "hsl.very_dark", (hsluv[2] / 100 < 10)?true:false);
     json_object_set_string(O, "encoded_png_content", PNG_RESULT.EncodedContent);
     json_object_set_number(O, "decoded_png_length", PNG_RESULT.DecodedLength);
     json_object_dotset_number(O, "ansicode", C->ansicode);
@@ -145,20 +135,17 @@ int parse_colors_csv(parse_csv_options *OPTIONS){
     json_object_dotset_string(O, "seq.truecolor.fg", C->truecolor->fg);
     json_object_dotset_string(O, "seq.truecolor.bg", C->truecolor->bg);
     /////////////////////////////////////////////////////////////////////////
-    if (OPTIONS->pretty_json_mode) {
+    if (OPTIONS->pretty_json_mode)
       js = json_serialize_to_string_pretty(o);
-    }else{
+    else
       js = json_serialize_to_string(o);
-    }
     qty++;
     if (!WRITE_TO_FILE) {
-      if (OPTIONS->output_color_mode) {
+      if (OPTIONS->output_color_mode)
         ansi_truecolor_bg(stdout, C->rgb->red, C->rgb->green, C->rgb->blue);
-      }
       fprintf(stdout, "%s\n", js);
-      if (OPTIONS->output_color_mode) {
+      if (OPTIONS->output_color_mode)
         printf(AC_RESETALL);
-      }
     }else{
       stringbuffer_append_string(sb, js);
       stringbuffer_append_string(sb, "\n");

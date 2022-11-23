@@ -1,6 +1,6 @@
 #pragma once
-#ifndef DB_H
-#define DB_H
+#ifndef COLORS_DB_H
+#define COLORS_DB_H
 #define COLORDB_MAX_HASH_BUCKETS    65536 * 1024
 #include <stdbool.h>
 #include <stdio.h>

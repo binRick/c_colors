@@ -7,9 +7,9 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
   struct djbhash_node *HASH_ITEM;
 
   djbhash_init(&TYPEIDS_HASH);
-  if (init_colors_db(DB) != 0) {
+  if (init_colors_db(DB) != 0)
     return(TYPEIDS_HASH);
-  }
+
   char   *tmp = NULL;
   size_t unique_typeids_qty = 0, unique_typeids_size;
   char   *unique_typeids = (char *)colordb_get_distinct_typeids(DB->db, &unique_typeids_size, &unique_typeids_qty);
@@ -19,17 +19,14 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
   for (size_t processed_items = 0; processed_items < unique_typeids_qty; ) {
     if (tmp != NULL && strlen(tmp) > 0) {
       colordb_type row_typeid = atoi(tmp);
-      if (row_typeid < 1) {
+      if (row_typeid < 1)
         continue;
-      }
       bool exists_in_hash = false;
-      if ((HASH_ITEM = djbhash_find(&TYPEIDS_HASH, tmp)) != NULL) {
+      if ((HASH_ITEM = djbhash_find(&TYPEIDS_HASH, tmp)) != NULL)
         exists_in_hash = true;
-      }
-      if (!exists_in_hash) {
+      if (!exists_in_hash)
         djbhash_set(&TYPEIDS_HASH, tmp, "", DJBHASH_STRING);
-      }
-      if (DEBUG_TYPEIDS_HASH) {
+      if (DEBUG_TYPEIDS_HASH)
         fprintf(stdout,
                 AC_RESETALL AC_YELLOW AC_ITALIC "\tTypeID" AC_RESETALL " "
                 AC_GREEN AC_BOLD "#%lu/%lu" AC_RESETALL
@@ -42,7 +39,6 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
                 row_typeid,
                 exists_in_hash  ?"Yes":"No"
                 );
-      }
       tmp += strlen(tmp);
     }else{
       processed_items++;
@@ -59,9 +55,9 @@ struct djbhash db_get_typeids_hash(ColorsDB *DB){
 } /* db_get_typeids_hash */
 
 int db_list_typeids(ColorsDB *DB){
-  if (init_colors_db(DB) != 0) {
+  if (init_colors_db(DB) != 0)
     return(1);
-  }
+
   char   *tmp = NULL;
   size_t unique_typeids_qty = 0, unique_typeids_size;
   char   *unique_typeids = (char *)colordb_get_distinct_typeids(DB->db, &unique_typeids_size, &unique_typeids_qty);
@@ -70,9 +66,8 @@ int db_list_typeids(ColorsDB *DB){
   for (size_t processed_items = 0; processed_items < unique_typeids_qty; ) {
     if (tmp != NULL && strlen(tmp) > 0) {
       colordb_type row_typeid = atoi(tmp);
-      if (row_typeid < 1) {
+      if (row_typeid < 1)
         continue;
-      }
       printf(
         AC_RESETALL AC_YELLOW AC_ITALIC "\tTypeID" AC_RESETALL " "
         AC_GREEN AC_BOLD "#%lu/%lu" AC_RESETALL
@@ -98,9 +93,9 @@ int db_list_typeids(ColorsDB *DB){
 }
 
 int db_list_ids(ColorsDB *DB){
-  if (init_colors_db(DB) != 0) {
+  if (init_colors_db(DB) != 0)
     return(1);
-  }
+
   size_t       total_ids = 0, unique_typeids_qty = 0, typeid_qty = 0, unique_typeids_size;
   char         *tmp;
   colordb_type TYPEID = 2588928;
@@ -170,9 +165,9 @@ colordb_id db_get_typeid_id(ColorsDB *DB, colordb_type TYPEID){
   size_t     len = 0;
 
   colordb_one(DB, TYPEID, &id, &len);
-  if ((len > 0) && (id > 0)) {
+  if ((len > 0) && (id > 0))
     return(id);
-  }
+
   return(-1);
 }
 
@@ -201,14 +196,14 @@ colordb_id add_colors_db(ColorsDB *DB, colordb_type TYPEID, char *RECORD){
 colordb_id add_colors_db_if_not_exist(ColorsDB *DB, colordb_type TYPEID, char *RECORD, char *HEX, char *NAME){
   colordb_id id = db_get_typeid_id(DB, TYPEID);
 
-  if (id > 0) {
+  if (id > 0)
     return(id);
-  }
+
   colordb_id new_id = add_colors_db(DB, TYPEID, RECORD);
 
-  if (new_id < 1) {
+  if (new_id < 1)
     return(new_id);
-  }
+
 
   colordb_id hex_id  = add_colors_db_typeid_hex(DB, new_id, HEX);
   colordb_id name_id = add_colors_db_typeid_name(DB, new_id, NAME);
@@ -225,8 +220,7 @@ unsigned long colordb_hash(char *key, int length){
   unsigned long hash;
 
   hash = 5381;
-  for (int i = 0; i < length; key++, i++ ) {
+  for (int i = 0; i < length; key++, i++ )
     hash = ((hash << 5) + hash) + (*key);
-  }
   return(hash % COLORDB_MAX_HASH_BUCKETS);
 }

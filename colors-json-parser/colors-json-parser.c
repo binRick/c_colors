@@ -111,12 +111,11 @@ int parse_colors_json(parse_json_options *OPTIONS){
   char                   *json_data = fs_read(OPTIONS->input_file);
   struct StringFNStrings Lines      = stringfn_split_lines_and_trim(json_data);
 
-  if (OPTIONS->verbose_mode) {
+  if (OPTIONS->verbose_mode)
     fprintf(stderr, "JSON> parsing %lu colors from %s of %lu bytes and %d lines\n",
             OPTIONS->parse_qty, OPTIONS->input_file, strlen(json_data),
             Lines.count
             );
-  }
   JSON_Value  *ColorLine;
   JSON_Object *ColorObject;
   ParsedColor *c;
@@ -130,12 +129,11 @@ int parse_colors_json(parse_json_options *OPTIONS){
     progress_on(progress, PROGRESS_EVENT_PROGRESS, db_progress);
     progress_on(progress, PROGRESS_EVENT_END, db_progress_end);
   }
-  for (size_t i = 0; i < (size_t)Lines.count && (i < OPTIONS->parse_qty); i++) {
+  for (size_t i = 0; i < (size_t)Lines.count && (i < OPTIONS->parse_qty); i++)
     {
       ColorLine = json_parse_string(Lines.strings[i]);
-      if (ColorLine == NULL) {
+      if (ColorLine == NULL)
         continue;
-      }
       ColorObject = json_value_get_object(ColorLine);
     }
     {
@@ -180,29 +178,25 @@ int parse_colors_json(parse_json_options *OPTIONS){
               );
     }
     {
-      if (DB_NAME_MODE_ENABLED) {
+      if (DB_NAME_MODE_ENABLED)
         ADD_ITEM_TO_NAME_DB();
-      }
-      if (DB_HEX_MODE_ENABLED) {
+      if (DB_HEX_MODE_ENABLED)
         ADD_ITEM_TO_HEX_DB();
-      }
     }
     {
-      if (OPTIONS->ParsedColorHandler != NULL && c != NULL) {
+      if (OPTIONS->ParsedColorHandler != NULL && c != NULL)
         OPTIONS->ParsedColorHandler(c);
-      }
     }
     {
       FREE_ITEM();
       progress_value(progress, i + 1);
     }
-  }
   OPTIONS->duration = ct_stop("");
   progress_value(progress, items_qty);
   progress_free(progress);
-  if (OPTIONS->verbose_mode) {
+  if (OPTIONS->verbose_mode)
     fprintf(stderr, "Parsed %d items in %s\n", OPTIONS->ResultsHash.active_count, OPTIONS->duration);
-  }
+
 #ifdef DEBUG_MEMORY_ENABLED
   //print_allocated_memory();
 #endif
@@ -215,9 +209,8 @@ int free_parsed_results(parse_json_options *OPTIONS){
 
   while (item) {
     ParsedColor *c = (ParsedColor *)((item)->value);
-    if (c) {
+    if (c)
       FREE_ITEM();
-    }
     item = djbhash_iterate(&OPTIONS->ResultsHash);
   }
   djbhash_destroy(&OPTIONS->ResultsHash);
@@ -230,11 +223,10 @@ int iterate_parsed_results(parse_json_options *OPTIONS){
 
   while (item) {
     ParsedColor *c = (ParsedColor *)((item)->value);
-    if (c) {
+    if (c)
       fprintf(stderr, "   #item> Name:%s\n",
               c->Name
               );
-    }
     item = djbhash_iterate(&OPTIONS->ResultsHash);
   }
   return(0);
